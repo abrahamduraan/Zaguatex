@@ -2,7 +2,7 @@ import HeroSection from "./blocks/HeroSection";
 import MainContentSection from "./blocks/MainContentSection";
 
 // PageRenderer receives the array of components from Contentful
-export default function PageRenderer({ components }) {
+export default function PageRender({ components = [] }) {
   if (!components || !components.length) {
     return null;
   }
@@ -11,8 +11,6 @@ export default function PageRenderer({ components }) {
     <>
       {components.map((block) => {
         const type = block.__typename;
-
-        console.log(block);
 
         switch (type) {
           case "Hero":

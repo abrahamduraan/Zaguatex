@@ -68,7 +68,8 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
           slug
           title
           # Add more fields that you need from the Page
-          componentsCollection {
+          componentsCollection(limit: 50) {
+            total
             items {
               __typename
               sys { id }

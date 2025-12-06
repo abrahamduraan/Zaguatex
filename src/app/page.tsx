@@ -8,11 +8,11 @@ export default async function HomePage() {
     return <p>No se encontró la página home.</p>;
   }
   
-  console.log("Home Page Components:", page.componentsCollection.items);
+  const components = page?.componentsCollection?.items ?? [];
 
   return (
     <main>
-      <PageRender components={page.componentsCollection.items} />
+      <PageRender components={components} />
     </main>
   );
 }
