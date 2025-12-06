@@ -1,4 +1,4 @@
-import HeroSection from "./sections/HeroSection";
+import HeroSection from "./blocks/HeroSection";
 import FeatureGrid from "./sections/FeatureGrid";
 import RichTextSection from "./sections/RichTextSection";
 
@@ -13,20 +13,20 @@ export default function PageRenderer({ components }) {
       {components.map((block) => {
         const type = block.__typename;
 
-        /* switch (type) {
+        switch (type) {
           case "HeroSection":
             return <HeroSection key={block.sys.id} {...block} />;
 
-          case "FeatureGrid":
+          /* case "FeatureGrid":
             return <FeatureGrid key={block.sys.id} {...block} />;
 
           case "RichTextSection":
-            return <RichTextSection key={block.sys.id} {...block} />;
+            return <RichTextSection key={block.sys.id} {...block} />; */
 
           default:
             console.warn(`Unknown block type: ${type}`);
             return null;
-        } */
+        }
       })}
     </>
   );
