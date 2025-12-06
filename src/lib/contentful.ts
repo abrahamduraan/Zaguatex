@@ -1,18 +1,18 @@
 // src/lib/contentful.ts
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
-const ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || "master";
+const ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || 'master';
 const TOKEN = process.env.CONTENTFUL_CDA_TOKEN!;
 const ENDPOINT =
   process.env.CONTENTFUL_GRAPHQL_ENDPOINT ||
   `https://graphql.contentful.com/content/v1/spaces/${SPACE_ID}`;
 
 if (!SPACE_ID || !TOKEN) {
-  throw new Error("Missing Contentful environment variables");
+  throw new Error('Missing Contentful environment variables');
 }
 
 type FetchOptions = {
-  next?: RequestInit["next"];
-  cache?: RequestInit["cache"];
+  next?: RequestInit['next'];
+  cache?: RequestInit['cache'];
 };
 
 export async function contentfulFetch<T>(
@@ -21,9 +21,9 @@ export async function contentfulFetch<T>(
   options: FetchOptions = {}
 ): Promise<T> {
   const res = await fetch(ENDPOINT, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${TOKEN}`,
     },
     body: JSON.stringify({ query, variables }),
@@ -34,14 +34,14 @@ export async function contentfulFetch<T>(
 
   if (!res.ok) {
     const text = await res.text();
-    console.error("[Contentful] Error response:", text);
-    throw new Error("Contentful request failed");
+    console.error('[Contentful] Error response:', text);
+    throw new Error('Contentful request failed');
   }
 
   const json = await res.json();
   if (json.errors) {
-    console.error("[Contentful] GraphQL errors:", json.errors);
-    throw new Error("Contentful GraphQL error");
+    console.error('[Contentful] GraphQL errors:', json.errors);
+    throw new Error('Contentful GraphQL error');
   }
 
   return json.data;
@@ -72,8 +72,10 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
             total
             items {
               __typename
-              sys { id }
-              
+              sys {
+                id
+              }
+
               ... on Hero {
                 title
                 badge
@@ -88,8 +90,8 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   title
                   description
                 }
-              }  
-                
+              }
+
               ... on Main {
                 supportingText
                 heading
@@ -170,7 +172,5 @@ export async function getAllPageSlugs(): Promise<string[]> {
 
   const data = await contentfulFetch<Response>(query);
 
-  return data.pageCollection.items
-    .map((item) => item.slug)
-    .filter(Boolean);
+  return data.pageCollection.items.map((item) => item.slug).filter(Boolean);
 }

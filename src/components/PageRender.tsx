@@ -1,5 +1,5 @@
-import HeroSection from "./blocks/HeroSection";
-import MainContentSection from "./blocks/MainContentSection";
+import HeroSection from './blocks/HeroSection';
+import MainContentSection from './blocks/MainContentSection';
 
 // PageRenderer receives the array of components from Contentful
 export default function PageRender({ components = [] }) {
@@ -13,10 +13,10 @@ export default function PageRender({ components = [] }) {
         const type = block.__typename;
 
         switch (type) {
-          case "Hero":
+          case 'Hero':
             return <HeroSection key={block.sys.id} {...block} />;
 
-          case "Main":
+          case 'Main':
             return <MainContentSection key={block.sys.id} {...block} />;
 
           default:

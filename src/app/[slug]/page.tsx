@@ -1,7 +1,7 @@
 // src/app/[slug]/page.tsx
-import { notFound } from "next/navigation";
-import { getAllPageSlugs, getPageBySlug } from "@/lib/contentful";
-import PageRender from "@/components/PageRender";
+import { notFound } from 'next/navigation';
+import { getAllPageSlugs, getPageBySlug } from '@/lib/contentful';
+import PageRender from '@/components/PageRender';
 
 type PageProps = {
   params: {

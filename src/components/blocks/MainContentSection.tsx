@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { ChartBreakoutSquare, MessageChatCircle, ZapFast } from "@untitledui/icons";
-import { FeaturedIcon } from "@/components/foundations/featured-icon/featured-icon";
+import { ChartBreakoutSquare } from '@untitledui/icons';
+import { FeaturedIcon } from '@/components/foundations/featured-icon/featured-icon';
 
 type MainContentSectionProps = {
   heading: string;
@@ -65,9 +65,7 @@ const MainContentSection = ({
           )}
 
           {supportingText && (
-            <p className="mt-4 text-lg text-tertiary md:mt-5 md:text-xl">
-              {supportingText}
-            </p>
+            <p className="mt-4 text-lg text-tertiary md:mt-5 md:text-xl">{supportingText}</p>
           )}
         </div>
       </div>
@@ -82,9 +80,7 @@ const MainContentSection = ({
               </h2>
             )}
             {cardText1 && (
-              <p className="mt-2 text-md text-tertiary md:mt-4 md:text-lg">
-                {cardText1}
-              </p>
+              <p className="mt-2 text-md text-tertiary md:mt-4 md:text-lg">{cardText1}</p>
             )}
           </div>
 
@@ -108,9 +104,7 @@ const MainContentSection = ({
               </h2>
             )}
             {cardText2 && (
-              <p className="mt-2 text-md text-tertiary md:mt-4 md:text-lg">
-                {cardText2}
-              </p>
+              <p className="mt-2 text-md text-tertiary md:mt-4 md:text-lg">{cardText2}</p>
             )}
           </div>
 
@@ -128,6 +122,7 @@ const MainContentSection = ({
         {/* CARD 3 */}
         <div className="grid grid-cols-1 gap-10 md:gap-20 lg:grid-cols-2 lg:gap-0">
           <div className="flex-1 self-center lg:py-24 lg:pr-24 lg:pl-12">
+            <FeaturedIcon icon={ChartBreakoutSquare} color="brand" size="lg" theme="light" />
 
             {cardTitle3 && (
               <h2 className="mt-5 text-display-xs font-semibold text-primary md:text-display-sm">
@@ -135,12 +130,10 @@ const MainContentSection = ({
               </h2>
             )}
             {cardText3 && (
-              <p className="mt-2 text-md text-tertiary md:mt-4 md:text-lg">
-                {cardText3}
-              </p>
+              <p className="mt-2 text-md text-tertiary md:mt-4 md:text-lg">{cardText3}</p>
             )}
           </div>
-          
+
           {image3 && (
             <div className="relative min-h-60 w-full flex-1 md:min-h-140">
               <img
