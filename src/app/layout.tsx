@@ -27,8 +27,6 @@ export default function RootLayout({
   return (
     <html 
       lang="en"
-      className="dark-mode" // <- la misma clase que se está viendo en el HTML
-      style={{ colorScheme: "dark" }} // <- lo mismo que el servidor
       suppressHydrationWarning
     >
       <body

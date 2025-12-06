@@ -82,7 +82,7 @@ const HeroSection = ({
                                             {buttonOneText}
                                         </Button>
                                     )}
-                                    {buttonOneText && (
+                                    {buttonTwoText && (
                                         <Button size="xl" href={buttonTwoUrl}>
                                             {buttonTwoText}
                                         </Button>
