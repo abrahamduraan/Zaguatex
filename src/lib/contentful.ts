@@ -72,7 +72,17 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
             items {
               __typename
               sys { id }
-              # Add section-specific fields here...
+              
+              ... on Hero {
+                title
+                badge
+                heading
+                supportingText
+                buttonOneText
+                buttonOneUrl
+                buttonTwoText
+                buttonTwoUrl
+              }
             }
           }
         }
