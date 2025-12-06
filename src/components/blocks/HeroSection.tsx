@@ -23,6 +23,11 @@ type HeroProps = {
   buttonOneUrl?: string | null;
   buttonTwoText?: string | null;
   buttonTwoUrl?: string | null;
+  image: {
+    url: string;
+    title: string;
+    description?: string | null;
+  };
 };
 
 
@@ -36,11 +41,17 @@ const HeroSection = ({
   buttonOneUrl,
   buttonTwoText,
   buttonTwoUrl,
+  image,
 }: HeroProps) => {
     return (
         <div className="bg-primary">
-            <section>
-                <div className="flex flex-col items-center bg-utility-brand-50_alt pt-16 md:pt-24">
+            <section style={{
+                backgroundImage: `url(${image.url})`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+            }} className="flex items-center h-screen">
+                <div className="flex flex-col items-center pt-16 pb-16 md:pt-24 md:pb-24 w-full">
                     <div className="mx-auto flex w-full max-w-container flex-col px-4 md:px-8">
                         <div className="flex flex-col items-start sm:items-center sm:text-center">
                             {badge && (
@@ -64,7 +75,7 @@ const HeroSection = ({
                                     {supportingText}
                                 </p>
                             )}
-                            {buttonOneText || buttonTwoText && (
+                            
                                 <div className="relative z-1 mt-8 flex w-full flex-col-reverse items-stretch gap-3 sm:w-auto sm:flex-row sm:items-start md:mt-12">
                                     {buttonOneText && (
                                         <Button iconLeading={PlayCircle} color="secondary" size="xl">
@@ -72,12 +83,12 @@ const HeroSection = ({
                                         </Button>
                                     )}
                                     {buttonOneText && (
-                                        <Button size="xl">
+                                        <Button size="xl" href={buttonTwoUrl}>
                                             {buttonTwoText}
                                         </Button>
                                     )}
                                 </div>
-                            )}
+                            
                         </div>
                     </div>
                 </div>

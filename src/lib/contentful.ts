@@ -82,6 +82,11 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                 buttonOneUrl
                 buttonTwoText
                 buttonTwoUrl
+                image {
+                  url
+                  title
+                  description
+                }
               }
             }
           }
