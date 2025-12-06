@@ -25,7 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html 
+      lang="en"
+      className="dark-mode" // <- la misma clase que se está viendo en el HTML
+      style={{ colorScheme: "dark" }} // <- lo mismo que el servidor
+      suppressHydrationWarning
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

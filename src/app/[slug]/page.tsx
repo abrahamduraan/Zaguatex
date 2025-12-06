@@ -1,7 +1,7 @@
 // src/app/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { getAllPageSlugs, getPageBySlug } from "@/lib/contentful";
-import PageRenderer from "@/components/PageRenderer";
+import PageRender from "@/components/PageRender";
 
 type PageProps = {
   params: {
@@ -27,7 +27,7 @@ export default async function DynamicPage({ params }: PageProps) {
 
   return (
     <main>
-      <PageRenderer components={components} />
+      <PageRender components={components} />
     </main>
   );
 }

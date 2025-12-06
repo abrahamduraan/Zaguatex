@@ -7,6 +7,8 @@ export default async function HomePage() {
   if (!page) {
     return <p>No se encontró la página home.</p>;
   }
+  
+  console.log("Home Page Components:", page.componentsCollection.items);
 
   return (
     <main>

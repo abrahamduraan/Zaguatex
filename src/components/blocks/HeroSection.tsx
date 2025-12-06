@@ -1,9 +1,9 @@
+"use client";
+
 import type { ComponentProps } from "react";
 import { ArrowRight, PlayCircle } from "@untitledui/icons";
 import { BadgeGroup } from "@/components/base/badges/badge-groups";
 import { Button } from "@/components/base/buttons/button";
-import { Header } from "@/components/marketing/header-navigation/header";
-import { BackgroundStripes } from "./base-components/background-stripes";
 
 const HeaderPrimary = (props: ComponentProps<typeof Header>) => {
     return (
@@ -14,10 +14,9 @@ const HeaderPrimary = (props: ComponentProps<typeof Header>) => {
     );
 };
 
-export const HeroAbstractAngles03 = () => {
+const HeroSection = () => {
     return (
         <div className="bg-primary">
-            <HeaderPrimary />
             <section>
                 <div className="flex flex-col items-center bg-utility-brand-50_alt pt-16 md:pt-24">
                     <div className="mx-auto flex w-full max-w-container flex-col px-4 md:px-8">
@@ -47,10 +46,6 @@ export const HeroAbstractAngles03 = () => {
                     </div>
                 </div>
 
-                <div className="relative pt-16">
-                    <BackgroundStripes />
-                </div>
-
                 <div className="relative pb-16 md:pb-24">
                     <div className="mx-auto w-full max-w-container px-4 md:px-8">
                         <div className="mx-auto w-full max-w-5xl">
@@ -73,3 +68,5 @@ export const HeroAbstractAngles03 = () => {
         </div>
     );
 };
+
+export default HeroSection;

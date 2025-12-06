@@ -13,8 +13,10 @@ export default function PageRenderer({ components }) {
       {components.map((block) => {
         const type = block.__typename;
 
+        console.log(block);
+
         switch (type) {
-          case "HeroSection":
+          case "Hero":
             return <HeroSection key={block.sys.id} {...block} />;
 
           /* case "FeatureGrid":
