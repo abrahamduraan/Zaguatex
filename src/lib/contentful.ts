@@ -87,6 +87,33 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   title
                   description
                 }
+              }  
+                
+              ... on Main {
+                supportingText
+                heading
+                subHeading
+                cardTitle1
+                cardText1
+                cardTitle2
+                cardText2
+                cardTitle3
+                cardText3
+                image1 {
+                  url
+                  title
+                  description
+                }
+                image2 {
+                  url
+                  title
+                  description
+                }
+                image3 {
+                  url
+                  title
+                  description
+                }
               }
             }
           }
