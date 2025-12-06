@@ -1,6 +1,5 @@
 import HeroSection from "./blocks/HeroSection";
-import FeatureGrid from "./sections/FeatureGrid";
-import RichTextSection from "./sections/RichTextSection";
+import MainContentSection from "./blocks/MainContentSection";
 
 // PageRenderer receives the array of components from Contentful
 export default function PageRenderer({ components }) {
@@ -19,11 +18,8 @@ export default function PageRenderer({ components }) {
           case "Hero":
             return <HeroSection key={block.sys.id} {...block} />;
 
-          /* case "FeatureGrid":
-            return <FeatureGrid key={block.sys.id} {...block} />;
-
-          case "RichTextSection":
-            return <RichTextSection key={block.sys.id} {...block} />; */
+          case "Main":
+            return <MainContentSection key={block.sys.id} {...block} />;
 
           default:
             console.warn(`Unknown block type: ${type}`);
