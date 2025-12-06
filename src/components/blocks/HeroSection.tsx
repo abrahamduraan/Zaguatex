@@ -75,20 +75,18 @@ const HeroSection = ({
                                     {supportingText}
                                 </p>
                             )}
-                            
-                                <div className="relative z-1 mt-8 flex w-full flex-col-reverse items-stretch gap-3 sm:w-auto sm:flex-row sm:items-start md:mt-12">
-                                    {buttonOneText && (
-                                        <Button iconLeading={PlayCircle} color="secondary" size="xl">
-                                            {buttonOneText}
-                                        </Button>
-                                    )}
-                                    {buttonTwoText && (
-                                        <Button size="xl" href={buttonTwoUrl}>
-                                            {buttonTwoText}
-                                        </Button>
-                                    )}
-                                </div>
-                            
+                            <div className="relative z-1 mt-8 flex w-full flex-col-reverse items-stretch gap-3 sm:w-auto sm:flex-row sm:items-start md:mt-12">
+                              {buttonOneText && (
+                                  <Button iconLeading={PlayCircle} color="secondary" size="xl" href={buttonOneUrl}>
+                                      {buttonOneText}
+                                  </Button>
+                              )}
+                              {buttonTwoText && (
+                                  <Button size="xl" href={buttonTwoUrl}>
+                                      {buttonTwoText}
+                                  </Button>
+                              )}
+                            </div>
                         </div>
                     </div>
                 </div>
