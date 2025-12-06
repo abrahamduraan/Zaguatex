@@ -128,7 +128,6 @@ const MainContentSection = ({
         {/* CARD 3 */}
         <div className="grid grid-cols-1 gap-10 md:gap-20 lg:grid-cols-2 lg:gap-0">
           <div className="flex-1 self-center lg:py-24 lg:pr-24 lg:pl-12">
-            <FeaturedIcon icon={ChartBreakoutSquare} color="brand" size="lg" theme="light" />
 
             {cardTitle3 && (
               <h2 className="mt-5 text-display-xs font-semibold text-primary md:text-display-sm">
