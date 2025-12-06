@@ -1,6 +1,6 @@
 'use client';
 
-import { ChartBreakoutSquare } from '@untitledui/icons';
+import { ChartBreakoutSquare, MessageChatCircle, ZapFast } from '@untitledui/icons';
 import { FeaturedIcon } from '@/components/foundations/featured-icon/featured-icon';
 
 type MainContentSectionProps = {
