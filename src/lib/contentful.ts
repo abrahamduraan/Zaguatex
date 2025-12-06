@@ -88,7 +88,6 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   description
                 }
               }  
-                
               ... on Main {
                 supportingText
                 heading

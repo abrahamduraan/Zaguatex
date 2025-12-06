@@ -1,7 +1,13 @@
 "use client";
 
-import { ChartBreakoutSquare, MessageChatCircle, ZapFast } from "@untitledui/icons";
+import { ChartBreakoutSquare } from "@untitledui/icons";
 import { FeaturedIcon } from "@/components/foundations/featured-icon/featured-icon";
+
+type ImageType = {
+  url: string;
+  title: string;
+  description?: string | null;
+};
 
 type MainContentSectionProps = {
   heading: string;
@@ -15,24 +21,12 @@ type MainContentSectionProps = {
   cardTitle3: string;
   cardText3: string;
 
-  image1: {
-    url: string;
-    title: string;
-    description?: string | null;
-  };
-  image2: {
-    url: string;
-    title: string;
-    description?: string | null;
-  };
-  image3: {
-    url: string;
-    title: string;
-    description?: string | null;
-  };
+  image1: ImageType;
+  image2: ImageType;
+  image3: ImageType;
 };
 
-export const MainContentSection = ({
+const MainContentSection = ({
   heading,
   subHeading,
   supportingText,
@@ -50,8 +44,11 @@ export const MainContentSection = ({
 }: MainContentSectionProps) => {
   return (
     <section className="flex flex-col gap-12 bg-primary py-16 sm:gap-16 md:gap-20 md:py-24 lg:gap-24">
+
+      {/* HEADER CONTENT */}
       <div className="mx-auto w-full max-w-container px-4 md:px-8">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+
           {subHeading && (
             <span className="text-sm font-semibold text-brand-secondary md:text-md">
               {subHeading}
@@ -70,7 +67,9 @@ export const MainContentSection = ({
         </div>
       </div>
 
+      {/* CARDS WRAPPER */}
       <div className="mx-auto flex w-full max-w-container flex-col gap-12 px-4 sm:gap-16 md:gap-20 md:px-8 lg:gap-24 lg:px-0">
+
         {/* CARD 1 */}
         <div className="grid grid-cols-1 gap-10 md:gap-20 lg:grid-cols-2 lg:gap-0">
           <div className="flex-1 self-center lg:py-24 lg:pr-24 lg:pl-12">
@@ -114,7 +113,6 @@ export const MainContentSection = ({
         {/* CARD 3 */}
         <div className="grid grid-cols-1 gap-10 md:gap-20 lg:grid-cols-2 lg:gap-0">
           <div className="flex-1 self-center lg:py-24 lg:pr-24 lg:pl-12">
-            <FeaturedIcon icon={ChartBreakoutSquare} color="brand" size="lg" theme="light" />
 
             <h2 className="mt-5 text-display-xs font-semibold text-primary md:text-display-sm">
               {cardTitle3}
@@ -136,3 +134,5 @@ export const MainContentSection = ({
     </section>
   );
 };
+
+export default MainContentSection;
