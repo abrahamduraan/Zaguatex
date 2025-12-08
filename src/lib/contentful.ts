@@ -118,6 +118,16 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   description
                 }
               }
+              ... on Carousel {
+              sys { id }
+              imagesCollection {
+                items {
+                  url
+                  title
+                  description
+                  }
+                }
+              }
             }
           }
         }
