@@ -1,6 +1,7 @@
 import HeroSection from './blocks/HeroSection';
 import MainContentSection from './blocks/MainContentSection';
 import CarouselUntitled from './blocks/CarouselUntitled';
+import Footer from './blocks/Footer';
 
 // PageRenderer receives the array of components from Contentful
 export default function PageRender({ components = [] }) {
@@ -22,6 +23,10 @@ export default function PageRender({ components = [] }) {
 
           case 'Carousel':
             return (<CarouselUntitled key={block.sys.id} images={block.imagesCollection.items} />);
+
+          case 'Footer':
+            return <Footer key={block.sys.id} {...block} />;
+
 
 
           default:
