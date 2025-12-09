@@ -59,7 +59,6 @@ export type PageEntry = {
   };
 };
 
-// Fetch a single Page by slug
 export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
   const query = /* GraphQL */ `
     query GetPageBySlug($slug: String!) {
@@ -67,14 +66,11 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
         items {
           slug
           title
-          # Add more fields that you need from the Page
           componentsCollection(limit: 50) {
             total
             items {
               __typename
-              sys {
-                id
-              }
+              sys { id }
 
               ... on Hero {
                 title
@@ -85,55 +81,57 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                 buttonOneUrl
                 buttonTwoText
                 buttonTwoUrl
-                image {
-                  url
-                  title
-                  description
-                }
+                image { url title description }
               }
 
               ... on Main {
                 supportingText
                 heading
                 subHeading
+
                 cardTitle1
                 cardText1
                 cardTitle2
                 cardText2
                 cardTitle3
                 cardText3
-                image1 {
-                  url
-                  title
-                  description
-                }
-                image2 {
-                  url
-                  title
-                  description
-                }
-                image3 {
-                  url
-                  title
-                  description
+
+                image1 { url title description }
+                image2 { url title description }
+                image3 { url title description }
+              }
+
+              ... on Carousel {
+                sys { id }
+                imagesCollection {
+                  items { url title description }
                 }
               }
-              ... on Carousel {
-              sys { id }
-              imagesCollection {
+
+              ... on Footer {
+              heading
+              subHeading
+              logoImage { url title }
+              footerLinksCollection {
                 items {
-                  url
-                  title
-                  description
-                  }
+                  label
+                  href
+                }
+              }
+              socialLinksCollection {
+                items {
+                  label
+                  href
                 }
               }
             }
-          }
-        }
-      }
-    }
+                        }  
+          } 
+        } 
+      } 
+    } 
   `;
+
 
   type Response = {
     pageCollection: {
