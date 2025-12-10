@@ -110,6 +110,8 @@ interface HeaderProps {
   isFullWidth?: boolean;
   isFloating?: boolean;
   className?: string;
+  logoUrl?: string;
+  logoAlt?: string;
 }
 
 export const Header = ({
@@ -117,6 +119,8 @@ export const Header = ({
   isFullWidth,
   isFloating,
   className,
+  logoUrl,
+  logoAlt
 }: HeaderProps) => {
   const headerRef = useRef<HTMLElement>(null);
 
@@ -141,8 +145,27 @@ export const Header = ({
           )}
         >
           <div className="flex flex-1 items-center gap-5">
-            <UntitledLogo className="h-8 md:max-lg:hidden" />
-            <UntitledLogoMinimal className="hidden h-8 md:inline-block lg:hidden" />
+            {/* Desktop logo */}
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={logoAlt || "Logo"}
+                className="h-8 md:max-lg:hidden"
+              />
+            ) : (
+              <UntitledLogo className="h-8 md:max-lg:hidden" />
+            )}
+
+            {/* Minimal / mobile logo */}
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={logoAlt || "Logo"}
+                className="hidden h-8 md:inline-block lg:hidden"
+              />
+            ) : (
+              <UntitledLogoMinimal className="hidden h-8 md:inline-block lg:hidden" />
+            )}
 
             {/* Desktop navigation */}
             <nav className="max-md:hidden">
@@ -209,11 +232,8 @@ export const Header = ({
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
-            <Button color="secondary" size={isFloating ? 'md' : 'lg'}>
-              Log in
-            </Button>
-            <Button color="primary" size={isFloating ? 'md' : 'lg'}>
-              Sign up
+            <Button color="primary" size={isFloating ? 'md' : 'lg'} href="donar">
+              Donar
             </Button>
           </div>
 
