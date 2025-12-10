@@ -32,9 +32,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <header>
-          <MainNav logo={logo} items={items} />
-        </header>
+        <MainNav logo={logo} items={items} />
         <RouteProvider>
           <ThemeProvider>{children}</ThemeProvider>
         </RouteProvider>

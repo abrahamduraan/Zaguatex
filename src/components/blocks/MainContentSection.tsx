@@ -49,7 +49,7 @@ const MainContentSection = ({
   image3,
 }: MainContentSectionProps) => {
   return (
-    <section className="flex flex-col gap-12 bg-primary py-16 sm:gap-16 md:gap-20 md:py-24 lg:gap-24">
+    <section className="flex flex-col gap-12 bg-primary py-16 sm:gap-16 md:gap-20 md:py-24 lg:gap-24 bg-secondary_alt">
       <div className="mx-auto w-full max-w-container px-4 md:px-8">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
           {subHeading && (

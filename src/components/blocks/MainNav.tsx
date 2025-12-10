@@ -13,6 +13,6 @@ export default async function MainNav() {
   if (!items.length && !logo) return null;
 
   return (
-    <Header items={headerItems} logoUrl={logo.url} logoAlt={logo.title} />
+    <Header items={headerItems} logoUrl={logo.url} logoAlt={logo.title} className="sticky top-0 z-50"/>
   );
 }
