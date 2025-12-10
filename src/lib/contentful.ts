@@ -108,28 +108,35 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                 }
               }
 
-              ... on Footer {
-              heading
-              subHeading
-              logoImage { url title }
-              footerLinksCollection {
-                items {
-                  label
-                  href
+              ... on BigCarousel {
+                sys { id }
+                imagesCollection {
+                  items { url title description }
                 }
               }
-              socialLinksCollection {
-                items {
-                  label
-                  href
+
+              ... on Footer {
+                heading
+                subHeading
+                logoImage { url title }
+                footerLinksCollection {
+                  items {
+                    label
+                    href
+                  }
+                }
+                socialLinksCollection {
+                  items {
+                    label
+                    href
+                  }
                 }
               }
             }
-                        }  
-          } 
+          }  
         } 
       } 
-    } 
+    }
   `;
 
 
