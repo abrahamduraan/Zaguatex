@@ -85,11 +85,11 @@ const MainContentSection = ({
           </div>
 
           {image1 && (
-            <div className="relative min-h-60 w-full flex-1 md:min-h-140">
+            <div className="relative w-full aspect-square flex-1">
               <img
                 src={image1.url}
                 alt={image1.title}
-                className="absolute inset-0 size-full object-cover lg:right-auto lg:w-[50vw] lg:max-w-[50vw]"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
           )}
@@ -109,11 +109,11 @@ const MainContentSection = ({
           </div>
 
           {image2 && (
-            <div className="relative min-h-60 w-full flex-1 md:min-h-140">
+            <div className="relative w-full aspect-square flex-1">
               <img
                 src={image2.url}
                 alt={image2.title}
-                className="absolute inset-0 size-full object-cover lg:left-auto lg:w-[50vw] lg:max-w-[50vw]"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
           )}
@@ -122,7 +122,6 @@ const MainContentSection = ({
         {/* CARD 3 */}
         <div className="grid grid-cols-1 gap-10 md:gap-20 lg:grid-cols-2 lg:gap-0">
           <div className="flex-1 self-center lg:py-24 lg:pr-24 lg:pl-12">
-
             {cardTitle3 && (
               <h2 className="mt-5 text-display-xs font-semibold text-primary md:text-display-sm">
                 {cardTitle3}
@@ -134,11 +133,11 @@ const MainContentSection = ({
           </div>
 
           {image3 && (
-            <div className="relative min-h-60 w-full flex-1 md:min-h-140">
+            <div className="relative w-full aspect-square flex-1">
               <img
                 src={image3.url}
                 alt={image3.title}
-                className="absolute inset-0 size-full object-cover lg:right-auto lg:w-[50vw] lg:max-w-[50vw]"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
           )}
