@@ -4,6 +4,7 @@ import { Carousel } from "@/components/application/carousel/carousel-base";
 import { Button } from "@/components/base/buttons/button";
 import { ArrowLeft, ArrowRight } from "@untitledui/icons";
 import { cx } from "@/utils/cx";
+import { isReactComponent } from "@/utils/is-react-component";
 
 interface BigCarouselProps {
   images: { url: string; title?: string }[];
@@ -18,7 +19,9 @@ const RoundButton = ({ icon: Icon, className, ...props }: any) => (
       className
     )}
   >
-    {Icon ? <Icon className="size-5 text-fg-quaternary transition-inherit-all group-hover:text-fg-quaternary_hover md:size-6" /> : null}
+    {props.children ?? (isReactComponent(Icon) ? (
+      <Icon className="size-5 text-fg-quaternary transition-inherit-all group-hover:text-fg-quaternary_hover md:size-6" />
+    ) : null)}
   </Button>
 );
 
@@ -26,9 +29,9 @@ export const BigCarousel = ({ images }: BigCarouselProps) => {
   if (!images || images.length === 0) return null;
 
   return (
-    <div className="mx-auto max-w-container py-12 md:py-16 overflow-y-hidden overflow-x-auto">
+    <div className="mx-auto max-w-container py-12 md:py-16 overflow-x-hidden"> {/* sin scroll horizontal */}
       <Carousel.Root opts={{ align: "start" }}>
-        <Carousel.Content overflowHidden={false} className="gap-6 pr-4 md:pr-8 lg:gap-8">
+        <Carousel.Content overflowHidden={true} className="gap-6 pr-4 md:pr-8 lg:gap-8">
           {images.map((img, index) => (
             <Carousel.Item key={`${img.url}-${index}`} className="basis-auto">
               <img
