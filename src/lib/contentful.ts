@@ -4,7 +4,7 @@ const ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || 'master';
 const TOKEN = process.env.CONTENTFUL_CDA_TOKEN!;
 const ENDPOINT =
   process.env.CONTENTFUL_GRAPHQL_ENDPOINT ||
-  `https://graphql.contentful.com/content/v1/spaces/${SPACE_ID}`;
+  `https://graphql.contentful.com/content/v1/spaces/${SPACE_ID}/environments/${ENVIRONMENT}`;
 
 if (!SPACE_ID || !TOKEN) {
   throw new Error('Missing Contentful environment variables');
@@ -173,4 +173,92 @@ export async function getAllPageSlugs(): Promise<string[]> {
   const data = await contentfulFetch<Response>(query);
 
   return data.pageCollection.items.map((item) => item.slug).filter(Boolean);
+}
+
+// Nav types
+export type NavItem = {
+  label: string;
+  url: string;
+};
+
+export type NavLogo = {
+  url: string;
+  title: string;
+  description?: string | null;
+};
+
+export type NavigationData = {
+  logo?: NavLogo | null;
+  items: NavItem[];
+};
+
+// Fetch main navigation by slug
+export async function getMainNavigation(
+  slug: string = 'main-nav'
+): Promise<NavigationData> {
+  const query = /* GraphQL */ `
+    query GetNavigation($slug: String!) {
+      menuCollection(where: { slug: $slug }, limit: 1) {
+        items {
+          title
+          slug
+          logo {
+            url
+            title
+            description
+          }
+          itemsCollection {
+            ... on MenuItemsCollection {
+              items {
+                text
+                link
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  type Response = {
+    navigationMenuCollection: {
+      items: {
+        title: string;
+        slug: string;
+        logo?: {
+          url: string;
+          title: string;
+          description?: string | null;
+        } | null;
+        itemsCollection?: {
+          items: {
+            text: string;
+            link: string;
+          }[];
+        } | null;
+      }[];
+    };
+  };
+
+  const data = await contentfulFetch<Response>(query, { slug });
+
+  console.log(data);
+
+  const menu = data.menuCollection?.items?.[0];
+
+  const items =
+    menu?.itemsCollection?.items?.map((item) => ({
+      text: item.text,
+      link: item.link,
+    })) ?? [];
+
+  const logo = menu?.logo
+    ? {
+        url: menu.logo.url,
+        title: menu.logo.title,
+        description: menu.logo.description,
+      }
+    : undefined;
+
+  return { logo, items };
 }
