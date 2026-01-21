@@ -45,7 +45,7 @@ const HeroSection = ({
         <div className="flex flex-col items-center pt-16 pb-16 md:pt-24 md:pb-24 w-full">
           <div className="mx-auto flex w-full max-w-container flex-col px-4 md:px-8">
             <div className="flex flex-col items-start sm:items-center sm:text-center">
-              {badge && (
+              {/* {badge && (
                 <a
                   href="#"
                   className="rounded-full outline-focus-ring focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -71,7 +71,7 @@ const HeroSection = ({
                     {badge}
                   </BadgeGroup>
                 </a>
-              )}
+              )} */}
 
               {heading && (
                 <h1 className="mt-4 text-display-md font-semibold text-brand-primary md:text-display-lg lg:text-display-xl">

@@ -46,7 +46,16 @@ export default function PageRender({ components = [] }) {
             const dogs = block.dogsCollection?.items || [];
             if (!dogs.length) return null;
 
-            return <DogsAdoption key={block.sys.id} dogs={dogs} />;
+            return (
+              <DogsAdoption
+                key={block.sys.id}
+                title={block.title}
+                subtitle={block.subtitle}
+                buttonText={block.buttonText}
+                buttonUrl={block.buttonUrl}
+                dogs={dogs}
+              />
+            );
 
           default:
             console.warn(`Unknown block type: ${type}`);

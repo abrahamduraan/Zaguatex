@@ -108,16 +108,19 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                 }
               }
               ... on DogsAdoption {
-                dogsCollection(limit: 50) {
-                  items {
-                    sys { id }
-                    title
-                    description
-                    image { url title description }
-                  }
+              title
+              subtitle
+              buttonText
+              buttonUrl
+              dogsCollection(limit: 50) {
+                items {
+                  sys { id }
+                  title
+                  description
+                  image { url title description }
                 }
               }
-
+            }
               ... on BigCarousel {
                 sys { id }
                 imagesCollection {
