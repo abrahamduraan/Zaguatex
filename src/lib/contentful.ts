@@ -107,6 +107,16 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   items { url title description }
                 }
               }
+              ... on DogsAdoption {
+                dogsCollection(limit: 50) {
+                  items {
+                    sys { id }
+                    title
+                    description
+                    image { url title description }
+                  }
+                }
+              }
 
               ... on BigCarousel {
                 sys { id }
@@ -269,10 +279,10 @@ export async function getMainNavigation(
 
   const logo = menu?.logo
     ? {
-        url: menu.logo.url,
-        title: menu.logo.title,
-        description: menu.logo.description,
-      }
+      url: menu.logo.url,
+      title: menu.logo.title,
+      description: menu.logo.description,
+    }
     : undefined;
 
   return { logo, items };
