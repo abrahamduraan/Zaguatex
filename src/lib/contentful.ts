@@ -141,12 +141,13 @@ export async function getPageBySlug(slug: string) {
           ... on InformationComponent {
             heading
             introText
+            image { url title description }
             itemsCollection(limit: 50) {
               items {
                 title
                 text
-                image { url title description }
-                imagePosition
+                media { url title description }
+                mediaPosition
               }
             }
           }
