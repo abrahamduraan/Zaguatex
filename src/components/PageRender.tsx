@@ -80,11 +80,12 @@ export default function PageRender({ components = [] }) {
                 key={block.sys.id}
                 heading={block.heading}
                 introText={block.introText}
-                image={block.image}
+                image={block.image} // si quieres que la sección tenga imagen principal
                 items={infoItems.map((item: any) => ({
                   title: item.title,
                   text: item.text,
                   image: item.image,
+                  imagePosition: item.imagePosition, 
                 }))}
               />
             );
