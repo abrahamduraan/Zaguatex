@@ -59,7 +59,7 @@ export type PageEntry = {
   };
 };
 
-export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
+export async function getPageBySlug(slug: string) {
   const query = /* GraphQL */ `
     query GetPageBySlug($slug: String!) {
       pageCollection(where: { slug: $slug }, limit: 1) {
@@ -67,7 +67,6 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
           slug
           title
           componentsCollection(limit: 50) {
-            total
             items {
               __typename
               sys { id }
@@ -88,14 +87,12 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                 supportingText
                 heading
                 subHeading
-
                 cardTitle1
                 cardText1
                 cardTitle2
                 cardText2
                 cardTitle3
                 cardText3
-
                 image1 { url title description }
                 image2 { url title description }
                 image3 { url title description }
@@ -107,26 +104,29 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   items { url title description }
                 }
               }
-              ... on DogsAdoption {
-              title
-              subtitle
-              buttonText
-              buttonUrl
-              dogsCollection(limit: 50) {
-                items {
-                  sys { id }
-                  title
-                  description
-                  image { url title description }
-                }
-              }
-            }
+
               ... on BigCarousel {
                 sys { id }
                 imagesCollection {
                   items { url title description }
                 }
               }
+
+              ... on DogsAdoption {
+                title
+                subtitle
+                buttonText
+                buttonUrl
+                dogsCollection(limit: 50) {
+                  items {
+                    sys { id }
+                    title
+                    description
+                    image { url title description }
+                  }
+                }
+              }
+
               ... on Faq {
                 heading
                 subheading
@@ -137,6 +137,20 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   }
                 }
               }
+
+              ... on InformationComponent {
+                heading
+                introText
+                image { url title description }
+                itemsCollection(limit: 50) {
+                  items {
+                    title
+                    text
+                    image { url title description }
+                  }
+                }
+              }
+
               ... on Footer {
                 heading
                 subHeading
@@ -155,9 +169,9 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                 }
               }
             }
-          }  
-        } 
-      } 
+          }
+        }
+      }
     }
   `;
 
