@@ -39,7 +39,7 @@ export default function InformationComponent({
     <section className="bg-primary py-16 md:py-24">
       <div className="mx-auto max-w-container px-4 md:px-8">
 
-        {/* Imagen principal — ANCHA (Untitled style) */}
+        {/* Imagen principal */}
         {image?.url && (
           <div className="mb-20">
             <img
@@ -58,7 +58,7 @@ export default function InformationComponent({
           </h2>
         )}
 
-        {/* Intro text */}
+        {/* Intro */}
         {introText && (
           <p className="mx-auto mb-16 max-w-4xl text-center text-base leading-relaxed text-tertiary md:text-lg whitespace-pre-line">
             {introText}
@@ -69,11 +69,14 @@ export default function InformationComponent({
         <div className="mx-auto flex max-w-4xl flex-col gap-14">
           {items.map((item, index) => {
             const position = item.mediaPosition || 'top';
-            const isHorizontal =
-              position === 'left' || position === 'right';
+            const isHorizontal = position === 'left' || position === 'right';
 
-            const isVideo =
-              item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
+            const isVideo = item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
+
+            const mediaClass = cx(
+              'w-full rounded-xl',
+              isHorizontal ? 'md:w-1/2' : 'max-w-3xl'
+            );
 
             const media =
               item.media?.url &&
@@ -82,19 +85,22 @@ export default function InformationComponent({
                   src={item.media.url}
                   controls
                   playsInline
-                  className="w-full rounded-xl md:w-1/2"
+                  className={mediaClass}
                 />
               ) : (
                 <img
                   src={item.media.url}
                   alt={item.media.description || ''}
-                  className="w-full rounded-xl object-cover md:w-1/2"
+                  className={cx(mediaClass, 'object-cover')}
                   loading="lazy"
                 />
               ));
 
             const content = (
-              <div className="flex flex-col gap-4">
+              <div className={cx(
+                'flex flex-col gap-4',
+                !isHorizontal && 'items-center text-center max-w-2xl'
+              )}>
                 {item.title && (
                   <h3 className="text-xl font-semibold text-brand-secondary md:text-2xl">
                     {item.title}
@@ -116,9 +122,10 @@ export default function InformationComponent({
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
                 className={cx(
-                  'flex flex-col gap-6',
-                  isHorizontal &&
-                    'md:flex-row md:items-center md:gap-10'
+                  'flex gap-6',
+                  isHorizontal
+                    ? 'flex-col md:flex-row md:items-center md:gap-10'
+                    : 'flex-col items-center text-center'
                 )}
               >
                 {position === 'top' && (
