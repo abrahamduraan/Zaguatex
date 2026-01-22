@@ -3,7 +3,8 @@ import MainContentSection from './blocks/MainContentSection';
 import CarouselUntitled from './blocks/CarouselUntitled';
 import BigCarousel from './blocks/BigCarousel';
 import Footer from './blocks/Footer';
-import DogsAdoption from './blocks/DogsAdoption'; // <- importamos el nuevo bloque
+import DogsAdoption from './blocks/DogsAdoption';
+import FAQ from "./blocks/FAQ";
 
 // PageRenderer receives the array of components from Contentful
 export default function PageRender({ components = [] }) {
@@ -54,6 +55,18 @@ export default function PageRender({ components = [] }) {
                 buttonText={block.buttonText}
                 buttonUrl={block.buttonUrl}
                 dogs={dogs}
+              />
+            );
+          case "Faq":
+            const items = block.itemsCollection?.items || [];
+            if (!items.length) return null;
+
+            return (
+              <FAQ
+                key={block.sys.id}
+                heading={block.heading}
+                subheading={block.subheading}
+                items={items}
               />
             );
 

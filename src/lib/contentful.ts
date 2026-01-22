@@ -127,7 +127,16 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                   items { url title description }
                 }
               }
-
+              ... on Faq {
+                heading
+                subheading
+                itemsCollection(limit: 20) {
+                  items {
+                    question
+                    answer
+                  }
+                }
+              }
               ... on Footer {
                 heading
                 subHeading
