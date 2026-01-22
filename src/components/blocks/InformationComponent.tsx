@@ -1,78 +1,111 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { cx } from "@/utils/cx";
+import { cx } from '@/utils/cx';
 
-interface InfoItem {
+interface MediaItem {
+  url: string;
+  title?: string;
+  description?: string;
+}
+
+interface InformationItem {
   title?: string;
   text?: string;
-  image?: {
-    url: string;
-    title?: string;
-    description?: string;
-  };
-  imagePosition?: 'top' | 'bottom' | 'left' | 'right';
+  media?: MediaItem;
+  mediaPosition?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 interface InformationComponentProps {
   heading?: string;
   introText?: string;
-  items: InfoItem[];
+  image?: {
+    url: string;
+    title?: string;
+    description?: string;
+  };
+  items: InformationItem[];
 }
 
 export default function InformationComponent({
   heading,
   introText,
+  image,
   items,
 }: InformationComponentProps) {
-  if (!items || !items.length) return null;
+  if (!items?.length) return null;
 
   return (
-    <section className="py-16 md:py-24 bg-primary">
+    <section className="bg-primary py-16 md:py-24">
       <div className="mx-auto max-w-container px-4 md:px-8">
+
+        {/* Imagen principal — ANCHA (Untitled style) */}
+        {image?.url && (
+          <div className="mb-20">
+            <img
+              src={image.url}
+              alt={image.description || ''}
+              className="w-full rounded-2xl object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
+
         {/* Heading */}
         {heading && (
-          <h2 className="text-brand-primary text-3xl md:text-4xl font-bold mb-6 text-center max-w-4xl mx-auto">
+          <h2 className="mx-auto mb-6 max-w-4xl text-center text-3xl font-bold text-brand-primary md:text-4xl">
             {heading}
           </h2>
         )}
 
-        {/* Intro Text */}
+        {/* Intro text */}
         {introText && (
-          <p className="text-tertiary text-base md:text-lg leading-relaxed mb-12 text-center max-w-4xl mx-auto whitespace-pre-line">
+          <p className="mx-auto mb-16 max-w-4xl text-center text-base leading-relaxed text-tertiary md:text-lg whitespace-pre-line">
             {introText}
           </p>
         )}
 
         {/* Items */}
-        <div className="flex flex-col gap-12 max-w-4xl mx-auto">
+        <div className="mx-auto flex max-w-4xl flex-col gap-14">
           {items.map((item, index) => {
-            const position = item.imagePosition || 'top';
+            const position = item.mediaPosition || 'top';
+            const isHorizontal =
+              position === 'left' || position === 'right';
 
-            const isHorizontal = position === 'left' || position === 'right';
+            const isVideo =
+              item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
+
+            const media =
+              item.media?.url &&
+              (isVideo ? (
+                <video
+                  src={item.media.url}
+                  controls
+                  playsInline
+                  className="w-full rounded-xl md:w-1/2"
+                />
+              ) : (
+                <img
+                  src={item.media.url}
+                  alt={item.media.description || ''}
+                  className="w-full rounded-xl object-cover md:w-1/2"
+                  loading="lazy"
+                />
+              ));
 
             const content = (
               <div className="flex flex-col gap-4">
                 {item.title && (
-                  <h3 className="text-brand-secondary text-xl md:text-2xl font-semibold">
+                  <h3 className="text-xl font-semibold text-brand-secondary md:text-2xl">
                     {item.title}
                   </h3>
                 )}
                 {item.text && (
-                  <p className="text-tertiary text-base md:text-lg leading-relaxed whitespace-pre-line">
+                  <p className="text-base leading-relaxed text-tertiary md:text-lg whitespace-pre-line">
                     {item.text}
                   </p>
                 )}
               </div>
-            );
-
-            const img = item.image?.url && (
-              <img
-                src={item.image.url}
-                alt={item.image.description || ''}
-                className="w-full md:w-1/2 rounded-xl object-cover"
-                loading="lazy"
-              />
             );
 
             return (
@@ -84,12 +117,13 @@ export default function InformationComponent({
                 transition={{ duration: 0.4, ease: 'easeOut' }}
                 className={cx(
                   'flex flex-col gap-6',
-                  isHorizontal && 'md:flex-row md:items-center md:gap-8'
+                  isHorizontal &&
+                    'md:flex-row md:items-center md:gap-10'
                 )}
               >
                 {position === 'top' && (
                   <>
-                    {img}
+                    {media}
                     {content}
                   </>
                 )}
@@ -97,13 +131,13 @@ export default function InformationComponent({
                 {position === 'bottom' && (
                   <>
                     {content}
-                    {img}
+                    {media}
                   </>
                 )}
 
                 {position === 'left' && (
                   <>
-                    {img}
+                    {media}
                     {content}
                   </>
                 )}
@@ -111,7 +145,7 @@ export default function InformationComponent({
                 {position === 'right' && (
                   <>
                     {content}
-                    {img}
+                    {media}
                   </>
                 )}
               </motion.div>

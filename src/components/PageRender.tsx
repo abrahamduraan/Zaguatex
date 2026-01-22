@@ -84,8 +84,8 @@ export default function PageRender({ components = [] }) {
                 items={infoItems.map((item: any) => ({
                   title: item.title,
                   text: item.text,
-                  image: item.image,
-                  imagePosition: item.imagePosition, 
+                  media: item.media,
+                  mediaPosition: item.mediaPosition, 
                 }))}
               />
             );
