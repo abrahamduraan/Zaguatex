@@ -5,6 +5,7 @@ import BigCarousel from './blocks/BigCarousel';
 import Footer from './blocks/Footer';
 import DogsAdoption from './blocks/DogsAdoption';
 import FAQ from "./blocks/FAQ";
+import InformationComponent from './blocks/InformationComponent';
 
 // PageRenderer receives the array of components from Contentful
 export default function PageRender({ components = [] }) {
@@ -58,15 +59,33 @@ export default function PageRender({ components = [] }) {
               />
             );
           case "Faq":
-            const items = block.itemsCollection?.items || [];
-            if (!items.length) return null;
+            const faqItems = block.itemsCollection?.items || [];
+            if (!faqItems.length) return null;
 
             return (
               <FAQ
                 key={block.sys.id}
                 heading={block.heading}
                 subheading={block.subheading}
-                items={items}
+                items={faqItems}
+              />
+            );
+
+          case 'InformationComponent':
+            const infoItems = block.itemsCollection?.items || [];
+            if (!infoItems.length) return null;
+
+            return (
+              <InformationComponent
+                key={block.sys.id}
+                heading={block.heading}
+                introText={block.introText}
+                image={block.image}
+                items={infoItems.map((item: any) => ({
+                  title: item.title,
+                  text: item.text,
+                  image: item.image,
+                }))}
               />
             );
 
