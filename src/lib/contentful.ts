@@ -1,4 +1,5 @@
 // src/lib/contentful.ts
+import type { ContentfulBlock } from '@/components/PageRender';
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
 const ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || 'master';
 const TOKEN = process.env.CONTENTFUL_CDA_TOKEN!;
@@ -53,14 +54,13 @@ export async function contentfulFetch<T>(
 export type PageEntry = {
   slug: string;
   title: string;
-  // Add more fields from your Contentful model as needed
   componentsCollection?: {
-    items: any[];
+    items: ContentfulBlock[];
   };
 };
 
-export async function getPageBySlug(slug: string) {
-  const query = /* GraphQL */ `
+export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
+  const query = /* tu query GraphQL */`
     query GetPageBySlug($slug: String!) {
       pageCollection(where: { slug: $slug }, limit: 1) {
         items {
@@ -183,7 +183,7 @@ export async function getPageBySlug(slug: string) {
         slug: string;
         title: string;
         componentsCollection?: {
-          items: any[];
+          items: ContentfulBlock[];
         };
       }[];
     };

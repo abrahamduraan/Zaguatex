@@ -1,6 +1,5 @@
 import { getPageBySlug } from '@/lib/contentful';
-import PageRender from '@/components/PageRender';
-import type { ContentfulBlock } from '@/components/PageRender'; 
+import PageRender, { ContentfulBlock } from '@/components/PageRender';
 
 export default async function HomePage() {
   const page = await getPageBySlug('home');
@@ -10,7 +9,7 @@ export default async function HomePage() {
   }
 
   // Tipamos explícitamente como ContentfulBlock[]
-  const components: ContentfulBlock[] = page?.componentsCollection?.items ?? [];
+  const components: ContentfulBlock[] = page.componentsCollection?.items ?? [];
 
   return (
     <main>
