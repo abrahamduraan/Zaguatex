@@ -50,7 +50,6 @@ export async function contentfulFetch<T>(
 
 // src/lib/contentful.ts
 
-// Example Page type
 export type PageEntry = {
   slug: string;
   title: string;
@@ -59,8 +58,7 @@ export type PageEntry = {
   };
 };
 
-export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
-  const query = /* tu query GraphQL */`
+export async function getPageBySlug(slug: string): Promise<PageEntry | null> {`
     query GetPageBySlug($slug: String!) {
       pageCollection(where: { slug: $slug }, limit: 1) {
         items {
@@ -177,7 +175,7 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
   `;
 
 
-  type Response = {
+    type Response = {
     pageCollection: {
       items: {
         slug: string;
