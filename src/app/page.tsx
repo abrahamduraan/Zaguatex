@@ -1,12 +1,14 @@
 import { getPageBySlug } from '@/lib/contentful';
-import PageRender, { ContentfulBlock } from '@/components/PageRender';
+import PageRender from '@/components/PageRender';
 
-export default async function DynamicPage({ params }: { params: { slug: string } }) {
-  const page = await getPageBySlug(params.slug);
+export default async function HomePage() {
+  const page = await getPageBySlug('home');
 
-  if (!page) return <p>Página no encontrada</p>;
+  if (!page) {
+    return <p>No se encontró la página home.</p>;
+  }
 
-  const components: ContentfulBlock[] = page.componentsCollection?.items ?? [];
+  const components = page?.componentsCollection?.items ?? [];
 
   return (
     <main>

@@ -7,35 +7,15 @@ import DogsAdoption from './blocks/DogsAdoption';
 import FAQ from "./blocks/FAQ";
 import InformationComponent from './blocks/InformationComponent';
 
-// Tipo genérico para bloques de Contentful
-export type ContentfulBlock = {
-  __typename: string;
-  sys: { id: string };
-  title?: string;
-  subtitle?: string;
-  buttonText?: string;
-  buttonUrl?: string;
-  heading?: string;
-  subheading?: string;
-  introText?: string;
-  image?: any;
-  itemsCollection?: { items: any[] };
-  dogsCollection?: { items: any[] };
-  imagesCollection?: { items: any[] };
-  [key: string]: any;
-};
-
-type PageRenderProps = {
-  components?: ContentfulBlock[];
-};
-
-// PageRender recibe el array de bloques desde Contentful
-export default function PageRender({ components = [] }: PageRenderProps) {
-  if (!components || components.length === 0) return null;
+// PageRenderer receives the array of components from Contentful
+export default function PageRender({ components = [] }) {
+  if (!components || !components.length) {
+    return null;
+  }
 
   return (
     <>
-      {components.map((block: ContentfulBlock) => {
+      {components.map((block) => {
         const type = block.__typename;
 
         switch (type) {
@@ -45,22 +25,28 @@ export default function PageRender({ components = [] }: PageRenderProps) {
           case 'Main':
             return <MainContentSection key={block.sys.id} {...block} />;
 
-          case 'Carousel': {
-            const images: any[] = block.imagesCollection?.items ?? [];
-            return <CarouselUntitled key={block.sys.id} images={images} />;
-          }
+          case 'Carousel':
+            return (
+              <CarouselUntitled
+                key={block.sys.id}
+                images={block.imagesCollection?.items || []}
+              />
+            );
 
-          case 'BigCarousel': {
-            const images: any[] = block.imagesCollection?.items ?? [];
-            return <BigCarousel key={block.sys.id} images={images} />;
-          }
+          case 'BigCarousel':
+            return (
+              <BigCarousel
+                key={block.sys.id}
+                images={block.imagesCollection?.items || []}
+              />
+            );
 
           case 'Footer':
             return <Footer key={block.sys.id} {...block} />;
 
-          case 'DogsAdoption': {
-            const dogs: any[] = block.dogsCollection?.items ?? [];
-            if (dogs.length === 0) return null;
+          case 'DogsAdoption':
+            const dogs = block.dogsCollection?.items || [];
+            if (!dogs.length) return null;
 
             return (
               <DogsAdoption
@@ -72,11 +58,9 @@ export default function PageRender({ components = [] }: PageRenderProps) {
                 dogs={dogs}
               />
             );
-          }
-
-          case 'Faq': {
-            const faqItems: any[] = block.itemsCollection?.items ?? [];
-            if (faqItems.length === 0) return null;
+          case "Faq":
+            const faqItems = block.itemsCollection?.items || [];
+            if (!faqItems.length) return null;
 
             return (
               <FAQ
@@ -86,27 +70,25 @@ export default function PageRender({ components = [] }: PageRenderProps) {
                 items={faqItems}
               />
             );
-          }
 
-          case 'InformationComponent': {
-            const infoItems: any[] = block.itemsCollection?.items ?? [];
-            if (infoItems.length === 0) return null;
+          case 'InformationComponent':
+            const infoItems = block.itemsCollection?.items || [];
+            if (!infoItems.length) return null;
 
             return (
               <InformationComponent
                 key={block.sys.id}
                 heading={block.heading}
                 introText={block.introText}
-                image={block.image}
+                image={block.image} // si quieres que la sección tenga imagen principal
                 items={infoItems.map((item: any) => ({
                   title: item.title,
                   text: item.text,
                   media: item.media,
-                  mediaPosition: item.mediaPosition,
+                  mediaPosition: item.mediaPosition, 
                 }))}
               />
             );
-          }
 
           default:
             console.warn(`Unknown block type: ${type}`);
