@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
@@ -10,6 +9,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  swcMinify: true,                    // minificador SWC activado
+  productionBrowserSourceMaps: false, // evita errores de source map
 };
 
 export default nextConfig;

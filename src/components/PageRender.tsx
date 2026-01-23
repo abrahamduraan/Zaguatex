@@ -7,11 +7,31 @@ import DogsAdoption from './blocks/DogsAdoption';
 import FAQ from "./blocks/FAQ";
 import InformationComponent from './blocks/InformationComponent';
 
-// PageRenderer receives the array of components from Contentful
-export default function PageRender({ components = [] }) {
-  if (!components || !components.length) {
-    return null;
-  }
+// Tipo genérico para bloques de Contentful
+type ContentfulBlock = {
+  __typename: string;
+  sys: { id: string };
+  title?: string;
+  subtitle?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  heading?: string;
+  subheading?: string;
+  introText?: string;
+  image?: any;
+  itemsCollection?: { items: any[] };
+  dogsCollection?: { items: any[] };
+  imagesCollection?: { items: any[] };
+  [key: string]: any; // para props dinámicos
+};
+
+type PageRenderProps = {
+  components?: ContentfulBlock[];
+};
+
+// PageRender recibe el array de bloques desde Contentful
+export default function PageRender({ components = [] }: PageRenderProps) {
+  if (!components.length) return null;
 
   return (
     <>
@@ -58,7 +78,8 @@ export default function PageRender({ components = [] }) {
                 dogs={dogs}
               />
             );
-          case "Faq":
+
+          case 'Faq':
             const faqItems = block.itemsCollection?.items || [];
             if (!faqItems.length) return null;
 
@@ -80,12 +101,12 @@ export default function PageRender({ components = [] }) {
                 key={block.sys.id}
                 heading={block.heading}
                 introText={block.introText}
-                image={block.image} // si quieres que la sección tenga imagen principal
+                image={block.image}
                 items={infoItems.map((item: any) => ({
                   title: item.title,
                   text: item.text,
                   media: item.media,
-                  mediaPosition: item.mediaPosition, 
+                  mediaPosition: item.mediaPosition,
                 }))}
               />
             );
