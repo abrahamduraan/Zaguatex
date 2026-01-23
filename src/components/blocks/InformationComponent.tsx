@@ -41,28 +41,46 @@ export default function InformationComponent({
 
         {/* Imagen principal */}
         {image?.url && (
-          <div className="mb-20">
+          <motion.div
+            className="mb-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <img
               src={image.url}
               alt={image.description || ''}
               className="w-full rounded-2xl object-cover"
               loading="lazy"
             />
-          </div>
+          </motion.div>
         )}
 
         {/* Heading */}
         {heading && (
-          <h2 className="mx-auto mb-6 max-w-4xl text-center text-3xl font-bold text-brand-primary md:text-4xl">
+          <motion.h2
+            className="mx-auto mb-6 max-w-4xl text-center text-3xl font-bold text-brand-primary md:text-4xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             {heading}
-          </h2>
+          </motion.h2>
         )}
 
         {/* Intro */}
         {introText && (
-          <p className="mx-auto mb-16 max-w-4xl text-center text-base leading-relaxed text-tertiary md:text-lg whitespace-pre-line">
+          <motion.p
+            className="mx-auto mb-16 max-w-4xl text-center text-base leading-relaxed text-tertiary md:text-lg whitespace-pre-line"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             {introText}
-          </p>
+          </motion.p>
         )}
 
         {/* Items */}
@@ -70,9 +88,7 @@ export default function InformationComponent({
           {items.map((item, index) => {
             const position = item.mediaPosition || 'top';
             const isHorizontal = position === 'left' || position === 'right';
-
             const isVideo = item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
-
             const mediaClass = cx(
               'w-full rounded-xl',
               isHorizontal ? 'md:w-1/2' : 'max-w-3xl'
@@ -81,26 +97,40 @@ export default function InformationComponent({
             const media =
               item.media?.url &&
               (isVideo ? (
-                <video
+                <motion.video
                   src={item.media.url}
                   controls
                   playsInline
                   className={mediaClass}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.15 }}
                 />
               ) : (
-                <img
+                <motion.img
                   src={item.media.url}
                   alt={item.media.description || ''}
                   className={cx(mediaClass, 'object-cover')}
                   loading="lazy"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.15 }}
                 />
               ));
 
             const content = (
-              <div className={cx(
-                'flex flex-col gap-4',
-                !isHorizontal && 'items-center text-center max-w-2xl'
-              )}>
+              <motion.div
+                className={cx(
+                  'flex flex-col gap-4',
+                  !isHorizontal && 'items-center text-center max-w-2xl'
+                )}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+              >
                 {item.title && (
                   <h3 className="text-xl font-semibold text-brand-secondary md:text-2xl">
                     {item.title}
@@ -111,16 +141,12 @@ export default function InformationComponent({
                     {item.text}
                   </p>
                 )}
-              </div>
+              </motion.div>
             );
 
             return (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
                 className={cx(
                   'flex gap-6',
                   isHorizontal
@@ -134,28 +160,25 @@ export default function InformationComponent({
                     {content}
                   </>
                 )}
-
                 {position === 'bottom' && (
                   <>
                     {content}
                     {media}
                   </>
                 )}
-
                 {position === 'left' && (
                   <>
                     {media}
                     {content}
                   </>
                 )}
-
                 {position === 'right' && (
                   <>
                     {content}
                     {media}
                   </>
                 )}
-              </motion.div>
+              </div>
             );
           })}
         </div>

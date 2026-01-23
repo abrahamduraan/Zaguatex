@@ -34,18 +34,28 @@ export default function FAQ({
     <section className="bg-primary py-16 md:py-24">
       <div className="mx-auto max-w-container px-4 md:px-8">
 
-        {/* Subtitle (igual a DogsAdoption) */}
+        {/* Subtitle */}
         {subheading && (
-          <p className="text-brand-secondary text-lg font-semibold md:text-xl mb-4 text-center">
+          <motion.p
+            className="text-brand-secondary text-lg font-semibold md:text-xl mb-4 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
             {subheading}
-          </p>
+          </motion.p>
         )}
 
-        {/* Title (igual a DogsAdoption) */}
+        {/* Heading */}
         {heading && (
-          <h2 className="text-brand-primary text-3xl md:text-4xl font-bold mb-12 text-center">
+          <motion.h2
+            className="text-brand-primary text-3xl md:text-4xl font-bold mb-12 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+          >
             {heading}
-          </h2>
+          </motion.h2>
         )}
 
         <div className="mx-auto max-w-3xl flex flex-col gap-6">
@@ -53,8 +63,12 @@ export default function FAQ({
             const isOpen = openQuestions.has(index);
 
             return (
-              <div
+              <motion.div
                 key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
                 className={cx(
                   "w-full",
                   "not-first:border-t border-secondary",
@@ -70,7 +84,12 @@ export default function FAQ({
                     {faq.question}
                   </span>
 
-                  <span className="flex size-6 items-center text-quaternary-fg">
+                  {/* Animated Icon */}
+                  <motion.span
+                    className="flex size-6 items-center text-quaternary-fg"
+                    animate={{ rotate: isOpen ? -90 : 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  >
                     <svg
                       width="24"
                       height="24"
@@ -82,21 +101,13 @@ export default function FAQ({
                       strokeLinejoin="round"
                     >
                       <circle cx="12" cy="12" r="10" />
-                      <line
-                        className={cx(
-                          "origin-center transition duration-150",
-                          isOpen && "-rotate-90"
-                        )}
-                        x1="12"
-                        y1="8"
-                        x2="12"
-                        y2="16"
-                      />
+                      <line x1="12" y1="8" x2="12" y2="16" />
                       <line x1="8" y1="12" x2="16" y2="12" />
                     </svg>
-                  </span>
+                  </motion.span>
                 </button>
 
+                {/* Answer */}
                 <motion.div
                   initial={false}
                   animate={{
@@ -105,19 +116,18 @@ export default function FAQ({
                   }}
                   transition={{
                     type: "spring",
-                    damping: 24,
-                    stiffness: 240,
+                    damping: 20,
+                    stiffness: 200,
                   }}
                   className="overflow-hidden"
                 >
-                  {/* Answer */}
                   <div className="pt-3 pr-4">
                     <p className="text-tertiary text-base leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
                 </motion.div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

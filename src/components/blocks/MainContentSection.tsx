@@ -1,5 +1,7 @@
 'use client';
 
+import { motion } from "motion/react";
+
 type MainContentSectionProps = {
   heading: string;
   subHeading?: string | null;
@@ -27,7 +29,7 @@ const ImageBlock = ({ image }: { image: { url: string; title: string } }) => (
   </div>
 );
 
-const MainContentSection = ({
+export default function MainContentSection({
   heading,
   subHeading,
   supportingText,
@@ -40,63 +42,82 @@ const MainContentSection = ({
   image1,
   image2,
   image3,
-}: MainContentSectionProps) => {
+}: MainContentSectionProps) {
+  const cards = [
+    { title: cardTitle1, text: cardText1, image: image1, reverse: false },
+    { title: cardTitle2, text: cardText2, image: image2, reverse: true },
+    { title: cardTitle3, text: cardText3, image: image3, reverse: false },
+  ];
+
   return (
     <section className="bg-secondary_alt py-16 md:py-24">
+      {/* Heading centrado */}
       <div className="mx-auto max-w-container px-4 md:px-8">
-        <div className="mx-auto max-w-3xl text-center">
+        <motion.div
+          className="mx-auto max-w-3xl text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           {subHeading && (
-            <span className="text-sm font-semibold text-brand-secondary">
+            <motion.span
+              className="text-sm font-semibold text-brand-secondary"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
               {subHeading}
-            </span>
+            </motion.span>
           )}
-          <h2 className="mt-3 text-display-sm font-semibold text-primary md:text-display-md">
+          <motion.h2
+            className="mt-3 text-display-sm font-semibold text-primary md:text-display-md"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             {heading}
-          </h2>
+          </motion.h2>
           {supportingText && (
-            <p className="mt-4 text-lg text-tertiary md:text-xl">
+            <motion.p
+              className="mt-4 text-lg text-tertiary md:text-xl"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               {supportingText}
-            </p>
+            </motion.p>
           )}
-        </div>
+        </motion.div>
       </div>
 
+      {/* Cards */}
       <div className="mx-auto mt-16 flex max-w-container flex-col gap-20 px-4 md:px-8">
-        {/* CARD 1 */}
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-          <div className="self-center lg:pl-12 lg:pr-24">
-            <h3 className="text-display-xs font-semibold text-primary">
-              {cardTitle1}
-            </h3>
-            <p className="mt-4 text-lg text-tertiary">{cardText1}</p>
-          </div>
-          <ImageBlock image={image1} />
-        </div>
+        {cards.map((card, idx) => (
+          <motion.div
+            key={idx}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10"
+            initial={{ opacity: 0, x: card.reverse ? 50 : -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: idx * 0.2 }}
+          >
+            {/* Imagen */}
+            <div className={`${card.reverse ? 'order-first lg:order-last' : 'order-first'}`}>
+              <ImageBlock image={card.image} />
+            </div>
 
-        {/* CARD 2 */}
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-          <div className="self-center lg:order-last lg:pl-24 lg:pr-8">
-            <h3 className="text-display-xs font-semibold text-primary">
-              {cardTitle2}
-            </h3>
-            <p className="mt-4 text-lg text-tertiary">{cardText2}</p>
-          </div>
-          <ImageBlock image={image2} />
-        </div>
-
-        {/* CARD 3 */}
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-          <div className="self-center lg:pl-12 lg:pr-24">
-            <h3 className="text-display-xs font-semibold text-primary">
-              {cardTitle3}
-            </h3>
-            <p className="mt-4 text-lg text-tertiary">{cardText3}</p>
-          </div>
-          <ImageBlock image={image3} />
-        </div>
+            {/* Texto */}
+            <div className="self-center lg:pl-12 lg:pr-24">
+              <h3 className="text-display-xs font-semibold text-primary">{card.title}</h3>
+              <p className="mt-4 text-lg text-tertiary">{card.text}</p>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
-};
-
-export default MainContentSection;
+}

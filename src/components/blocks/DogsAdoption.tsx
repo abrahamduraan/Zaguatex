@@ -28,8 +28,8 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.2, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
 export default function DogsAdoption({
@@ -43,21 +43,50 @@ export default function DogsAdoption({
 
   return (
     <div className="mx-auto max-w-5xl px-4 md:px-6 py-12 text-center">
-
+      {/* Subtitle */}
       {subtitle && (
-        <p className="text-brand-secondary text-lg font-semibold mb-3">{subtitle}</p>
+        <motion.p
+          className="text-brand-secondary text-lg font-semibold mb-3"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {subtitle}
+        </motion.p>
       )}
 
+      {/* Title */}
       {title && (
-        <h2 className="text-brand-primary text-3xl md:text-4xl font-bold mb-8">{title}</h2>
+        <motion.h2
+          className="text-brand-primary text-3xl md:text-4xl font-bold mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        >
+          {title}
+        </motion.h2>
       )}
 
+      {/* Button */}
       {buttonText && buttonUrl && (
-        <div className="mb-12 flex justify-center">
-          <Button size="xl" href={buttonUrl} color="primary">{buttonText}</Button>
-        </div>
+        <motion.div
+          className="mb-12 flex justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+        >
+          <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300 }}>
+            <Button size="xl" href={buttonUrl} color="primary">
+              {buttonText}
+            </Button>
+          </motion.div>
+        </motion.div>
       )}
 
+      {/* Cards Grid */}
       <motion.ul
         variants={containerVariants}
         initial="hidden"
@@ -69,7 +98,7 @@ export default function DogsAdoption({
           <motion.li
             key={dog.sys.id}
             variants={cardVariants}
-            whileHover={{ scale: 1.025 }} // Solo escala, no se mueve
+            whileHover={{ scale: 1.025 }}
             transition={{ type: "spring", stiffness: 420, damping: 28 }}
             className="cursor-pointer"
           >

@@ -73,7 +73,6 @@ export async function getPageBySlug(slug: string) {
 
               ... on Hero {
                 title
-                badge
                 heading
                 supportingText
                 buttonOneText
@@ -97,6 +96,7 @@ export async function getPageBySlug(slug: string) {
                 image2 { url title description }
                 image3 { url title description }
               }
+
 
               ... on Carousel {
                 sys { id }
