@@ -58,7 +58,8 @@ export type PageEntry = {
   };
 };
 
-export async function getPageBySlug(slug: string): Promise<PageEntry | null> {`
+export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
+  const query = /* GraphQL */ `
     query GetPageBySlug($slug: String!) {
       pageCollection(where: { slug: $slug }, limit: 1) {
         items {
