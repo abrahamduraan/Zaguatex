@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from "motion/react";
 import DogsAdoptionCard from "./DogsAdoptionCard";
 import { Button } from "@/components/base/buttons/button";
 
@@ -18,6 +19,19 @@ interface DogsAdoptionProps {
   dogs: Dog[];
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.2, ease: "easeOut" } },
+};
+
 export default function DogsAdoption({
   title,
   subtitle,
@@ -25,48 +39,48 @@ export default function DogsAdoption({
   buttonUrl,
   dogs,
 }: DogsAdoptionProps) {
-  if (!dogs || !dogs.length) return null;
-
-  const handleDogClick = (dog: Dog) => {
-    console.log("Dog clicked:", dog.title);
-    // Aquí puedes abrir modal, navegar a detalle, etc.
-  };
+  if (!dogs?.length) return null;
 
   return (
-    <div className="mx-auto max-w-container px-4 md:px-8 py-12 text-center">
+    <div className="mx-auto max-w-5xl px-4 md:px-6 py-12 text-center">
 
-      {/* Subtítulo */}
-      {subtitle && <p className="text-brand-secondary text-lg font-semibold md:text-xl mb-4">{subtitle}</p>}
+      {subtitle && (
+        <p className="text-brand-secondary text-lg font-semibold mb-3">{subtitle}</p>
+      )}
 
-      {/* Título */}
-      {title && <h2 className="text-brand-primary text-3xl md:text-4xl font-bold mb-8">{title}</h2>}
+      {title && (
+        <h2 className="text-brand-primary text-3xl md:text-4xl font-bold mb-8">{title}</h2>
+      )}
 
-      {/* Botón único */}
       {buttonText && buttonUrl && (
         <div className="mb-12 flex justify-center">
-          <Button
-            size="xl"
-            href={buttonUrl}
-            color="primary"
-          >
-            {buttonText}
-          </Button>
+          <Button size="xl" href={buttonUrl} color="primary">{buttonText}</Button>
         </div>
       )}
 
-      {/* Catálogo de perros */}
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {dogs.map((dog, index) => (
-          <li key={`${dog.sys.id}-${index}`}>
+      <motion.ul
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        {dogs.map((dog) => (
+          <motion.li
+            key={dog.sys.id}
+            variants={cardVariants}
+            whileHover={{ scale: 1.025 }} // Solo escala, no se mueve
+            transition={{ type: "spring", stiffness: 420, damping: 28 }}
+            className="cursor-pointer"
+          >
             <DogsAdoptionCard
               title={dog.title}
               description={dog.description}
               image={dog.image}
-              onClick={() => handleDogClick(dog)}
             />
-          </li>
+          </motion.li>
         ))}
-      </ul>
+      </motion.ul>
     </div>
   );
 }
