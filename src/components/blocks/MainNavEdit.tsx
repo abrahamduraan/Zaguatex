@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 import { Header } from "@/components/marketing/header-navigation/header";
-import Link from 'next/link'; // <-- importante
+import Link from 'next/link';
 
 interface MainNavEditProps {
   items: { text: string; link: string }[];
@@ -10,7 +10,17 @@ interface MainNavEditProps {
 }
 
 export default function MainNavEdit({ items, logo }: MainNavEditProps) {
-  const headerItems = items.map(item => ({
+  // Enlaces fijos adicionales
+  const defaultItems = [
+    { text: "Adoptar", link: "adoptar" },
+    { text: "Voluntario", link: "voluntario" },
+    { text: "Contactar", link: "contactar" },
+    { text: "Donar", link: "donar" },
+  ];
+
+  const allItems = [...items, ...defaultItems];
+
+  const headerItems = allItems.map(item => ({
     label: item.text,
     href: item.link
   }));
@@ -28,6 +38,7 @@ export default function MainNavEdit({ items, logo }: MainNavEditProps) {
         className="sticky fixed top-0 z-50"
         renderItem={(item) => (
           <motion.div
+            key={item.href}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}

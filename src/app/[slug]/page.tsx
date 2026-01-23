@@ -1,29 +1,27 @@
-// src/app/[slug]/page.tsx
 import { notFound } from 'next/navigation';
 import { getAllPageSlugs, getPageBySlug } from '@/lib/contentful';
 import PageRender from '@/components/PageRender';
 
 type PageProps = {
-  params: {
-    slug: string;
-  };
+  params: { slug: string };
 };
 
-// This will generate static pages for each slug from Contentful
+// Genera las páginas estáticas
 export async function generateStaticParams() {
   const slugs = await getAllPageSlugs();
-
-  return slugs.map((slug) => ({ slug }));
+  return slugs.map(slug => ({ slug }));
 }
 
 export default async function DynamicPage({ params }: PageProps) {
-  const page = await getPageBySlug(params.slug);
+  const slug = params?.slug;
 
-  if (!page) {
-    notFound(); // Next.js 404
-  }
+  if (!slug) return notFound(); // protege contra slug undefined
 
-  const components = page.componentsCollection.items;
+  const page = await getPageBySlug(slug);
+
+  if (!page) return notFound(); // 404 si no existe
+
+  const components = page.componentsCollection?.items ?? [];
 
   return (
     <main>

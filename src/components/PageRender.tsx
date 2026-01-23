@@ -5,7 +5,7 @@ import BigCarousel from './blocks/BigCarousel';
 import Footer from './blocks/Footer';
 import DogsAdoption from './blocks/DogsAdoption';
 import FAQ from "./blocks/FAQ";
-import InformationComponent from './blocks/InformationComponent";
+import InformationComponent from './blocks/InformationComponent';
 
 // Tipo genérico para bloques de Contentful
 export type ContentfulBlock = {

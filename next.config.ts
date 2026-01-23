@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  basePath: '/zaguatex', // si tu app corre en subcarpeta
+  swcMinify: true,
+  productionBrowserSourceMaps: false,
   images: {
     remotePatterns: [
       {
@@ -9,8 +12,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  swcMinify: true,                    // minificador SWC activado
-  productionBrowserSourceMaps: false, // evita errores de source map
 };
 
 export default nextConfig;
