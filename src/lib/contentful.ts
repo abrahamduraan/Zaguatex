@@ -61,15 +61,15 @@ export type PageEntry = {
 
 export async function getPageBySlug(slug: string) {
   const query = /* GraphQL */ `
-    query GetPageBySlug($slug: String!) {
-      pageCollection(where: { slug: $slug }, limit: 1) {
-        items {
-          slug
-          title
-          componentsCollection(limit: 50) {
-            items {
-              __typename
-              sys { id }
+  query GetPageBySlug($slug: String!) {
+    pageCollection(where: { slug: $slug }, limit: 1) {
+      items {
+        slug
+        title
+        componentsCollection(limit: 50) {
+          items {
+            __typename
+            sys { id }
 
               ... on Hero {
                 title
@@ -182,14 +182,13 @@ export async function getPageBySlug(slug: string) {
       items: {
         slug: string;
         title: string;
-        componentsCollection?: {
-          items: any[];
-        };
+        componentsCollection?: { items: any[] };
       }[];
     };
   };
-
-  const data = await contentfulFetch<Response>(query, { slug });
+  
+  const normalizedSlug = slug.toLowerCase().trim();
+  const data = await contentfulFetch<Response>(query, { slug: normalizedSlug });
 
   const item = data.pageCollection.items[0];
   if (!item) return null;
@@ -273,7 +272,7 @@ export async function getMainNavigation(
   `;
 
   type Response = {
-    navigationMenuCollection: {
+    menuCollection: {
       items: {
         title: string;
         slug: string;
@@ -292,7 +291,9 @@ export async function getMainNavigation(
     };
   };
 
-  const data = await contentfulFetch<Response>(query, { slug });
+
+  const normalizedSlug = slug.toLowerCase().trim();
+  const data = await contentfulFetch<Response>(query, { slug: normalizedSlug });
 
   console.log(data);
 

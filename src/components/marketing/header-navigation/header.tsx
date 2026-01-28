@@ -1,5 +1,8 @@
 'use client';
 
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
 import { ChevronDown } from '@untitledui/icons';
@@ -39,6 +42,7 @@ const footerNavItems = [
   { label: 'Sitemap', href: '/pricing' },
   { label: 'Cookie settings', href: '/pricing' },
 ];
+
 
 const MobileNavItem = (props: {
   className?: string;
@@ -112,6 +116,7 @@ interface HeaderProps {
   className?: string;
   logoUrl?: string;
   logoAlt?: string;
+  renderLogo?: () => ReactNode;
 }
 
 export const Header = ({
@@ -120,9 +125,11 @@ export const Header = ({
   isFloating,
   className,
   logoUrl,
-  logoAlt
+  logoAlt,
+  renderLogo,
 }: HeaderProps) => {
   const headerRef = useRef<HTMLElement>(null);
+  const router = useRouter();
 
   return (
     <header
@@ -141,31 +148,39 @@ export const Header = ({
           className={cx(
             'flex w-full justify-between gap-4',
             isFloating &&
-              'ring-secondary_alt md:rounded-2xl md:bg-primary md:py-3 md:pr-3 md:pl-4 md:shadow-xs md:ring-1'
+            'ring-secondary_alt md:rounded-2xl md:bg-primary md:py-3 md:pr-3 md:pl-4 md:shadow-xs md:ring-1'
           )}
         >
           <div className="flex flex-1 items-center gap-5">
             {/* Desktop logo */}
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt={logoAlt || "Logo"}
-                className="h-8 md:max-lg:hidden"
-              />
-            ) : (
-              <UntitledLogo className="h-8 md:max-lg:hidden" />
+            {logoUrl && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="cursor-pointer md:max-lg:hidden"
+                onClick={() => router.push("/")}
+              >
+                <img src={logoUrl} alt={logoAlt || "Logo"} className="h-8" />
+              </motion.div>
             )}
 
             {/* Minimal / mobile logo */}
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt={logoAlt || "Logo"}
-                className="hidden h-8 md:inline-block lg:hidden"
-              />
-            ) : (
-              <UntitledLogoMinimal className="hidden h-8 md:inline-block lg:hidden" />
+            {logoUrl && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="cursor-pointer hidden md:inline-block lg:hidden"
+                onClick={() => router.push("/")}
+              >
+                <img src={logoUrl} alt={logoAlt || "Logo"} className="h-8" />
+              </motion.div>
             )}
+
+
 
             {/* Desktop navigation */}
             <nav className="max-md:hidden">
@@ -186,9 +201,9 @@ export const Header = ({
                               'hidden origin-top will-change-transform md:block',
                               isFullWidth && 'w-full',
                               isEntering &&
-                                'duration-200 ease-out animate-in fade-in slide-in-from-top-1',
+                              'duration-200 ease-out animate-in fade-in slide-in-from-top-1',
                               isExiting &&
-                                'duration-150 ease-in animate-out fade-out slide-out-to-top-1'
+                              'duration-150 ease-in animate-out fade-out slide-out-to-top-1'
                             )
                           }
                           offset={isFloating || isFullWidth ? 0 : 8}
@@ -205,11 +220,11 @@ export const Header = ({
                                 // Have to use the scale animation inside the popover to avoid
                                 // miscalculating the popover's position when opening.
                                 isEntering &&
-                                  !isFullWidth &&
-                                  'duration-200 ease-out animate-in zoom-in-95',
+                                !isFullWidth &&
+                                'duration-200 ease-out animate-in zoom-in-95',
                                 isExiting &&
-                                  !isFullWidth &&
-                                  'duration-150 ease-in animate-out zoom-out-95'
+                                !isFullWidth &&
+                                'duration-150 ease-in animate-out zoom-out-95'
                               )}
                             >
                               {navItem.menu}

@@ -1,27 +1,31 @@
+// src/app/[slug]/page.tsx
 import { notFound } from 'next/navigation';
 import { getAllPageSlugs, getPageBySlug } from '@/lib/contentful';
 import PageRender from '@/components/PageRender';
 
 type PageProps = {
-  params: { slug: string };
+  params: {
+    slug: string;
+  };
 };
 
-// Genera las páginas estáticas
+// Esto evita que se genere /home dinámicamente
 export async function generateStaticParams() {
   const slugs = await getAllPageSlugs();
-  return slugs.map(slug => ({ slug }));
+  return slugs
+    .filter(slug => slug !== 'home') // <--- home ya tiene su propia página
+    .map(slug => ({ slug }));
 }
 
 export default async function DynamicPage({ params }: PageProps) {
-  const slug = params?.slug;
-
-  if (!slug) return notFound(); // protege contra slug undefined
-
+  const { slug } = await params; // necesario en Next 16+
   const page = await getPageBySlug(slug);
 
-  if (!page) return notFound(); // 404 si no existe
+  if (!page) {
+    notFound(); // Next.js 404
+  }
 
-  const components = page.componentsCollection?.items ?? [];
+  const components = page.componentsCollection.items;
 
   return (
     <main>

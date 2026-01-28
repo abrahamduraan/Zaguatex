@@ -1,3 +1,4 @@
+// src/app/page.tsx
 import { getPageBySlug } from '@/lib/contentful';
 import PageRender from '@/components/PageRender';
 
@@ -8,7 +9,7 @@ export default async function HomePage() {
     return <p>No se encontró la página home.</p>;
   }
 
-  const components = page?.componentsCollection?.items ?? [];
+  const components = page.componentsCollection.items ?? [];
 
   return (
     <main>
