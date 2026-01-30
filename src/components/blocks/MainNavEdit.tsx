@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Header } from "@/components/marketing/header-navigation/header";
+import { Header } from '@/components/marketing/header-navigation/header';
 import Link from 'next/link';
 
 interface MainNavEditProps {
@@ -24,7 +24,7 @@ export default function MainNavEdit({ items, logo }: MainNavEditProps) {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
       className="sticky top-0 z-50 bg-white"
     >
       <Header
@@ -38,11 +38,12 @@ export default function MainNavEdit({ items, logo }: MainNavEditProps) {
         )}
         renderItem={(item) => (
           <motion.div
+            key={item.href} // <- importante para React
             variants={itemVariants}
             initial="hidden"
             animate="visible"
             whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
             className="px-4 py-2 text-sm md:text-base font-medium"
           >
             <Link href={`/${item.href}`}>{item.label}</Link>

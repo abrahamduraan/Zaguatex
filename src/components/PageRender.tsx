@@ -3,7 +3,7 @@ import MainContentSection from './blocks/MainContentSection';
 import CarouselUntitled from './blocks/CarouselUntitled';
 import BigCarousel from './blocks/BigCarousel';
 import Footer from './blocks/Footer';
-import DogsAdoption from './blocks/DogsAdoption';
+import DogsAdoption from './blocks/adoptar/DogsAdoption';
 import FAQ from "./blocks/FAQ";
 import InformationComponent from './blocks/InformationComponent';
 
@@ -45,17 +45,14 @@ export default function PageRender({ components = [] }) {
             return <Footer key={block.sys.id} {...block} />;
 
           case 'DogsAdoption':
-            // Mapea los perros para que coincidan con la interfaz esperada por DogsAdoption
             const dogs = (block.dogsCollection?.items || []).map(dog => ({
               sys: dog.sys,
               title: dog.title,
               description: dog.description,
-              mainImage: dog.mainImage, // Imagen principal de la card
-              galleryImages: dog.galleryImagesCollection?.items || [], // Imágenes extra para el modal
+              mainImage: dog.mainImage,
+              galleryImages: dog.galleryImagesCollection?.items || [],
             }));
-
             if (!dogs.length) return null;
-
             return (
               <DogsAdoption
                 key={block.sys.id}
@@ -63,7 +60,7 @@ export default function PageRender({ components = [] }) {
                 subtitle={block.subtitle}
                 buttonText={block.buttonText}
                 buttonUrl={block.buttonUrl}
-                dogs={dogs} 
+                dogs={dogs}
               />
             );
 

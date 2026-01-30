@@ -189,7 +189,7 @@ export async function getPageBySlug(slug: string) {
       }[];
     };
   };
-  
+
   const normalizedSlug = slug.toLowerCase().trim();
   const data = await contentfulFetch<Response>(query, { slug: normalizedSlug });
 
@@ -317,4 +317,43 @@ export async function getMainNavigation(
     : undefined;
 
   return { logo, items };
+}
+
+export async function getDogByTitle(title: string) {
+  const query = /* GraphQL */ `
+    query GetDogByTitle($title: String!) {
+      dogsAdoptionCardCollection(where: { title: $title }, limit: 1) {
+        items {
+          title
+          description
+          mainImage { url title description }
+          galleryImagesCollection {
+            items { url title description }
+          }
+        }
+      }
+    }
+  `;
+
+  type Response = {
+    dogsAdoptionCardCollection: {
+      items: {
+        title: string;
+        description: string;
+        mainImage?: { url: string; title?: string; description?: string };
+        galleryImagesCollection?: { items: { url: string; title?: string; description?: string }[] };
+      }[];
+    };
+  };
+
+  const data = await contentfulFetch<Response>(query, { title }); // Case-sensitive
+  const dog = data.dogsAdoptionCardCollection.items[0];
+  if (!dog) return null;
+
+  return {
+    title: dog.title,
+    description: dog.description,
+    mainImage: dog.mainImage,
+    galleryImages: dog.galleryImagesCollection?.items || [],
+  };
 }
