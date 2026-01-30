@@ -60,20 +60,18 @@ export default function DogsAdoption({
 
   return (
     <div className="mx-auto max-w-5xl px-4 md:px-6 py-12 text-center">
-      {/* Subtítulo */}
+
       {subtitle && <p className="text-brand-secondary text-lg font-semibold mb-3">{subtitle}</p>}
 
-      {/* Título */}
+
       {title && <h2 className="text-brand-primary text-3xl md:text-4xl font-bold mb-8">{title}</h2>}
 
-      {/* Botón opcional */}
       {buttonText && buttonUrl && (
         <div className="mb-12 flex justify-center">
           <Button size="xl" href={buttonUrl} color="primary">{buttonText}</Button>
         </div>
       )}
 
-      {/* Catálogo de cards */}
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {dogs.map((dog) => (
           <li key={dog.sys.id} onClick={() => { setSelectedDog(dog); setGalleryIndex(0); }}>
@@ -86,29 +84,26 @@ export default function DogsAdoption({
         ))}
       </ul>
 
-      {/* Modal */}
       {selectedDog && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-x-hidden"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden bg-black/30"
           onClick={() => setSelectedDog(null)}
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            className="bg-brand-solid rounded-2xl w-full max-w-3xl max-h-[90vh] p-6 relative shadow-lg overflow-y-auto text-white"
+            className="bg-brand-solid rounded-3xl w-full max-w-3xl max-h-[90vh] p-6 relative shadow-xl overflow-y-auto text-white"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Cerrar */}
             <div className="flex justify-end mb-2">
               <Button onClick={() => setSelectedDog(null)} color="secondary">
                 X
               </Button>
             </div>
 
-            {/* Carrusel premium */}
             {currentImages.length > 0 && (
-              <div className="relative w-full mb-4 select-none overflow-hidden rounded-lg">
+              <div className="relative w-full mb-4 select-none overflow-hidden rounded-2xl">
                 <motion.div
                   animate={controls}
                   drag="x"
@@ -119,25 +114,25 @@ export default function DogsAdoption({
                   <img
                     src={currentImages[galleryIndex]?.url}
                     alt={currentImages[galleryIndex]?.title || selectedDog.title}
-                    className="w-full h-auto max-h-80 object-cover rounded-lg shadow-lg"
+                    className="w-full h-auto max-h-80 object-cover rounded-2xl shadow-lg"
                   />
                 </motion.div>
 
-                {/* Flechas */}
-                <button
+                <Button
                   onClick={prevImage}
-                  className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition"
+                  className="absolute top-1/2 left-2 transform -translate-y-1/2 p-3 rounded-full hover:scale-110 transition"
+                  color="primary"
                 >
                   ‹
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={nextImage}
-                  className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition"
+                  className="absolute top-1/2 right-2 transform -translate-y-1/2 p-3 rounded-full hover:scale-110 transition"
+                  color="primary"
                 >
                   ›
-                </button>
+                </Button>
 
-                {/* Miniaturas */}
                 {currentImages.length > 1 && (
                   <div className="flex justify-center gap-2 mt-2">
                     {currentImages.map((img, i) => (
@@ -146,8 +141,8 @@ export default function DogsAdoption({
                         src={img?.url}
                         alt={img?.title || ""}
                         onClick={() => setGalleryIndex(i)}
-                        className={`w-12 h-12 object-cover rounded cursor-pointer border-2 transition ${
-                          i === galleryIndex ? "border-white" : "border-transparent"
+                        className={`w-12 h-12 object-cover rounded-full cursor-pointer border-2 transition ${
+                          i === galleryIndex ? "border-yellow-400" : "border-transparent"
                         }`}
                       />
                     ))}
@@ -156,15 +151,12 @@ export default function DogsAdoption({
               </div>
             )}
 
-            {/* Título */}
-            <h3 className="text-2xl font-bold mb-2">{selectedDog.title}</h3>
+            <h3 className="text-2xl font-semibold mb-2 text-white">{selectedDog.title}</h3>
 
-            {/* Descripción completa */}
-            <p className="leading-relaxed mb-4 break-words whitespace-pre-line">
+            <p className="leading-relaxed mb-4 text-white break-words whitespace-pre-line">
               {selectedDog.description}
             </p>
 
-            {/* Botón opcional */}
             {buttonText && buttonUrl && (
               <div className="flex justify-center mt-4">
                 <Button size="xl" href={buttonUrl} color="primary">{buttonText}</Button>
