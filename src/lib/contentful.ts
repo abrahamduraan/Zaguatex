@@ -117,15 +117,18 @@ export async function getPageBySlug(slug: string) {
                 subtitle
                 buttonText
                 buttonUrl
-                dogsCollection(limit: 50) {
-                  items {
-                    sys { id }
-                    title
-                    description
-                    image { url title description }
+                dogsCollection(limit: 20) {
+                items {
+                  sys { id }
+                  title
+                  description
+                  mainImage { url title description }
+                  galleryImagesCollection(limit: 3) {   # <- límite aquí
+                    items { url title description }
                   }
                 }
               }
+            }
 
               ... on Faq {
                 heading

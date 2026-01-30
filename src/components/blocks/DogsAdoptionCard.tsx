@@ -29,7 +29,7 @@ export default function DogsAdoptionCard({
       onClick={onClick}
       className="group relative cursor-pointer transition-transform duration-300 hover:-translate-y-1"
     >
-      {/* Patitas blancas decorativas */}
+      {/* Patitas decorativas */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <Paw className="absolute top-4 left-4 w-14 h-14 text-white opacity-30 rotate-[-20deg]" />
         <Paw className="absolute bottom-20 right-6 w-16 h-16 text-white opacity-25 rotate-[18deg]" />
@@ -37,7 +37,6 @@ export default function DogsAdoptionCard({
 
       {/* Contenedor cuadrado */}
       <div className="relative z-10 w-full aspect-square overflow-hidden rounded-[28px]">
-        {/* Imagen */}
         {image?.url && (
           <img
             src={image.url}
@@ -46,7 +45,7 @@ export default function DogsAdoptionCard({
           />
         )}
 
-        {/* TÍTULO / STICKER */}
+        {/* Título / sticker */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20">
           <div
             className="
@@ -67,7 +66,7 @@ export default function DogsAdoptionCard({
           </div>
         </div>
 
-        {/* Descripción reveal */}
+        {/* Descripción truncada con … */}
         <div
           className="
             absolute bottom-0 left-0 right-0
@@ -81,7 +80,14 @@ export default function DogsAdoptionCard({
             group-hover:opacity-100
           "
         >
-          <p className="text-sm text-white font-semibold leading-relaxed line-clamp-4">
+          <p
+            className="
+              text-sm text-white font-semibold leading-relaxed
+              overflow-hidden
+              text-ellipsis
+              max-h-[4.5em]  /* 3 líneas x 1.5em line-height */
+            "
+          >
             {description}
           </p>
         </div>

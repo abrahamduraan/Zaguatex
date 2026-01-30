@@ -45,7 +45,15 @@ export default function PageRender({ components = [] }) {
             return <Footer key={block.sys.id} {...block} />;
 
           case 'DogsAdoption':
-            const dogs = block.dogsCollection?.items || [];
+            // Mapea los perros para que coincidan con la interfaz esperada por DogsAdoption
+            const dogs = (block.dogsCollection?.items || []).map(dog => ({
+              sys: dog.sys,
+              title: dog.title,
+              description: dog.description,
+              mainImage: dog.mainImage, // Imagen principal de la card
+              galleryImages: dog.galleryImagesCollection?.items || [], // Imágenes extra para el modal
+            }));
+
             if (!dogs.length) return null;
 
             return (
@@ -55,9 +63,10 @@ export default function PageRender({ components = [] }) {
                 subtitle={block.subtitle}
                 buttonText={block.buttonText}
                 buttonUrl={block.buttonUrl}
-                dogs={dogs}
+                dogs={dogs} 
               />
             );
+
           case "Faq":
             const faqItems = block.itemsCollection?.items || [];
             if (!faqItems.length) return null;
@@ -85,7 +94,7 @@ export default function PageRender({ components = [] }) {
                   title: item.title,
                   text: item.text,
                   media: item.media,
-                  mediaPosition: item.mediaPosition, 
+                  mediaPosition: item.mediaPosition,
                 }))}
               />
             );
