@@ -25,6 +25,7 @@ export default async function DogDetailPage({ params }: Props) {
     <DogInfo
       title={dog.title}
       description={dog.description}
+      information={dog.information}
       mainImage={dog.mainImage}
       galleryImages={dog.galleryImages}
     />

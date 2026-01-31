@@ -49,6 +49,7 @@ export default function PageRender({ components = [] }) {
               sys: dog.sys,
               title: dog.title,
               description: dog.description,
+              information: dog.information,
               mainImage: dog.mainImage,
               galleryImages: dog.galleryImagesCollection?.items || [],
             }));
