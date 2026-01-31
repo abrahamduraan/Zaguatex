@@ -363,3 +363,44 @@ export async function getDogByTitle(title: string) {
     galleryImages: dog.galleryImagesCollection?.items || [],
   };
 }
+
+export async function getFooterData() {
+  const query = /* GraphQL */ `
+    query GetFooter {
+      footer(id: "xLtS1uzAZ7y2xW6UWtX8F") {
+        heading
+        subHeading
+        logoImage { url title }
+        footerLinksCollection {
+          items { label href }
+        }
+        socialLinksCollection {
+          items { label href }
+        }
+      }
+    }
+  `;
+
+  try {
+    const data = await contentfulFetch<{ footer: any }>(query);
+
+    const footer = data.footer;
+
+    return {
+      heading: footer.heading || null,
+      subHeading: footer.subHeading || null,
+      logoImage: footer.logoImage || null,
+      footerLinksCollection: footer.footerLinksCollection || { items: [] },
+      socialLinksCollection: footer.socialLinksCollection || { items: [] },
+    };
+  } catch (error) {
+    console.error('Error fetching footer data:', error);
+    return {
+      heading: null,
+      subHeading: null,
+      logoImage: null,
+      footerLinksCollection: { items: [] },
+      socialLinksCollection: { items: [] },
+    };
+  }
+}

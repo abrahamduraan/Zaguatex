@@ -11,7 +11,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.1",
     "@untitledui/icons": "^0.0.19",
+    "contentful": "^11.10.3",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "motion": "^12.29.0",
