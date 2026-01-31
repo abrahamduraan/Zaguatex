@@ -2,7 +2,12 @@
 
 import { Button } from "@/components/base/buttons/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookF, faInstagram, faWhatsapp, faTiktok } from "@fortawesome/free-brands-svg-icons";
+
+// Íconos de marcas
+import { faFacebookF, faInstagram, faWhatsapp, faTiktok, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+
+// Íconos sólidos
+import { faMapMarkerAlt, faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 type FooterContact = {
   label: string;
@@ -35,6 +40,12 @@ const Footer = ({
     tiktok: faTiktok,
   };
 
+  const contactIconsMap: Record<string, any> = {
+    Location: faMapMarkerAlt,
+    Number: faPhone,
+    Email: faEnvelope,
+  };
+
   const safeSocialLinks = socialLinks
     .map(link => {
       const key = link.label.trim().toLowerCase();
@@ -47,49 +58,46 @@ const Footer = ({
   return (
     <footer>
       {/* Sección principal */}
-      <div className="bg-primary py-12 md:py-16">
-        <div className="mx-auto max-w-container px-4 md:px-8 flex flex-col md:flex-row justify-between gap-12 md:gap-16">
-          
-          {/* IZQUIERDA: Logo + Heading + Subheading + Social Links */}
-          <div className="flex flex-col gap-4 md:w-1/2">
-            {logoImage && (
-              <img
-                src={logoImage.url}
-                alt={logoImage.title || "Logo"}
-                className="h-10 w-min shrink-0"
-              />
-            )}
-            {heading && <p className="text-md text-tertiary font-semibold">{heading}</p>}
-            {subHeading && <p className="text-sm text-quaternary">{subHeading}</p>}
+      <div
+        className="py-12 md:py-16"
+        style={{ backgroundColor: 'rgb(242, 242, 242)' }} // gris claro
+      >
+        <div className="mx-auto max-w-container px-4 md:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
 
-            {safeSocialLinks.length > 0 && (
-              <ul className="flex gap-4 mt-2">
-                {safeSocialLinks.map(link => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex text-fg-quaternary outline-focus-ring transition duration-100 ease-linear hover:text-fg-quaternary_hover focus-visible:outline-2 focus-visible:outline-offset-2"
-                    >
-                      <FontAwesomeIcon icon={link.Icon} size="lg" aria-label={link.label} />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+            {/* Logo */}
+            <div className="flex flex-col justify-start items-start">
+              {logoImage && (
+                <img
+                  src={logoImage.url}
+                  alt={logoImage.title || "Logo"}
+                  className="h-16 w-auto mb-2"
+                />
+              )}
+            </div>
 
-          {/* DERECHA: Menu + Contact */}
-          <div className="flex-1 md:w-1/2 flex flex-col md:flex-row gap-8">
+            {/* Heading + Subheading */}
+            <div className="flex flex-col justify-start">
+              {heading && (
+                <p className="text-lg font-semibold text-tertiary mb-1 max-w-[200px] break-words">
+                  {heading}
+                </p>
+              )}
+              {subHeading && (
+                <p className="text-sm text-quaternary max-w-[220px] break-words">
+                  {subHeading}
+                </p>
+              )}
+            </div>
+
             {/* Menu */}
-            <nav className="flex-1">
-              <h4 className="text-sm font-semibold text-quaternary mb-4">Menu</h4>
-              <ul className="flex flex-col gap-3">
+            <nav className="flex flex-col justify-start gap-2">
+              <h4 className="text-md font-semibold text-quaternary mb-2">Menu</h4>
+              <ul className="flex flex-col gap-2">
                 {footerLinksCollection?.items.length ? (
                   footerLinksCollection.items.map(link => (
                     <li key={link.label}>
-                      <Button color="link-gray" size="lg" href={link.href} as="a">
+                      <Button color="link-gray" size="sm" href={link.href} as="a">
                         {link.label}
                       </Button>
                     </li>
@@ -100,60 +108,65 @@ const Footer = ({
               </ul>
             </nav>
 
-            {/* Contacto */}
-            {contactCollection.length > 0 && (
-              <div className="flex-1">
-                <h4 className="text-sm font-semibold text-quaternary mb-4">Información de contacto</h4>
-                <ul className="flex flex-col gap-2 text-sm text-quaternary">
-                  {contactCollection.map(contact => {
-                    let icon;
-                    switch (contact.icon) {
-                      case "Location":
-                        icon = "📍";
-                        break;
-                      case "Number":
-                        icon = "📞";
-                        break;
-                      case "Email":
-                        icon = "✉️";
-                        break;
-                      default:
-                        icon = "";
-                    }
-                    return (
-                      <li key={contact.label} className="flex items-center gap-2">
-                        <span>{icon}</span>
-                        <span>{contact.label}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
+            {/* Contact + Redes sociales */}
+            <div className="flex flex-col justify-start gap-3">
+              {contactCollection.length > 0 && (
+                <>
+                  <h4 className="text-md font-semibold text-quaternary mb-2">Información de contacto</h4>
+                  <ul className="flex flex-col gap-1 text-sm text-quaternary">
+                    {contactCollection.map(contact => {
+                      const icon = contactIconsMap[contact.icon];
+                      return (
+                        <li key={contact.label} className="flex items-center gap-2">
+                          {icon && <FontAwesomeIcon icon={icon} />}
+                          <span>{contact.label}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              )}
+
+              {/* Redes sociales debajo del contacto */}
+              {safeSocialLinks.length > 0 && (
+                <div className="flex gap-4 mt-2">
+                  {safeSocialLinks.map(link => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex text-fg-quaternary outline-focus-ring transition duration-100 ease-linear hover:text-fg-quaternary_hover focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                      <FontAwesomeIcon icon={link.Icon} size="lg" aria-label={link.label} />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Footer inferior */}
-      <div className="bg-secondary_alt py-10 md:py-12">
+      <div
+        className="py-10 md:py-12"
+        style={{ backgroundColor: 'rgb(7, 78, 140)' }} // Fondo azul
+      >
         <div className="mx-auto max-w-container px-4 md:px-8 flex justify-between items-center">
-          <span className="text-quaternary text-md">
+          <span className="text-white text-md">
             © {currentYear}&nbsp;&nbsp;All rights reserved.
           </span>
-          <span className="flex items-center gap-1 font-mono text-accent px-2 py-0.5 rounded-sm bg-accent/10 hover:bg-accent/20 transition-colors">
+          <span className="flex items-center gap-2 font-mono text-white px-2 py-0.5 rounded-sm transition-colors">
             💻 Dev. Abraham Durán
             <a
-              href="https://www.linkedin.com/in/abrahamduraan"
+              href="https://www.linkedin.com/in/abrahamduraan/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn Abraham Durán"
-              className="ml-1"
+              className="ml-2"
             >
-              <img
-                src="https://static.platzi.com/media/user_upload/logotipo%20LinkedIn-48a7203f-e808-4c04-80d5-1cc2f9ceffff.jpg"
-                alt="LinkedIn Abraham Durán"
-                className="h-6 w-auto inline-block"
-              />
+              <FontAwesomeIcon icon={faLinkedin} size="lg" />
             </a>
           </span>
         </div>

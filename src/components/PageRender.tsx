@@ -8,10 +8,18 @@ import FAQ from "./blocks/FAQ";
 import InformationComponent from './blocks/InformationComponent';
 
 // PageRenderer receives the array of components from Contentful
-export default function PageRender({ components = [] }) {
-  if (!components || !components.length) {
-    return null;
-  }
+interface BlockBase {
+  sys: { id: string };
+  __typename: string;
+  [key: string]: any;
+}
+
+interface PageRenderProps {
+  components: BlockBase[];
+}
+
+export default function PageRender({ components = [] }: PageRenderProps) {
+  if (!components.length) return null;
 
   return (
     <>

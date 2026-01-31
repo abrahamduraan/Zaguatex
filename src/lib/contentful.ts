@@ -141,18 +141,20 @@ export async function getPageBySlug(slug: string) {
                   }
                 }
               }
-
-              ... on InformationComponent {
-                heading
-                introText
-                image { url title }
-                itemsCollection(limit: 20) {
-                  items {
-                    title
-                    text
-                  }
-                }
+                
+          ... on InformationComponent {
+            heading
+            introText
+            image { url title description }
+            itemsCollection(limit: 50) {
+              items {
+                title
+                text
+                media { url title description }
+                mediaPosition
               }
+            }
+          }
 
               ... on Footer {
                 heading

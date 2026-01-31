@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { motion } from 'motion/react';
+import { motion, Variants, Easing } from 'framer-motion';
 import DogsAdoptionCard from './DogsAdoptionCard';
 import { Button } from '@/components/base/buttons/button';
 
@@ -20,14 +20,18 @@ interface DogsAdoptionProps {
   dogs: Dog[];
 }
 
-const containerVariants = {
+// Variants tipados correctamente
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
-const cardVariants = {
+// Import easing desde Framer Motion
+const ease: Easing = [0.25, 0.1, 0.25, 1]; // equivalente a easeOut
+
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease } },
 };
 
 export default function DogsAdoption({
@@ -49,7 +53,7 @@ export default function DogsAdoption({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease }}
         >
           {subtitle}
         </motion.p>
@@ -61,7 +65,7 @@ export default function DogsAdoption({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+          transition={{ duration: 0.8, ease, delay: 0.2 }}
         >
           {title}
         </motion.h2>
@@ -73,18 +77,15 @@ export default function DogsAdoption({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
+          transition={{ duration: 0.8, ease, delay: 0.4 }}
         >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: 'spring', stiffness: 300 }}
-          >
+          <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
             <Button
               size="xl"
               href={buttonUrl}
               color="primary"
-              target="_blank"          // ← abre en nueva pestaña
-              rel="noopener noreferrer" // ← por seguridad
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {buttonText}
             </Button>
@@ -111,9 +112,7 @@ export default function DogsAdoption({
               title={dog.title}
               description={dog.description}
               mainImage={dog.mainImage}
-              onClick={() =>
-                router.push(`/adoptar/${encodeURIComponent(dog.title)}`)
-              }
+              onClick={() => router.push(`/adoptar/${encodeURIComponent(dog.title)}`)}
             />
           </motion.li>
         ))}

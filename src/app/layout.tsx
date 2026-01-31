@@ -38,7 +38,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         {/* Navegación */}
-        <MainNav logo={logo} items={items} />
+        <MainNav/>
 
         {/* Contenido principal */}
         <RouteProvider>

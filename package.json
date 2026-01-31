@@ -13,7 +13,9 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.1",
+    "@untitledui/file-icons": "^0.0.9",
     "@untitledui/icons": "^0.0.19",
     "contentful": "^11.10.3",
     "embla-carousel": "^8.6.0",
@@ -30,6 +32,7 @@
     "tailwindcss-react-aria-components": "^2.0.1"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^20",
     "@types/react": "^19",
