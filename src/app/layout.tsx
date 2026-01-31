@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { RouteProvider } from '@/providers/route-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
-import { getMainNavigation } from "@/lib/contentful";
+import { getMainNavigation, getFooterData } from "@/lib/contentful";
 import MainNav from "@/components/blocks/MainNav";
+import Footer from "@/components/blocks/Footer"; // <-- footer import
 
 import './globals.css';
 
@@ -27,15 +28,29 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Traemos la navegación y el footer desde Contentful
   const { logo, items } = await getMainNavigation("main-nav");
+  const footerData = await getFooterData();
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+        {/* Navegación */}
         <MainNav logo={logo} items={items} />
+
+        {/* Contenido principal */}
         <RouteProvider>
           <ThemeProvider>{children}</ThemeProvider>
         </RouteProvider>
+
+        {/* Footer dinámico */}
+        <Footer
+          heading={footerData.heading}
+          subHeading={footerData.subHeading}
+          logoImage={footerData.logoImage}
+          footerLinksCollection={footerData.footerLinksCollection}
+          socialLinksCollection={footerData.socialLinksCollection}
+        />
       </body>
     </html>
   );

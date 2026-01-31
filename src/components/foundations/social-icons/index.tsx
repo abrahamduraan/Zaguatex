@@ -20,3 +20,4 @@ export { default as Tumblr } from './tumblr';
 export { default as Twitter } from './twitter';
 export { default as X } from './x';
 export { default as YouTube } from './youtube';
+export { default as WhatsApp } from './whatsapp';
