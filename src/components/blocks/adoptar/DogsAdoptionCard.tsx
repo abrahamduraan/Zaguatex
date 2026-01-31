@@ -56,7 +56,7 @@ export default function DogsAdoptionCard({
 
         <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-6 text-center bg-brand-solid translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
           <p className="text-sm text-white font-semibold leading-relaxed line-clamp-1">
-            {truncate(description, 10)}
+            {truncate(description, 20)}
           </p>
         </div>
       </div>
