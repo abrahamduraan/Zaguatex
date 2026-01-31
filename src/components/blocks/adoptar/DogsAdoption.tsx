@@ -79,7 +79,13 @@ export default function DogsAdoption({
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
-            <Button size="xl" href={buttonUrl} color="primary">
+            <Button
+              size="xl"
+              href={buttonUrl}
+              color="primary"
+              target="_blank"          // ← abre en nueva pestaña
+              rel="noopener noreferrer" // ← por seguridad
+            >
               {buttonText}
             </Button>
           </motion.div>
