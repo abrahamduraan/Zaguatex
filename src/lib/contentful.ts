@@ -63,15 +63,15 @@ export type PageEntry = {
 
 export async function getPageBySlug(slug: string) {
   const query = /* GraphQL */ `
-  query GetPageBySlug($slug: String!) {
-    pageCollection(where: { slug: $slug }, limit: 1) {
-      items {
-        slug
-        title
-        componentsCollection(limit: 50) {
-          items {
-            __typename
-            sys { id }
+    query GetPageBySlug($slug: String!) {
+      pageCollection(where: { slug: $slug }, limit: 1) {
+        items {
+          slug
+          title
+          componentsCollection(limit: 20) {
+            items {
+              __typename
+              sys { id }
 
               ... on Hero {
                 title
@@ -81,7 +81,7 @@ export async function getPageBySlug(slug: string) {
                 buttonOneUrl
                 buttonTwoText
                 buttonTwoUrl
-                image { url title description }
+                image { url title }
               }
 
               ... on Main {
@@ -94,23 +94,22 @@ export async function getPageBySlug(slug: string) {
                 cardText2
                 cardTitle3
                 cardText3
-                image1 { url title description }
-                image2 { url title description }
-                image3 { url title description }
+                image1 { url title }
+                image2 { url title }
+                image3 { url title }
               }
-
 
               ... on Carousel {
                 sys { id }
-                imagesCollection {
-                  items { url title description }
+                imagesCollection(limit: 10) {
+                  items { url title }
                 }
               }
 
               ... on BigCarousel {
                 sys { id }
-                imagesCollection {
-                  items { url title description }
+                imagesCollection(limit: 10) {
+                  items { url title }
                 }
               }
 
@@ -119,24 +118,23 @@ export async function getPageBySlug(slug: string) {
                 subtitle
                 buttonText
                 buttonUrl
-                dogsCollection(limit: 20) {
-                items {
-                  sys { id }
-                  title
-                  description
-                  information
-                  mainImage { url title description }
-                  galleryImagesCollection(limit: 3) {   # <- límite aquí
-                    items { url title description }
+                dogsCollection(limit: 10) {
+                  items {
+                    sys { id }
+                    title
+                    description
+                    mainImage { url title }
+                    galleryImagesCollection(limit: 3) {
+                      items { url title }
+                    }
                   }
                 }
               }
-            }
 
               ... on Faq {
                 heading
                 subheading
-                itemsCollection(limit: 20) {
+                itemsCollection(limit: 10) {
                   items {
                     question
                     answer
@@ -144,44 +142,44 @@ export async function getPageBySlug(slug: string) {
                 }
               }
 
-          ... on InformationComponent {
-            heading
-            introText
-            image { url title description }
-            itemsCollection(limit: 50) {
-              items {
-                title
-                text
-                media { url title description }
-                mediaPosition
+              ... on InformationComponent {
+                heading
+                introText
+                image { url title }
+                itemsCollection(limit: 20) {
+                  items {
+                    title
+                    text
+                  }
+                }
               }
-            }
-          }
 
               ... on Footer {
                 heading
                 subHeading
                 logoImage { url title }
                 footerLinksCollection {
-                  items {
-                    label
-                    href
-                  }
+                  items { label href }
                 }
                 socialLinksCollection {
+                  items { label href }
+                }
+                contactCollection {
                   items {
-                    label
-                    href
+                    ... on FooterContact {
+                      label
+                      icon
+                    }
                   }
                 }
               }
+
             }
           }
         }
       }
     }
   `;
-
 
   type Response = {
     pageCollection: {
@@ -377,6 +375,14 @@ export async function getFooterData() {
         socialLinksCollection {
           items { label href }
         }
+        contactCollection {
+          items {
+            ... on FooterContact {
+              label
+              icon
+            }
+          }
+        }
       }
     }
   `;
@@ -392,6 +398,8 @@ export async function getFooterData() {
       logoImage: footer.logoImage || null,
       footerLinksCollection: footer.footerLinksCollection || { items: [] },
       socialLinksCollection: footer.socialLinksCollection || { items: [] },
+      // ✅ Aquí extraemos directamente el array
+      contactCollection: footer.contactCollection?.items || [],
     };
   } catch (error) {
     console.error('Error fetching footer data:', error);
@@ -401,6 +409,7 @@ export async function getFooterData() {
       logoImage: null,
       footerLinksCollection: { items: [] },
       socialLinksCollection: { items: [] },
+      contactCollection: [],
     };
   }
 }

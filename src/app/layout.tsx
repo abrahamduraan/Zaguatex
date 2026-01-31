@@ -52,6 +52,7 @@ export default async function RootLayout({
           logoImage={footerData.logoImage}
           footerLinksCollection={footerData.footerLinksCollection}
           socialLinks={footerData.socialLinksCollection.items} // <-- pasar solo el array
+          contactCollection={footerData.contactCollection}
         />
       </body>
     </html>
