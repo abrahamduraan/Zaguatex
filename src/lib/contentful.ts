@@ -74,7 +74,6 @@ export async function getPageBySlug(slug: string) {
               sys { id }
 
               ... on Hero {
-                title
                 heading
                 supportingText
                 buttonOneText
@@ -234,8 +233,8 @@ export async function getAllPageSlugs(): Promise<string[]> {
 
 // Nav types
 export type NavItem = {
-  label: string;
-  url: string;
+  text: string;
+  link: string;
 };
 
 export type NavLogo = {

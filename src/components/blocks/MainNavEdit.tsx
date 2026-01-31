@@ -1,24 +1,28 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Header } from '@/components/marketing/header-navigation/header';
 import Link from 'next/link';
+import { Header } from '@/components/marketing/header-navigation/header';
+import type { NavItem, NavLogo } from '@/lib/contentful';
 
 interface MainNavEditProps {
-  items: { text: string; link: string }[];
-  logo: { url: string; title: string };
+  items: NavItem[];
+  logo?: NavLogo;
 }
 
 export default function MainNavEdit({ items, logo }: MainNavEditProps) {
-  const headerItems = items.map(item => ({
-    label: item.text,
-    href: item.link
-  }));
+  if (!items?.length && !logo) return null;
 
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   };
+
+  // Convertimos items al formato que Header espera
+  const headerItems = items.map(item => ({
+    label: item.text,
+    href: item.link,
+  }));
 
   return (
     <motion.div
@@ -29,25 +33,16 @@ export default function MainNavEdit({ items, logo }: MainNavEditProps) {
     >
       <Header
         items={headerItems}
-        logoUrl={logo.url}
-        logoAlt={logo.title}
+        logoUrl={logo?.url ?? ''}
+        logoAlt={logo?.title ?? ''}
         renderLogo={() => (
           <Link href="/">
-            <img src={logo.url} alt={logo.title} className="h-8 cursor-pointer" />
+            <img
+              src={logo?.url}
+              alt={logo?.title}
+              className="h-8 cursor-pointer"
+            />
           </Link>
-        )}
-        renderItem={(item) => (
-          <motion.div
-            key={item.href} // <- importante para React
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="px-4 py-2 text-sm md:text-base font-medium"
-          >
-            <Link href={`/${item.href}`}>{item.label}</Link>
-          </motion.div>
         )}
       />
     </motion.div>

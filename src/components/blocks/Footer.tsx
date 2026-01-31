@@ -58,10 +58,7 @@ const Footer = ({
   return (
     <footer>
       {/* Sección principal */}
-      <div
-        className="py-12 md:py-16"
-        style={{ backgroundColor: 'rgb(242, 242, 242)' }} // gris claro
-      >
+      <div className="py-12 md:py-16" style={{ backgroundColor: 'rgb(242, 242, 242)' }}>
         <div className="mx-auto max-w-container px-4 md:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
 
@@ -97,7 +94,7 @@ const Footer = ({
                 {footerLinksCollection?.items.length ? (
                   footerLinksCollection.items.map(link => (
                     <li key={link.label}>
-                      <Button color="link-gray" size="sm" href={link.href} as="a">
+                      <Button color="link-gray" size="sm" href={link.href}>
                         {link.label}
                       </Button>
                     </li>
@@ -149,10 +146,7 @@ const Footer = ({
       </div>
 
       {/* Footer inferior */}
-      <div
-        className="py-10 md:py-12"
-        style={{ backgroundColor: 'rgb(7, 78, 140)' }} // Fondo azul
-      >
+      <div className="py-10 md:py-12" style={{ backgroundColor: 'rgb(7, 78, 140)' }}>
         <div className="mx-auto max-w-container px-4 md:px-8 flex justify-between items-center">
           <span className="text-white text-md">
             © {currentYear}&nbsp;&nbsp;All rights reserved.
