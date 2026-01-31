@@ -29,7 +29,6 @@ export async function contentfulFetch<T>(
       Authorization: `Bearer ${TOKEN}`,
     },
     body: JSON.stringify({ query, variables }),
-    // Next.js caching options
     next: options.next,
     cache: options.cache,
   });
@@ -49,22 +48,21 @@ export async function contentfulFetch<T>(
   return json.data;
 }
 
-// src/lib/contentful.ts
-
 // Example Page type
 export type PageEntry = {
   slug: string;
   title: string;
-  // Add more fields from your Contentful model as needed
   componentsCollection?: {
     items: any[];
   };
 };
 
 export async function getPageBySlug(slug: string) {
+  const normalizedSlug = slug?.toLowerCase().trim() ?? '';
+
   const query = /* GraphQL */ `
     query GetPageBySlug($slug: String!) {
-      pageCollection(where: { slug: $slug }, limit: 1) {
+      pageCollection(where: { slug_contains: $slug }, limit: 1) {
         items {
           slug
           title
@@ -72,109 +70,14 @@ export async function getPageBySlug(slug: string) {
             items {
               __typename
               sys { id }
-
-              ... on Hero {
-                heading
-                supportingText
-                buttonOneText
-                buttonOneUrl
-                buttonTwoText
-                buttonTwoUrl
-                image { url title }
-              }
-
-              ... on Main {
-                supportingText
-                heading
-                subHeading
-                cardTitle1
-                cardText1
-                cardTitle2
-                cardText2
-                cardTitle3
-                cardText3
-                image1 { url title }
-                image2 { url title }
-                image3 { url title }
-              }
-
-              ... on Carousel {
-                sys { id }
-                imagesCollection(limit: 10) {
-                  items { url title }
-                }
-              }
-
-              ... on BigCarousel {
-                sys { id }
-                imagesCollection(limit: 10) {
-                  items { url title }
-                }
-              }
-
-              ... on DogsAdoption {
-                title
-                subtitle
-                buttonText
-                buttonUrl
-                dogsCollection(limit: 10) {
-                  items {
-                    sys { id }
-                    title
-                    description
-                    mainImage { url title }
-                    galleryImagesCollection(limit: 3) {
-                      items { url title }
-                    }
-                  }
-                }
-              }
-
-              ... on Faq {
-                heading
-                subheading
-                itemsCollection(limit: 10) {
-                  items {
-                    question
-                    answer
-                  }
-                }
-              }
-                
-          ... on InformationComponent {
-            heading
-            introText
-            image { url title description }
-            itemsCollection(limit: 50) {
-              items {
-                title
-                text
-                media { url title description }
-                mediaPosition
-              }
-            }
-          }
-
-              ... on Footer {
-                heading
-                subHeading
-                logoImage { url title }
-                footerLinksCollection {
-                  items { label href }
-                }
-                socialLinksCollection {
-                  items { label href }
-                }
-                contactCollection {
-                  items {
-                    ... on FooterContact {
-                      label
-                      icon
-                    }
-                  }
-                }
-              }
-
+              ... on Hero { heading supportingText buttonOneText buttonOneUrl buttonTwoText buttonTwoUrl image { url title } }
+              ... on Main { heading subHeading supportingText cardTitle1 cardText1 cardTitle2 cardText2 cardTitle3 cardText3 image1 { url title } image2 { url title } image3 { url title } }
+              ... on Carousel { sys { id } imagesCollection(limit: 10) { items { url title } } }
+              ... on BigCarousel { sys { id } imagesCollection(limit: 10) { items { url title } } }
+              ... on DogsAdoption { title subtitle buttonText buttonUrl dogsCollection(limit: 10) { items { sys { id } title description mainImage { url title } galleryImagesCollection(limit: 3) { items { url title } } } } }
+              ... on Faq { heading subheading itemsCollection(limit: 10) { items { question answer } } }
+              ... on InformationComponent { heading introText image { url title description } itemsCollection(limit: 50) { items { title text media { url title description } mediaPosition } } }
+              ... on Footer { heading subHeading logoImage { url title } footerLinksCollection { items { label href } } socialLinksCollection { items { label href } } contactCollection { items { ... on FooterContact { label icon } } } }
             }
           }
         }
@@ -184,93 +87,57 @@ export async function getPageBySlug(slug: string) {
 
   type Response = {
     pageCollection: {
-      items: {
-        slug: string;
-        title: string;
-        componentsCollection?: { items: any[] };
-      }[];
-    };
+      items: { slug: string; title: string; componentsCollection?: { items: any[] } }[]
+    }
   };
 
-  const normalizedSlug = slug.toLowerCase().trim();
   const data = await contentfulFetch<Response>(query, { slug: normalizedSlug });
-
   const item = data.pageCollection.items[0];
   if (!item) return null;
 
+  // 🔹 Fallback garantizado
   return {
     slug: item.slug,
     title: item.title,
-    componentsCollection: item.componentsCollection ?? { items: [] },
+    componentsCollection: {
+      items: item.componentsCollection?.items ?? []
+    },
   };
 }
 
-// src/lib/contentful.ts
 
 export async function getAllPageSlugs(): Promise<string[]> {
   const query = /* GraphQL */ `
     query GetAllPageSlugs {
       pageCollection(where: { slug_exists: true }, limit: 1000) {
-        items {
-          slug
-        }
+        items { slug }
       }
     }
   `;
 
-  type Response = {
-    pageCollection: {
-      items: {
-        slug: string;
-      }[];
-    };
-  };
-
+  type Response = { pageCollection: { items: { slug: string }[] } };
   const data = await contentfulFetch<Response>(query);
 
   return data.pageCollection.items.map((item) => item.slug).filter(Boolean);
 }
 
 // Nav types
-export type NavItem = {
-  text: string;
-  link: string;
-};
+export type NavItem = { text: string; link: string };
+export type NavLogo = { url: string; title: string; description?: string | null };
+export type NavigationData = { logo?: NavLogo | null; items: NavItem[] };
 
-export type NavLogo = {
-  url: string;
-  title: string;
-  description?: string | null;
-};
+export async function getMainNavigation(slug?: string): Promise<NavigationData> {
+  const safeSlug = slug?.trim() || 'main-nav';
+  const normalizedSlug = safeSlug.toLowerCase();
 
-export type NavigationData = {
-  logo?: NavLogo | null;
-  items: NavItem[];
-};
-
-// Fetch main navigation by slug
-export async function getMainNavigation(
-  slug: string = 'main-nav'
-): Promise<NavigationData> {
   const query = /* GraphQL */ `
     query GetNavigation($slug: String!) {
       menuCollection(where: { slug: $slug }, limit: 1) {
         items {
           title
           slug
-          logo {
-            url
-            title
-            description
-          }
-          itemsCollection {
-            ... on MenuItemsCollection {
-              items {
-                text
-                link
-              }
-            }
-          }
+          logo { url title description }
+          itemsCollection { ... on MenuItemsCollection { items { text link } } }
         }
       }
     }
@@ -281,46 +148,26 @@ export async function getMainNavigation(
       items: {
         title: string;
         slug: string;
-        logo?: {
-          url: string;
-          title: string;
-          description?: string | null;
-        } | null;
-        itemsCollection?: {
-          items: {
-            text: string;
-            link: string;
-          }[];
-        } | null;
+        logo?: { url: string; title: string; description?: string | null } | null;
+        itemsCollection?: { items: { text: string; link: string }[] } | null;
       }[];
     };
   };
 
-
-  const normalizedSlug = slug.toLowerCase().trim();
   const data = await contentfulFetch<Response>(query, { slug: normalizedSlug });
-
-  console.log(data);
-
   const menu = data.menuCollection?.items?.[0];
 
-  const items =
-    menu?.itemsCollection?.items?.map((item) => ({
-      text: item.text,
-      link: item.link,
-    })) ?? [];
+  const items = menu?.itemsCollection?.items?.map((item) => ({
+    text: item.text ?? '',
+    link: item.link ?? '#',
+  })) ?? [];
 
-  const logo = menu?.logo
-    ? {
-      url: menu.logo.url,
-      title: menu.logo.title,
-      description: menu.logo.description,
-    }
-    : undefined;
+  const logo = menu?.logo ? { url: menu.logo.url, title: menu.logo.title, description: menu.logo.description } : undefined;
 
   return { logo, items };
 }
 
+// ✅ Aquí estaba el problema: le faltaba el export
 export async function getDogByTitle(title: string) {
   const query = /* GraphQL */ `
     query GetDogByTitle($title: String!) {
@@ -330,9 +177,7 @@ export async function getDogByTitle(title: string) {
           description
           information
           mainImage { url title description }
-          galleryImagesCollection {
-            items { url title description }
-          }
+          galleryImagesCollection { items { url title description } }
         }
       }
     }
@@ -350,7 +195,7 @@ export async function getDogByTitle(title: string) {
     };
   };
 
-  const data = await contentfulFetch<Response>(query, { title }); // Case-sensitive
+  const data = await contentfulFetch<Response>(query, { title });
   const dog = data.dogsAdoptionCardCollection.items[0];
   if (!dog) return null;
 
@@ -370,27 +215,15 @@ export async function getFooterData() {
         heading
         subHeading
         logoImage { url title }
-        footerLinksCollection {
-          items { label href }
-        }
-        socialLinksCollection {
-          items { label href }
-        }
-        contactCollection {
-          items {
-            ... on FooterContact {
-              label
-              icon
-            }
-          }
-        }
+        footerLinksCollection { items { label href } }
+        socialLinksCollection { items { label href } }
+        contactCollection { items { ... on FooterContact { label icon } } }
       }
     }
   `;
 
   try {
     const data = await contentfulFetch<{ footer: any }>(query);
-
     const footer = data.footer;
 
     return {
@@ -399,7 +232,6 @@ export async function getFooterData() {
       logoImage: footer.logoImage || null,
       footerLinksCollection: footer.footerLinksCollection || { items: [] },
       socialLinksCollection: footer.socialLinksCollection || { items: [] },
-      // ✅ Aquí extraemos directamente el array
       contactCollection: footer.contactCollection?.items || [],
     };
   } catch (error) {

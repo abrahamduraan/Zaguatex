@@ -9,11 +9,12 @@ type PageProps = {
   };
 };
 
-// Esto evita que se genere /home dinámicamente
+// Genera rutas estáticas para todos los slugs existentes, excepto "home"
 export async function generateStaticParams() {
   const slugs = await getAllPageSlugs();
+
   return slugs
-    .filter(slug => slug !== 'home') // <--- home ya tiene su propia página
+    .filter(slug => slug !== 'home')
     .map(slug => ({ slug }));
 }
 
@@ -21,11 +22,9 @@ export default async function DynamicPage({ params }: PageProps) {
   const { slug } = await params; // necesario en Next 16+
   const page = await getPageBySlug(slug);
 
-  if (!page) {
-    notFound(); // Next.js 404
-  }
+  if (!page) notFound();
 
-  const components = page.componentsCollection.items;
+  const components = page.componentsCollection.items; // ✅ siempre seguro
 
   return (
     <main>
@@ -33,3 +32,4 @@ export default async function DynamicPage({ params }: PageProps) {
     </main>
   );
 }
+
