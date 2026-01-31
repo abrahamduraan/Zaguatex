@@ -1,3 +1,5 @@
+import { p } from "motion/react-client";
+
 // src/lib/contentful.ts
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
 const ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || 'master';
@@ -122,6 +124,7 @@ export async function getPageBySlug(slug: string) {
                   sys { id }
                   title
                   description
+                  information
                   mainImage { url title description }
                   galleryImagesCollection(limit: 3) {   # <- límite aquí
                     items { url title description }
@@ -326,6 +329,7 @@ export async function getDogByTitle(title: string) {
         items {
           title
           description
+          information
           mainImage { url title description }
           galleryImagesCollection {
             items { url title description }
@@ -340,6 +344,7 @@ export async function getDogByTitle(title: string) {
       items: {
         title: string;
         description: string;
+        information: string;
         mainImage?: { url: string; title?: string; description?: string };
         galleryImagesCollection?: { items: { url: string; title?: string; description?: string }[] };
       }[];
@@ -353,6 +358,7 @@ export async function getDogByTitle(title: string) {
   return {
     title: dog.title,
     description: dog.description,
+    information: dog.information,
     mainImage: dog.mainImage,
     galleryImages: dog.galleryImagesCollection?.items || [],
   };

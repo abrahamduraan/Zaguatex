@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'motion/react';
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface Image {
   url: string;
@@ -12,6 +12,7 @@ interface Image {
 interface DogInfoProps {
   title: string;
   description: string;
+  information: string;
   mainImage?: Image;
   galleryImages?: Image[];
 }
@@ -19,116 +20,145 @@ interface DogInfoProps {
 export default function DogInfo({
   title,
   description,
+  information,
   mainImage,
   galleryImages = [],
 }: DogInfoProps) {
   const [modalImage, setModalImage] = useState<Image | null>(null);
 
-  // Limitar la galería a máximo 5 imágenes
-  const displayedGallery = galleryImages.slice(0, 5);
+  const displayedGallery = galleryImages.slice(0, 6);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-8 py-12 space-y-12">
-
-      {/* 🌟 Título */}
-      <motion.h1
-        className="text-4xl md:text-5xl font-bold text-center text-brand-primary"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        {title}
-      </motion.h1>
-
-      {/* 📝 Descripción */}
-      <motion.div
-        className="max-w-3xl mx-auto text-gray-700 text-base md:text-lg leading-relaxed text-justify"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-      >
-        {description.split('\n').map((para, i) => (
-          <p key={i} className="mb-4 break-words">
-            {para}
-          </p>
-        ))}
-      </motion.div>
-
-      {/* 🖼 Main + Gallery Grid */}
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-12 gap-6"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
-        {/* Imagen principal ocupa más columnas */}
-        {mainImage?.url && (
-          <motion.div
-            className="md:col-span-8 rounded-3xl overflow-hidden shadow-xl cursor-pointer"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: 'spring', stiffness: 300 }}
-            onClick={() => setModalImage(mainImage)}
-          >
-            <img
-              src={mainImage.url}
-              alt={mainImage.title || title}
-              className="w-full h-full object-cover"
-            />
-          </motion.div>
-        )}
-
-        {/* Galería */}
-        {displayedGallery.length > 0 && (
-          <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-1 gap-4">
-            {displayedGallery.map((img, index) => (
-              <motion.div
-                key={index}
-                className="rounded-2xl overflow-hidden shadow-lg cursor-pointer"
-                whileHover={{ scale: 1.03 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                onClick={() => setModalImage(img)}
-              >
-                <img
-                  src={img.url}
-                  alt={`Imagen ${index + 1}`}
-                  className="w-full h-32 md:h-40 lg:h-48 object-cover"
-                />
-              </motion.div>
-            ))}
-          </div>
-        )}
-      </motion.div>
-
-      {/* Modal para imagen */}
-      {modalImage && (
-        <div
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
-          onClick={() => setModalImage(null)}
-        >
-          <motion.div
-            className="relative w-full h-full max-w-[90vw] max-h-[90vh] flex items-center justify-center"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            onClick={(e) => e.stopPropagation()} // evita cerrar al click en la imagen
-          >
-            <img
-              src={modalImage.url}
-              alt={modalImage.title || 'Imagen'}
-              className="w-full h-full max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
-            />
-            <button
-              onClick={() => setModalImage(null)}
-              className="absolute top-2 right-2 bg-brand-solid text-white rounded-full p-2 shadow-lg text-xl hover:opacity-90 transition-opacity"
+    <article className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+      {/* ===================== CONTENIDO PRINCIPAL ===================== */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        {/* ===================== IMÁGENES ===================== */}
+        <div className="lg:col-span-6 space-y-6">
+          {/* IMAGEN PRINCIPAL */}
+          {mainImage?.url && (
+            <motion.div
+              className="relative aspect-square overflow-hidden rounded-3xl shadow-xl cursor-pointer"
+              whileHover={{ scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 220 }}
+              onClick={() => setModalImage(mainImage)}
             >
-              ✕
-            </button>
-          </motion.div>
+              <img
+                src={mainImage.url}
+                alt={mainImage.title || title}
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
+          )}
+
+          {/* GALERÍA */}
+          {displayedGallery.length > 0 && (
+            <div className="grid grid-cols-3 gap-4">
+              {displayedGallery.map((img, index) => (
+                <motion.div
+                  key={index}
+                  className="relative aspect-square overflow-hidden rounded-2xl shadow-md cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 220 }}
+                  onClick={() => setModalImage(img)}
+                >
+                  <img
+                    src={img.url}
+                    alt={img.title || `Imagen ${index + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </div>
+
+        {/* ===================== TEXTO ===================== */}
+        <div className="lg:col-span-6 flex flex-col space-y-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-primary">
+            {title}
+          </h1>
+
+          <p
+            className="
+              text-gray-700
+              text-base md:text-lg
+              leading-relaxed
+              whitespace-pre-line
+              break-words
+              hyphens-auto
+            "
+          >
+            {description}
+          </p>
+
+          {information && (
+            <section className="rounded-2xl bg-[#F5EFE6] px-5 sm:px-6 py-5">
+              <div
+                className="
+                  text-gray-800
+                  text-sm md:text-base
+                  leading-relaxed
+                  whitespace-pre-line
+                  break-words
+                  hyphens-auto
+                "
+              >
+                {information}
+              </div>
+            </section>
+          )}
+        </div>
+      </section>
+
+      {/* ===================== MODAL CON LÍMITE DE TAMAÑO ===================== */}
+      <AnimatePresence>
+        {modalImage && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            onClick={() => setModalImage(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+            >
+              <img
+                src={modalImage.url}
+                alt={modalImage.title || 'Imagen'}
+                className="
+                  max-w-[90vw]
+                  max-h-[90vh]
+                  w-auto
+                  h-auto
+                  rounded-2xl
+                  shadow-2xl
+                "
+              />
+
+              <button
+                onClick={() => setModalImage(null)}
+                className="
+                  absolute -top-3 -right-3
+                  rounded-full
+                  bg-brand-solid text-white
+                  p-2 shadow-lg
+                  hover:opacity-90
+                  focus:outline-none
+                  focus:ring-2 focus:ring-white/60
+                "
+                aria-label="Cerrar"
+              >
+                ✕
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </article>
   );
 }
