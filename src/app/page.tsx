@@ -1,10 +1,13 @@
-export default async function DynamicPage({ params }: PageProps) {
-  const { slug } = await params; // necesario en Next 16+
-  const page = await getPageBySlug(slug);
+// src/app/page.tsx
+import PageRender from '@/components/PageRender';
+import { getPageBySlug } from '@/lib/contentful';
 
-  if (!page) notFound();
+export default async function HomePage() {
+  const page = await getPageBySlug('home'); // ⚡ slug "home" de Contentful
 
-  const components = page.componentsCollection.items; // ✅ siempre seguro
+  if (!page) return <p>No se encontró la página home.</p>;
+
+  const components = page.componentsCollection?.items ?? [];
 
   return (
     <main>

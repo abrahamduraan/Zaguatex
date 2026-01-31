@@ -9,22 +9,22 @@ type PageProps = {
   };
 };
 
-// Genera rutas estáticas para todos los slugs existentes, excepto "home"
+// Genera rutas estáticas para todos los slugs, excepto "home"
 export async function generateStaticParams() {
   const slugs = await getAllPageSlugs();
 
   return slugs
-    .filter(slug => slug !== 'home')
+    .filter(slug => slug !== 'home') // home no se genera aquí
     .map(slug => ({ slug }));
 }
 
 export default async function DynamicPage({ params }: PageProps) {
-  const { slug } = await params; // necesario en Next 16+
+  const { slug } = params; // ✅ params ya viene listo, no es necesario await
   const page = await getPageBySlug(slug);
 
-  if (!page) notFound();
+  if (!page) notFound(); // 404 si no existe
 
-  const components = page.componentsCollection.items; // ✅ siempre seguro
+  const components = page.componentsCollection.items;
 
   return (
     <main>
@@ -32,4 +32,3 @@ export default async function DynamicPage({ params }: PageProps) {
     </main>
   );
 }
-
