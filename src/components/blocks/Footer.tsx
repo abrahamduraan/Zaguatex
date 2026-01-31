@@ -1,7 +1,6 @@
-
+'use client';
 
 import { Button } from "@/components/base/buttons/button";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faInstagram, faWhatsapp, faTiktok } from "@fortawesome/free-brands-svg-icons";
 
@@ -10,8 +9,7 @@ type FooterProps = {
   subHeading?: string | null;
   logoImage?: { url: string; title?: string } | null;
   footerLinksCollection?: { items: { label: string; href: string }[] };
-  socialLinks?: { label: string; href: string }[]; // enlaces manuales
-  socialLinksCollection?: { items: { label: string; href: string }[] }; // lo que viene de Contentful
+  socialLinks?: { label: string; href: string }[];
 };
 
 const Footer = ({
@@ -20,11 +18,10 @@ const Footer = ({
   logoImage,
   footerLinksCollection,
   socialLinks = [],
-  socialLinksCollection,
 }: FooterProps) => {
   const currentYear = new Date().getFullYear();
 
-  // Mapa de iconos por label (minúsculas)
+  // Mapa de iconos por label en minúsculas
   const socialIconsMap: Record<string, any> = {
     facebook: faFacebookF,
     instagram: faInstagram,
@@ -32,16 +29,18 @@ const Footer = ({
     tiktok: faTiktok,
   };
 
-  // Combina socialLinks manuales o lo que viene de Contentful
-  const socialLinksArray = socialLinks.length
-    ? socialLinks
-    : socialLinksCollection?.items || [];
-
-  // Filtra solo los enlaces que tengan ícono definido
-  const safeSocialLinks = socialLinksArray.filter(link => {
-    const key = link.label.trim().toLowerCase();
-    return socialIconsMap[key];
-  });
+  // Mapear socialLinks con sus íconos
+  const safeSocialLinks = socialLinks
+    .map(link => {
+      const key = link.label.trim().toLowerCase();
+      const Icon = socialIconsMap[key];
+      if (!Icon) {
+        console.warn(`No icon found for social link: "${link.label}"`);
+        return null;
+      }
+      return { ...link, Icon };
+    })
+    .filter(Boolean) as (typeof socialLinks[0] & { Icon: any })[];
 
   return (
     <footer>
@@ -91,24 +90,21 @@ const Footer = ({
               © {currentYear} Dev Abraham Durán. All rights reserved.
             </p>
 
+            {/* Social links */}
             {safeSocialLinks.length > 0 && (
               <ul className="flex gap-6">
-                {safeSocialLinks.map(link => {
-                  const key = link.label.trim().toLowerCase();
-                  const Icon = socialIconsMap[key];
-                  return (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex rounded-xs text-fg-quaternary outline-focus-ring transition duration-100 ease-linear hover:text-fg-quaternary_hover focus-visible:outline-2 focus-visible:outline-offset-2"
-                      >
-                        <FontAwesomeIcon icon={Icon} size="lg" aria-label={link.label} />
-                      </a>
-                    </li>
-                  );
-                })}
+                {safeSocialLinks.map(link => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex rounded-xs text-fg-quaternary outline-focus-ring transition duration-100 ease-linear hover:text-fg-quaternary_hover focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                      <FontAwesomeIcon icon={link.Icon} size="lg" aria-label={link.label} />
+                    </a>
+                  </li>
+                ))}
               </ul>
             )}
           </div>

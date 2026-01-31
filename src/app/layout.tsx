@@ -31,6 +31,8 @@ export default async function RootLayout({
   // Traemos la navegación y el footer desde Contentful
   const { logo, items } = await getMainNavigation("main-nav");
   const footerData = await getFooterData();
+  console.log("Footer Data:", footerData);
+
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -49,7 +51,7 @@ export default async function RootLayout({
           subHeading={footerData.subHeading}
           logoImage={footerData.logoImage}
           footerLinksCollection={footerData.footerLinksCollection}
-          socialLinksCollection={footerData.socialLinksCollection}
+          socialLinks={footerData.socialLinksCollection.items} // <-- pasar solo el array
         />
       </body>
     </html>
