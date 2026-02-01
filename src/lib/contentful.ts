@@ -58,11 +58,9 @@ export type PageEntry = {
 };
 
 export async function getPageBySlug(slug: string) {
-  const normalizedSlug = slug?.toLowerCase().trim() ?? '';
-
   const query = /* GraphQL */ `
     query GetPageBySlug($slug: String!) {
-      pageCollection(where: { slug_contains: $slug }, limit: 1) {
+      pageCollection(where: { slug: $slug }, limit: 1) {
         items {
           slug
           title
@@ -70,14 +68,110 @@ export async function getPageBySlug(slug: string) {
             items {
               __typename
               sys { id }
-              ... on Hero { heading supportingText buttonOneText buttonOneUrl buttonTwoText buttonTwoUrl image { url title } }
-              ... on Main { heading subHeading supportingText cardTitle1 cardText1 cardTitle2 cardText2 cardTitle3 cardText3 image1 { url title } image2 { url title } image3 { url title } }
-              ... on Carousel { sys { id } imagesCollection(limit: 10) { items { url title } } }
-              ... on BigCarousel { sys { id } imagesCollection(limit: 10) { items { url title } } }
-              ... on DogsAdoption { title subtitle buttonText buttonUrl dogsCollection(limit: 10) { items { sys { id } title description mainImage { url title } galleryImagesCollection(limit: 3) { items { url title } } } } }
-              ... on Faq { heading subheading itemsCollection(limit: 10) { items { question answer } } }
-              ... on InformationComponent { heading introText image { url title description } itemsCollection(limit: 50) { items { title text media { url title description } mediaPosition } } }
-              ... on Footer { heading subHeading logoImage { url title } footerLinksCollection { items { label href } } socialLinksCollection { items { label href } } contactCollection { items { ... on FooterContact { label icon } } } }
+
+              ... on Hero {
+                title
+                heading
+                supportingText
+                buttonOneText
+                buttonOneUrl
+                buttonTwoText
+                buttonTwoUrl
+                image { url title }
+              }
+
+              ... on Main {
+                supportingText
+                heading
+                subHeading
+                cardTitle1
+                cardText1
+                cardTitle2
+                cardText2
+                cardTitle3
+                cardText3
+                image1 { url title }
+                image2 { url title }
+                image3 { url title }
+              }
+
+              ... on Carousel {
+                sys { id }
+                imagesCollection(limit: 10) {
+                  items { url title }
+                }
+              }
+
+              ... on BigCarousel {
+                sys { id }
+                imagesCollection(limit: 10) {
+                  items { url title }
+                }
+              }
+
+              ... on DogsAdoption {
+                title
+                subtitle
+                buttonText
+                buttonUrl
+                dogsCollection(limit: 10) {
+                  items {
+                    sys { id }
+                    title
+                    description
+                    mainImage { url title }
+                    galleryImagesCollection(limit: 3) {
+                      items { url title }
+                    }
+                  }
+                }
+              }
+
+              ... on Faq {
+                heading
+                subheading
+                itemsCollection(limit: 10) {
+                  items {
+                    question
+                    answer
+                  }
+                }
+              }
+                
+          ... on InformationComponent {
+            heading
+            introText
+            image { url title description }
+            itemsCollection(limit: 50) {
+              items {
+                title
+                text
+                media { url title description }
+                mediaPosition
+              }
+            }
+          }
+
+              ... on Footer {
+                heading
+                subHeading
+                logoImage { url title }
+                footerLinksCollection {
+                  items { label href }
+                }
+                socialLinksCollection {
+                  items { label href }
+                }
+                contactCollection {
+                  items {
+                    ... on FooterContact {
+                      label
+                      icon
+                    }
+                  }
+                }
+              }
+
             }
           }
         }
@@ -87,27 +181,24 @@ export async function getPageBySlug(slug: string) {
 
   type Response = {
     pageCollection: {
-      items: { slug: string; title: string; componentsCollection?: { items: any[] } }[]
-    }
+      items: {
+        slug: string;
+        title: string;
+        componentsCollection?: { items: any[] };
+      }[];
+    };
   };
 
+  const normalizedSlug = slug.toLowerCase().trim();
   const data = await contentfulFetch<Response>(query, { slug: normalizedSlug });
+
   const item = data.pageCollection.items[0];
   if (!item) return null;
-
-  // 🔹 Convertimos explícitamente a BlockBase
-  const components: BlockBase[] = (item.componentsCollection?.items ?? []).map((b) => ({
-    sys: b.sys,
-    __typename: b.__typename,
-    ...b,
-  }));
 
   return {
     slug: item.slug,
     title: item.title,
-    componentsCollection: {
-      items: components,
-    },
+    componentsCollection: item.componentsCollection ?? { items: [] },
   };
 }
 

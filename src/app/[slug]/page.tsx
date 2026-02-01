@@ -1,28 +1,31 @@
-import { notFound, redirect } from 'next/navigation';
-import { getPageBySlug } from '@/lib/contentful';
-import PageRender, { BlockBase } from '@/components/PageRender';
+// src/app/[slug]/page.tsx
+import { notFound } from 'next/navigation';
+import { getAllPageSlugs, getPageBySlug } from '@/lib/contentful';
+import PageRender from '@/components/PageRender';
 
-type PageProps = { params: { slug?: string[] } };
+type PageProps = {
+  params: {
+    slug: string;
+  };
+};
+
+// Esto evita que se genere /home dinámicamente
+export async function generateStaticParams() {
+  const slugs = await getAllPageSlugs();
+  return slugs
+    .filter(slug => slug !== 'home') // <--- home ya tiene su propia página
+    .map(slug => ({ slug }));
+}
 
 export default async function DynamicPage({ params }: PageProps) {
-  const slugArray = params.slug ?? [];
+  const { slug } = await params; // necesario en Next 16+
+  const page = await getPageBySlug(slug);
 
-  // ⚡ Redirige /home a /
-  if (slugArray.length === 1 && slugArray[0].toLowerCase() === 'home') {
-    redirect('/');
+  if (!page) {
+    notFound(); // Next.js 404
   }
 
-  // Decide qué slug cargar
-  const slugToLoad =
-    slugArray.length === 0 ? 'home' : slugArray[slugArray.length - 1].toLowerCase();
-
-  const page = await getPageBySlug(slugToLoad);
-  if (!page) notFound();
-
-  // 🔹 Forzamos tipo seguro
-  const components: BlockBase[] = Array.isArray(page.componentsCollection?.items)
-    ? (page.componentsCollection.items as BlockBase[])
-    : [];
+  const components = page.componentsCollection.items;
 
   return (
     <main>

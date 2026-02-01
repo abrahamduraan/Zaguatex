@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
@@ -9,6 +8,9 @@ const nextConfig: NextConfig = {
         hostname: 'images.ctfassets.net',
       },
     ],
+  },
+  experimental: {
+    turbo: false, // ⚡ Desactiva Turbopack en desarrollo para evitar errores de source map
   },
 };
 
