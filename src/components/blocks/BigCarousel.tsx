@@ -38,7 +38,7 @@ export const BigCarousel = ({ title, subtitle, images }: BigCarouselProps) => {
   if (!images?.length) return null;
 
   const initialDelay = 0.3;
-  const stagger = 0.3; // más espacio entre cada imagen
+  const stagger = 0; // más espacio entre cada imagen
 
   return (
     <div className="mx-auto max-w-container py-12 md:py-16 overflow-x-hidden">
@@ -47,7 +47,7 @@ export const BigCarousel = ({ title, subtitle, images }: BigCarouselProps) => {
       {subtitle && (
         <motion.p
           className="text-brand-secondary text-lg font-semibold mb-2 text-center"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y:  20}}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: "easeOut" }}

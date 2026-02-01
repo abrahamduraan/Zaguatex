@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Button } from '@/components/base/buttons/button';
 
 interface Image {
   url: string;
@@ -27,9 +28,15 @@ export default function DogInfo({
   const [modalImage, setModalImage] = useState<Image | null>(null);
   const displayedGallery = galleryImages.slice(0, 6);
 
+  // Mensaje de WhatsApp hardcodeado
+  const buttonText = 'Adoptar por WhatsApp';
+  const buttonUrl = `https://wa.me/+50689320530?text=${encodeURIComponent(
+    `Hola, quiero saber más acerca de ${title}`
+  )}`;
+
   return (
     <article className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-20">
-      
+
       {/* ===================== MOBILE ===================== */}
       <section className="block lg:hidden space-y-6">
         {/* TITLE */}
@@ -38,9 +45,35 @@ export default function DogInfo({
         </h1>
 
         {/* DESCRIPTION */}
-        <p className="text-gray-700 text-base md:text-lg leading-relaxed text-center whitespace-pre-line break-words hyphens-auto">
+        <p className="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-line break-words hyphens-auto text-center">
           {description}
         </p>
+
+        {/* BUTTON MOBILE */}
+        {buttonText && buttonUrl && (
+          <motion.div
+            className="mb-6 flex justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <Button
+                size="xl"
+                href={buttonUrl}
+                color="primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {buttonText}
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
 
         {/* MAIN IMAGE */}
         {mainImage?.url && (
@@ -130,14 +163,42 @@ export default function DogInfo({
         </div>
 
         {/* TEXT */}
-        <div className="lg:col-span-6 flex flex-col space-y-6">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-primary">
-            {title}
-          </h1>
+        <div className="lg:col-span-6 flex flex-col space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-primary mb-2">
+                {title}
+              </h1>
+              <p className="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-line break-words hyphens-auto">
+                {description}
+              </p>
+            </div>
 
-          <p className="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-line break-words hyphens-auto">
-            {description}
-          </p>
+            {buttonText && buttonUrl && (
+              <motion.div
+                className="ml-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >
+                  <Button
+                    size="xl"
+                    href={buttonUrl}
+                    color="primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {buttonText}
+                  </Button>
+                </motion.div>
+              </motion.div>
+            )}
+          </div>
 
           {information && (
             <section className="rounded-2xl bg-[#F5EFE6] px-5 sm:px-6 py-5">

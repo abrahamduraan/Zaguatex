@@ -127,6 +127,12 @@ export async function getPageBySlug(slug: string) {
                 }
               }
 
+              ... on ButtonComponent {  
+                text
+                link
+                color
+                position
+              }
               ... on Faq {
                 heading
                 subheading

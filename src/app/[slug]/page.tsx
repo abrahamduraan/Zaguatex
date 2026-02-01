@@ -28,7 +28,7 @@ export default async function DynamicPage({ params }: PageProps) {
   const components = page.componentsCollection.items;
 
   return (
-    <main>
+    <main style={{ width: '100%', overflowX: 'hidden' }}>
       <PageRender components={components} />
     </main>
   );

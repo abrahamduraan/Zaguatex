@@ -10,7 +10,7 @@ export default async function HomePage() {
   const components = page.componentsCollection?.items ?? [];
 
   return (
-    <main>
+    <main style={{ width: '100%', overflowX: 'hidden' }}>
       <PageRender components={components} />
     </main>
   );

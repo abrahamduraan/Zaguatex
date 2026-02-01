@@ -89,6 +89,25 @@ export default function InformationComponent({
             const position = item.mediaPosition || 'top';
             const isHorizontal = position === 'left' || position === 'right';
             const isVideo = item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
+
+            /* Layout: define SOLO el orden */
+            const layoutClass = cx(
+              'flex gap-6',
+              isHorizontal
+                ? position === 'right'
+                  ? 'flex-col md:flex-row-reverse md:items-center md:gap-10'
+                  : 'flex-col md:flex-row md:items-center md:gap-10'
+                : 'flex-col items-center text-center'
+            );
+
+            /* Texto: siempre anclado a la izquierda en horizontal */
+            const contentClass = cx(
+              'flex flex-col gap-4',
+              isHorizontal
+                ? 'md:items-start md:text-left md:mr-auto'
+                : 'items-center text-center max-w-2xl'
+            );
+
             const mediaClass = cx(
               'w-full rounded-xl',
               isHorizontal ? 'md:w-1/2' : 'max-w-3xl'
@@ -122,10 +141,7 @@ export default function InformationComponent({
 
             const content = (
               <motion.div
-                className={cx(
-                  'flex flex-col gap-4',
-                  !isHorizontal && 'items-center text-center max-w-2xl'
-                )}
+                className={contentClass}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -145,39 +161,9 @@ export default function InformationComponent({
             );
 
             return (
-              <div
-                key={index}
-                className={cx(
-                  'flex gap-6',
-                  isHorizontal
-                    ? 'flex-col md:flex-row md:items-center md:gap-10'
-                    : 'flex-col items-center text-center'
-                )}
-              >
-                {position === 'top' && (
-                  <>
-                    {media}
-                    {content}
-                  </>
-                )}
-                {position === 'bottom' && (
-                  <>
-                    {content}
-                    {media}
-                  </>
-                )}
-                {position === 'left' && (
-                  <>
-                    {media}
-                    {content}
-                  </>
-                )}
-                {position === 'right' && (
-                  <>
-                    {content}
-                    {media}
-                  </>
-                )}
+              <div key={index} className={layoutClass}>
+                {media}
+                {content}
               </div>
             );
           })}

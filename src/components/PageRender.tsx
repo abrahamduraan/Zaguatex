@@ -7,6 +7,8 @@ import Footer from './blocks/Footer';
 import DogsAdoption from './blocks/adoptar/DogsAdoption';
 import FAQ from './blocks/FAQ';
 import InformationComponent from './blocks/InformationComponent';
+import ButtonComponent from './blocks/ButtonComponent';
+
 
 /** 🔹 Base type para cualquier bloque */
 export interface BlockBase {
@@ -77,13 +79,13 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   DogsAdoption: (block) => {
     const dogs = Array.isArray(block.dogsCollection?.items)
       ? block.dogsCollection.items.map((dog: any) => ({
-          sys: dog.sys,
-          title: dog.title ?? '',
-          description: dog.description ?? '',
-          information: dog.information ?? '',
-          mainImage: dog.mainImage ?? null,
-          galleryImages: dog.galleryImagesCollection?.items ?? [],
-        }))
+        sys: dog.sys,
+        title: dog.title ?? '',
+        description: dog.description ?? '',
+        information: dog.information ?? '',
+        mainImage: dog.mainImage ?? null,
+        galleryImages: dog.galleryImagesCollection?.items ?? [],
+      }))
       : [];
 
     if (!dogs.length) return null;
@@ -118,6 +120,23 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
       />
     );
   },
+
+  ButtonComponent: (block) => {
+    if (!block.text) return null;
+
+    return (
+      <ButtonComponent
+        key={block.sys.id}
+        sys={block.sys}
+        text={block.text}
+        link={block.link || undefined}
+        color={block.color || 'blue'}
+        position={block.position || 'center'}
+      />
+    );
+  },
+
+
 
   InformationComponent: (block) => {
     const infoItems = Array.isArray(block.itemsCollection?.items)
