@@ -132,9 +132,8 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   },
 };
 
-/** 🔹 PageRender */
-export default function PageRender({ components = [] }: PageRenderProps) {
-  if (!components.length) return null;
+export default function PageRender({ components }: PageRenderProps) {
+  if (!components || !components.length) return null;
 
   return (
     <>
