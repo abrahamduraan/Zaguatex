@@ -9,7 +9,7 @@ export default async function DynamicPage({ params }: PageProps) {
 
   // ⚡ Redirige /home a /
   if (slugArray.length === 1 && slugArray[0].toLowerCase() === 'home') {
-    redirect('/'); // Cambia la URL
+    redirect('/');
   }
 
   // Decide qué slug cargar
@@ -19,8 +19,10 @@ export default async function DynamicPage({ params }: PageProps) {
   const page = await getPageBySlug(slugToLoad);
   if (!page) notFound();
 
-  // 🔹 Forzamos tipo BlockBase[] para que TypeScript no infiera never[]
-  const components: BlockBase[] = page.componentsCollection?.items as BlockBase[] ?? [];
+  // 🔹 Forzamos tipo seguro con Array.isArray
+  const components: BlockBase[] = Array.isArray(page.componentsCollection?.items)
+    ? page.componentsCollection.items
+    : [];
 
   return (
     <main>

@@ -1,4 +1,3 @@
-// src/components/PageRender.tsx
 import { ReactElement } from 'react';
 import HeroSection from './blocks/HeroSection';
 import MainContentSection from './blocks/MainContentSection';
@@ -9,19 +8,16 @@ import DogsAdoption from './blocks/adoptar/DogsAdoption';
 import FAQ from './blocks/FAQ';
 import InformationComponent from './blocks/InformationComponent';
 
-/** 🔹 Base type para cualquier bloque */
 export interface BlockBase {
   sys: { id: string };
   __typename: string;
   [key: string]: any;
 }
 
-/** 🔹 Props del PageRender */
 interface PageRenderProps {
   components: BlockBase[];
 }
 
-/** 🔹 Map de tipos de bloque a componente */
 const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | null> = {
   Hero: (block) => (
     <HeroSection
@@ -71,14 +67,16 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   Footer: (block) => <Footer key={block.sys.id} {...block} />,
 
   DogsAdoption: (block) => {
-    const dogs = (block.dogsCollection?.items ?? []).map((dog: any) => ({
-      sys: dog.sys,
-      title: dog.title ?? '',
-      description: dog.description ?? '',
-      information: dog.information ?? '',
-      mainImage: dog.mainImage ?? null,
-      galleryImages: dog.galleryImagesCollection?.items ?? [],
-    }));
+    const dogs = Array.isArray(block.dogsCollection?.items)
+      ? block.dogsCollection.items.map((dog: any) => ({
+          sys: dog.sys,
+          title: dog.title ?? '',
+          description: dog.description ?? '',
+          information: dog.information ?? '',
+          mainImage: dog.mainImage ?? null,
+          galleryImages: dog.galleryImagesCollection?.items ?? [],
+        }))
+      : [];
 
     if (!dogs.length) return null;
 
@@ -95,7 +93,9 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   },
 
   Faq: (block) => {
-    const faqItems = block.itemsCollection?.items ?? [];
+    const faqItems = Array.isArray(block.itemsCollection?.items)
+      ? block.itemsCollection.items
+      : [];
     if (!faqItems.length) return null;
 
     return (
@@ -112,7 +112,9 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   },
 
   InformationComponent: (block) => {
-    const infoItems = block.itemsCollection?.items ?? [];
+    const infoItems = Array.isArray(block.itemsCollection?.items)
+      ? block.itemsCollection.items
+      : [];
     if (!infoItems.length) return null;
 
     return (
@@ -133,7 +135,7 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
 };
 
 export default function PageRender({ components }: PageRenderProps) {
-  if (!components || !components.length) return null;
+  if (!Array.isArray(components) || components.length === 0) return null;
 
   return (
     <>
