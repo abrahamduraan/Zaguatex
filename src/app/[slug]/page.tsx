@@ -7,7 +7,7 @@ type PageProps = { params: { slug?: string[] } };
 export default async function DynamicPage({ params }: PageProps) {
   const slugArray = params.slug ?? [];
 
-  // ⚡ Redirige /home a /
+  // Redirige /home a /
   if (slugArray.length === 1 && slugArray[0].toLowerCase() === 'home') {
     redirect('/');
   }
@@ -19,9 +19,9 @@ export default async function DynamicPage({ params }: PageProps) {
   const page = await getPageBySlug(slugToLoad);
   if (!page) notFound();
 
-  // 🔹 Forzamos tipo seguro con Array.isArray
+  // 🔹 Aquí forzamos tipo BlockBase[]
   const components: BlockBase[] = Array.isArray(page.componentsCollection?.items)
-    ? page.componentsCollection.items
+    ? (page.componentsCollection.items as BlockBase[])
     : [];
 
   return (
