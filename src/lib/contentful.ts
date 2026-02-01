@@ -1,5 +1,5 @@
 import { p } from "motion/react-client";
-
+import { BlockBase } from '@/components/PageRender';
 // src/lib/contentful.ts
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID!;
 const ENVIRONMENT = process.env.CONTENTFUL_ENVIRONMENT || 'master';
@@ -95,12 +95,18 @@ export async function getPageBySlug(slug: string) {
   const item = data.pageCollection.items[0];
   if (!item) return null;
 
-  // 🔹 Fallback garantizado
+  // 🔹 Convertimos explícitamente a BlockBase
+  const components: BlockBase[] = (item.componentsCollection?.items ?? []).map((b) => ({
+    sys: b.sys,
+    __typename: b.__typename,
+    ...b,
+  }));
+
   return {
     slug: item.slug,
     title: item.title,
     componentsCollection: {
-      items: item.componentsCollection?.items ?? []
+      items: components,
     },
   };
 }

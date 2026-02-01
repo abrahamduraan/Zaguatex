@@ -1,25 +1,24 @@
-// src/app/[slug]/page.tsx
-import { notFound } from 'next/navigation';
-import { getAllPageSlugs, getPageBySlug } from '@/lib/contentful';
+// src/app/[...slug]/page.tsx
+import { notFound, redirect } from 'next/navigation';
+import { getPageBySlug } from '@/lib/contentful';
 import PageRender, { BlockBase } from '@/components/PageRender';
 
-type PageProps = { params: { slug: string } };
-
-// Genera rutas estáticas excepto "home"
-export async function generateStaticParams() {
-  const slugs = await getAllPageSlugs();
-  return slugs
-    .filter(slug => slug !== 'home')
-    .map(slug => ({ slug }));
-}
+type PageProps = { params: { slug?: string[] } };
 
 export default async function DynamicPage({ params }: PageProps) {
-  const { slug } = params;
+  const slugArray = params.slug ?? [];
 
-  const page = await getPageBySlug(slug);
+  // ⚡ Redirige /home a /
+  if (slugArray.length === 1 && slugArray[0].toLowerCase() === 'home') {
+    redirect('/'); // Esto cambia la URL
+  }
+
+  // Decide qué slug cargar
+  const slugToLoad = slugArray.length === 0 ? 'home' : slugArray[slugArray.length - 1].toLowerCase();
+
+  const page = await getPageBySlug(slugToLoad);
   if (!page) notFound();
 
-  // ⚡ Aseguramos tipado correcto
   const components: BlockBase[] = page.componentsCollection?.items ?? [];
 
   return (
