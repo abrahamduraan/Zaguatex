@@ -1,4 +1,3 @@
-// src/app/[...slug]/page.tsx
 import { notFound, redirect } from 'next/navigation';
 import { getPageBySlug } from '@/lib/contentful';
 import PageRender, { BlockBase } from '@/components/PageRender';
@@ -10,16 +9,16 @@ export default async function DynamicPage({ params }: PageProps) {
 
   // ⚡ Redirige /home a /
   if (slugArray.length === 1 && slugArray[0].toLowerCase() === 'home') {
-    redirect('/'); // Esto cambia la URL
+    redirect('/');
   }
 
-  // Decide qué slug cargar
   const slugToLoad = slugArray.length === 0 ? 'home' : slugArray[slugArray.length - 1].toLowerCase();
 
   const page = await getPageBySlug(slugToLoad);
   if (!page) notFound();
 
-  const components: BlockBase[] = page.componentsCollection?.items ?? [];
+  // 🔹 Forzamos tipo BlockBase[]
+  const components: BlockBase[] = page.componentsCollection?.items as BlockBase[] ?? [];
 
   return (
     <main>
