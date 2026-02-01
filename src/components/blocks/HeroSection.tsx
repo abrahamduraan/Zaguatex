@@ -11,7 +11,7 @@ type HeroProps = {
   buttonOneUrl?: string;
   buttonTwoText?: string;
   buttonTwoUrl?: string;
-  image: { url: string; title: string; description?: string };
+  image?: { url: string; title?: string; description?: string } | null;
 };
 
 export default function HeroSection({
@@ -23,6 +23,8 @@ export default function HeroSection({
   buttonTwoUrl,
   image
 }: HeroProps) {
+  if (!image?.url) return null;
+
   return (
     <section
       style={{
@@ -31,10 +33,10 @@ export default function HeroSection({
         backgroundPosition: 'center',
         backgroundSize: 'cover',
       }}
-      className="relative flex items-center h-screen"
+      className="relative flex flex-col flex-1 items-center justify-center w-full h-screen"
     >
-      <div className="flex flex-col items-center w-full pt-16 pb-16 md:pt-24 md:pb-24">
-        <div className="mx-auto w-full max-w-container flex-col px-4 md:px-8 flex items-start sm:items-center sm:text-center">
+      <div className="flex flex-col items-center justify-center w-full pt-16 pb-16 md:pt-24 md:pb-24">
+        <div className="mx-auto w-full max-w-container flex flex-col px-4 md:px-8 items-center text-center">
 
           {heading && (
             <motion.h1
@@ -60,39 +62,30 @@ export default function HeroSection({
             </motion.p>
           )}
 
-          {/* Buttons */}
           <motion.div
-            className="mt-8 flex flex-col-reverse items-stretch gap-3 sm:w-auto sm:flex-row sm:items-start md:mt-12"
+            className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
           >
-            {buttonOneText && (
+            {buttonOneText && buttonOneUrl && (
               <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <Button
-                  iconLeading={PlayCircle}
-                  color="secondary"
-                  size="xl"
-                  href={buttonOneUrl}
-                  className="hover:bg-brand-secondary-dark"
-                >
+                <Button iconLeading={PlayCircle} color="secondary" size="xl" href={buttonOneUrl}>
                   {buttonOneText}
                 </Button>
               </motion.div>
             )}
-            {buttonTwoText && (
+
+            {buttonTwoText && buttonTwoUrl && (
               <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <Button
-                  size="xl"
-                  href={buttonTwoUrl}
-                  className="hover:bg-brand-solid_dark"
-                >
+                <Button size="xl" href={buttonTwoUrl}>
                   {buttonTwoText}
                 </Button>
               </motion.div>
             )}
           </motion.div>
+
         </div>
       </div>
     </section>

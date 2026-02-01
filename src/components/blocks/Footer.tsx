@@ -1,13 +1,11 @@
 'use client';
 
-import { Button } from "@/components/base/buttons/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button } from "@/components/base/buttons/button";
 
-// Íconos de marcas
+// Importar directamente todos los iconos que vamos a usar
+import { faMapMarkerAlt, faPhone, faEnvelope, faLaptopCode } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF, faInstagram, faWhatsapp, faTiktok, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-
-// Íconos sólidos
-import { faMapMarkerAlt, faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 type FooterContact = {
   label: string;
@@ -33,37 +31,41 @@ const Footer = ({
 }: FooterProps) => {
   const currentYear = new Date().getFullYear();
 
+  // Map de iconos de redes sociales
   const socialIconsMap: Record<string, any> = {
     facebook: faFacebookF,
     instagram: faInstagram,
     whatsapp: faWhatsapp,
     tiktok: faTiktok,
+    linkedin: faLinkedin,
   };
 
+  // Map de iconos de contacto
   const contactIconsMap: Record<string, any> = {
     Location: faMapMarkerAlt,
     Number: faPhone,
     Email: faEnvelope,
   };
 
+  // Filtra y asigna iconos seguros a redes sociales
   const safeSocialLinks = socialLinks
     .map(link => {
       const key = link.label.trim().toLowerCase();
-      const Icon = socialIconsMap[key];
-      if (!Icon) return null;
-      return { ...link, Icon };
+      const icon = socialIconsMap[key];
+      if (!icon) return null;
+      return { ...link, icon };
     })
-    .filter(Boolean) as (typeof socialLinks[0] & { Icon: any })[];
+    .filter(Boolean) as (typeof socialLinks[0] & { icon: any })[];
 
   return (
     <footer>
       {/* Sección principal */}
-      <div className="py-12 md:py-16" style={{ backgroundColor: 'rgb(242, 242, 242)' }}>
+      <div className="py-12 md:py-16 bg-gray-100">
         <div className="mx-auto max-w-container px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 text-center md:text-left">
 
             {/* Logo */}
-            <div className="flex flex-col justify-start items-start">
+            <div className="flex flex-col items-center md:items-start">
               {logoImage && (
                 <img
                   src={logoImage.url}
@@ -74,7 +76,7 @@ const Footer = ({
             </div>
 
             {/* Heading + Subheading */}
-            <div className="flex flex-col justify-start">
+            <div className="flex flex-col items-center md:items-start">
               {heading && (
                 <p className="text-lg font-semibold text-tertiary mb-1 max-w-[200px] break-words">
                   {heading}
@@ -88,15 +90,13 @@ const Footer = ({
             </div>
 
             {/* Menu */}
-            <nav className="flex flex-col justify-start gap-2">
+            <nav className="flex flex-col items-center md:items-start gap-2">
               <h4 className="text-md font-semibold text-quaternary mb-2">Menu</h4>
               <ul className="flex flex-col gap-2">
                 {footerLinksCollection?.items.length ? (
                   footerLinksCollection.items.map(link => (
                     <li key={link.label}>
-                      <Button color="link-gray" size="sm" href={link.href}>
-                        {link.label}
-                      </Button>
+                      <Button color="link-gray" size="sm" href={link.href}>{link.label}</Button>
                     </li>
                   ))
                 ) : (
@@ -105,8 +105,8 @@ const Footer = ({
               </ul>
             </nav>
 
-            {/* Contact + Redes sociales */}
-            <div className="flex flex-col justify-start gap-3">
+            {/* Contacto + Redes Sociales */}
+            <div className="flex flex-col items-center md:items-start gap-3">
               {contactCollection.length > 0 && (
                 <>
                   <h4 className="text-md font-semibold text-quaternary mb-2">Información de contacto</h4>
@@ -114,8 +114,8 @@ const Footer = ({
                     {contactCollection.map(contact => {
                       const icon = contactIconsMap[contact.icon];
                       return (
-                        <li key={contact.label} className="flex items-center gap-2">
-                          {icon && <FontAwesomeIcon icon={icon} />}
+                        <li key={contact.label} className="flex items-center gap-2 justify-center md:justify-start">
+                          {icon && <FontAwesomeIcon icon={icon} style={{ width: "1rem", height: "1rem" }} />}
                           <span>{contact.label}</span>
                         </li>
                       );
@@ -124,35 +124,35 @@ const Footer = ({
                 </>
               )}
 
-              {/* Redes sociales debajo del contacto */}
+              {/* Redes sociales */}
               {safeSocialLinks.length > 0 && (
-                <div className="flex gap-4 mt-2">
+                <div className="flex gap-4 mt-2 justify-center md:justify-start">
                   {safeSocialLinks.map(link => (
                     <a
                       key={link.label}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={link.label}
                       className="flex text-fg-quaternary outline-focus-ring transition duration-100 ease-linear hover:text-fg-quaternary_hover focus-visible:outline-2 focus-visible:outline-offset-2"
                     >
-                      <FontAwesomeIcon icon={link.Icon} size="lg" aria-label={link.label} />
+                      <FontAwesomeIcon icon={link.icon} style={{ width: "1rem", height: "1rem" }} />
                     </a>
                   ))}
                 </div>
               )}
             </div>
+
           </div>
         </div>
       </div>
 
       {/* Footer inferior */}
-      <div className="py-10 md:py-12" style={{ backgroundColor: 'rgb(7, 78, 140)' }}>
-        <div className="mx-auto max-w-container px-4 md:px-8 flex justify-between items-center">
-          <span className="text-white text-md">
-            © {currentYear}&nbsp;&nbsp;All rights reserved.
-          </span>
-          <span className="flex items-center gap-2 font-mono text-white px-2 py-0.5 rounded-sm transition-colors">
-            💻 Dev. Abraham Durán
+      <div className="py-10 md:py-12 bg-blue-900">
+        <div className="mx-auto max-w-container px-4 md:px-8 flex flex-col md:flex-row justify-center md:justify-between items-center gap-2 md:gap-0 text-center md:text-left">
+          <span className="text-white text-md">© {currentYear}&nbsp;&nbsp;All rights reserved.</span>
+          <span className="flex items-center gap-2 font-mono text-white px-2 py-0.5 rounded-sm transition-colors justify-center">
+            <FontAwesomeIcon icon={faLaptopCode} style={{ width: "1rem", height: "1rem" }} /> Dev. Abraham Durán
             <a
               href="https://www.linkedin.com/in/abrahamduraan/"
               target="_blank"
@@ -160,7 +160,7 @@ const Footer = ({
               aria-label="LinkedIn Abraham Durán"
               className="ml-2"
             >
-              <FontAwesomeIcon icon={faLinkedin} size="lg" />
+              <FontAwesomeIcon icon={faLinkedin} style={{ width: "1rem", height: "1rem" }} />
             </a>
           </span>
         </div>

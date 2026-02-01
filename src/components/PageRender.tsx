@@ -22,18 +22,23 @@ interface PageRenderProps {
 
 /** 🔹 Map de tipos de bloque a componente */
 const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | null> = {
-  Hero: (block) => (
-    <HeroSection
-      key={block.sys.id}
-      heading={block.heading ?? ''}
-      supportingText={block.supportingText ?? ''}
-      buttonOneText={block.buttonOneText ?? ''}
-      buttonOneUrl={block.buttonOneUrl ?? '#'}
-      buttonTwoText={block.buttonTwoText ?? ''}
-      buttonTwoUrl={block.buttonTwoUrl ?? '#'}
-      image={block.image ?? null}
-    />
-  ),
+  Hero: (block) => {
+    // ❌ Evita renderizar Hero sin imagen
+    if (!block.image?.url) return null;
+
+    return (
+      <HeroSection
+        key={block.sys.id}
+        heading={block.heading ?? ''}
+        supportingText={block.supportingText ?? ''}
+        buttonOneText={block.buttonOneText ?? ''}
+        buttonOneUrl={block.buttonOneUrl ?? '#'}
+        buttonTwoText={block.buttonTwoText ?? ''}
+        buttonTwoUrl={block.buttonTwoUrl ?? '#'}
+        image={block.image}
+      />
+    );
+  },
 
   Main: (block) => (
     <MainContentSection
@@ -141,9 +146,15 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
 export default function PageRender({ components }: PageRenderProps) {
   if (!Array.isArray(components) || components.length === 0) return null;
 
+  // ❗ Filtra Heroes sin imagen y bloque vacío
+  const safeComponents = components.filter(block => {
+    if (block.__typename === 'Hero' && !block.image?.url) return false;
+    return true;
+  });
+
   return (
     <>
-      {components.map((block) => {
+      {safeComponents.map((block) => {
         const renderFn = BLOCK_COMPONENT_MAP[block.__typename];
         if (!renderFn) {
           console.warn(`Unknown block type: ${block.__typename}`);

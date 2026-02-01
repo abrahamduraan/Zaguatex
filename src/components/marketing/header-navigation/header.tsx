@@ -153,6 +153,7 @@ export const Header = ({
         >
           <div className="flex flex-1 items-center gap-5">
             {/* Desktop logo */}
+            {/* Desktop logo */}
             {logoUrl && (
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
@@ -160,9 +161,14 @@ export const Header = ({
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="cursor-pointer md:max-lg:hidden"
-                onClick={() => router.push("/")}
               >
-                <img src={logoUrl} alt={logoAlt || "Logo"} className="h-8" />
+                <Link href="/" passHref>
+                  <img
+                    src={logoUrl}
+                    alt={logoAlt || "Logo"}
+                    className="h-10 w-auto"
+                  />
+                </Link>
               </motion.div>
             )}
 
@@ -174,12 +180,16 @@ export const Header = ({
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="cursor-pointer hidden md:inline-block lg:hidden"
-                onClick={() => router.push("/")}
               >
-                <img src={logoUrl} alt={logoAlt || "Logo"} className="h-8" />
+                <Link href="/" passHref>
+                  <img
+                    src={logoUrl}
+                    alt={logoAlt || "Logo"}
+                    className="h-8 w-auto"
+                  />
+                </Link>
               </motion.div>
             )}
-
 
 
             {/* Desktop navigation */}
@@ -283,33 +293,37 @@ export const Header = ({
                 />
               </svg>
             </AriaButton>
+
             <AriaPopover
               triggerRef={headerRef}
-              className="h-calc(100%-72px) scrollbar-hide w-full overflow-y-auto shadow-lg md:hidden"
+              className="fixed top-0 right-0 h-full w-1/2 bg-primary shadow-lg overflow-y-auto md:hidden"
               offset={0}
-              crossOffset={20}
+              crossOffset={0}
               containerPadding={0}
-              placement="bottom left"
+              placement="bottom right"
             >
-              <AriaDialog className="outline-hidden">
-                <nav className="w-full bg-primary shadow-lg">
-                  <ul className="flex flex-col gap-0.5 py-5">
+              <AriaDialog className="outline-hidden w-full h-full">
+                <nav className="w-full h-full flex flex-col">
+                  <ul className="flex flex-col divide-y divide-gray-300 py-5 px-4">
                     {items.map((navItem) =>
                       navItem.menu ? (
-                        <MobileNavItem key={navItem.label} label={navItem.label}>
-                          {navItem.menu}
-                        </MobileNavItem>
+                        <li key={navItem.label} className="pb-2">
+                          <MobileNavItem label={navItem.label}>{navItem.menu}</MobileNavItem>
+                        </li>
                       ) : (
-                        <MobileNavItem
-                          key={navItem.label}
-                          label={navItem.label}
-                          href={navItem.href}
-                        />
+                        <li key={navItem.label} className="pb-2">
+                          <MobileNavItem label={navItem.label} href={navItem.href} />
+                        </li>
                       )
                     )}
-                  </ul>
 
-                  <MobileFooter />
+                    {/* Botón Donar sin línea horizontal */}
+                    <li className="pt-4">
+                      <Button color="primary" size="lg" href="/donar" className="w-full">
+                        Donar
+                      </Button>
+                    </li>
+                  </ul>
                 </nav>
               </AriaDialog>
             </AriaPopover>
