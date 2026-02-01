@@ -8,16 +8,19 @@ import DogsAdoption from './blocks/adoptar/DogsAdoption';
 import FAQ from './blocks/FAQ';
 import InformationComponent from './blocks/InformationComponent';
 
+/** 🔹 Base type para cualquier bloque */
 export interface BlockBase {
   sys: { id: string };
   __typename: string;
   [key: string]: any;
 }
 
+/** 🔹 Props del PageRender */
 interface PageRenderProps {
-  components: BlockBase[];
+  components: readonly BlockBase[]; // 🔹 readonly evita never[]
 }
 
+/** 🔹 Map de tipos de bloque a componente */
 const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | null> = {
   Hero: (block) => (
     <HeroSection
@@ -68,7 +71,7 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
 
   DogsAdoption: (block) => {
     const dogs = Array.isArray(block.dogsCollection?.items)
-      ? block.dogsCollection.items.map((dog: any) => ({
+      ? block.dogsCollection.items.map((dog) => ({
           sys: dog.sys,
           title: dog.title ?? '',
           description: dog.description ?? '',
@@ -134,6 +137,7 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   },
 };
 
+/** 🔹 PageRender seguro */
 export default function PageRender({ components }: PageRenderProps) {
   if (!Array.isArray(components) || components.length === 0) return null;
 
