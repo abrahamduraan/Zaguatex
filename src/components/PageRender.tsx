@@ -17,7 +17,7 @@ export interface BlockBase {
 
 /** 🔹 Props del PageRender */
 interface PageRenderProps {
-  components: readonly BlockBase[]; // 🔹 readonly evita never[]
+  components: BlockBase[];
 }
 
 /** 🔹 Map de tipos de bloque a componente */
@@ -56,14 +56,14 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   Carousel: (block) => (
     <CarouselUntitled
       key={block.sys.id}
-      images={block.imagesCollection?.items ?? []}
+      images={Array.isArray(block.imagesCollection?.items) ? block.imagesCollection.items : []}
     />
   ),
 
   BigCarousel: (block) => (
     <BigCarousel
       key={block.sys.id}
-      images={block.imagesCollection?.items ?? []}
+      images={Array.isArray(block.imagesCollection?.items) ? block.imagesCollection.items : []}
     />
   ),
 
@@ -71,7 +71,7 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
 
   DogsAdoption: (block) => {
     const dogs = Array.isArray(block.dogsCollection?.items)
-      ? block.dogsCollection.items.map((dog) => ({
+      ? block.dogsCollection.items.map((dog: any) => ({
           sys: dog.sys,
           title: dog.title ?? '',
           description: dog.description ?? '',
