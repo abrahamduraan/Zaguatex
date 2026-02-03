@@ -1,12 +1,11 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState, ReactNode } from 'react';
 import { ChevronDown } from '@untitledui/icons';
 import { Button } from '@/components/base/buttons/button';
-import { DropdownMenuSimple } from '@/components/marketing/header-navigation/dropdown-header-navigation';
 import { cx } from '@/utils/cx';
 import {
   Button as AriaButton,
@@ -19,46 +18,24 @@ import {
 // Tipos
 // -----------------------------
 export type HeaderNavItem = {
-  label: string | ReactNode | null; // ahora puede ser JSX
+  label: string | ReactNode;
   href?: string;
   menu?: ReactNode;
 };
 
 // -----------------------------
-// Items de ejemplo
-// -----------------------------
-const headerNavItems: HeaderNavItem[] = [
-  { label: 'Products', href: '/products', menu: <DropdownMenuSimple /> },
-  { label: 'Services', href: '/services', menu: <DropdownMenuSimple /> },
-  { label: 'Pricing', href: '/pricing' },
-  { label: 'Resources', href: '/resources', menu: <DropdownMenuSimple /> },
-  { label: 'About', href: '/about' },
-];
-
-const footerNavItems = [
-  { label: 'About us', href: '/' },
-  { label: 'Press', href: '/products' },
-  { label: 'Careers', href: '/resources' },
-  { label: 'Legal', href: '/ss' },
-  { label: 'Support', href: '/sss' },
-  { label: 'Contact', href: '/sss' },
-  { label: 'Sitemap', href: '/ssss' },
-  { label: 'Cookie settings', href: '/sssss' },
-];
-
-// -----------------------------
 // Componente para mobile nav
 // -----------------------------
 const MobileNavItem = ({
-  className,
   label,
   href,
   children,
+  onClick,
 }: {
-  className?: string;
   label: string | ReactNode;
   href?: string;
   children?: ReactNode;
+  onClick?: () => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -67,7 +44,8 @@ const MobileNavItem = ({
       <li>
         <Link
           href={href}
-          className="flex items-center justify-between px-4 py-3 text-md font-semibold text-[var(--color-gray)] hover:bg-[var(--color-blue)] hover:text-[var(--color-white)]"
+          onClick={onClick} // cerrar menú al hacer click
+          className="flex items-center justify-between px-4 py-3 text-md font-semibold text-[var(--color-dark-gray)] hover:text-[var(--color-yellow)] hover:bg-[var(--color-white)]"
         >
           {label}
         </Link>
@@ -80,9 +58,9 @@ const MobileNavItem = ({
       <button
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between px-4 py-3 text-md font-semibold text-[var(--color-gray)] hover:bg-[var(--color-blue)] hover:text-[var(--color-white)]"
+        className="flex w-full items-center justify-between px-4 py-3 text-md font-semibold text-[var(--color-dark-gray)] hover:text-[var(--color-yellow)] hover:bg-[var(--color-white)]"
       >
-        {label}{' '}
+        {label}
         <ChevronDown
           className={cx(
             'size-4 stroke-[var(--color-dark-gray)] transition duration-100 ease-linear',
@@ -96,38 +74,15 @@ const MobileNavItem = ({
 };
 
 // -----------------------------
-// Footer mobile
+// Footer mobile vacío
 // -----------------------------
-const MobileFooter = () => {
-  return (
-    <div className="flex flex-col gap-8 border-t border-secondary px-4 py-6">
-      <ul className="grid grid-flow-col grid-cols-2 grid-rows-4 gap-x-6 gap-y-3">
-        {footerNavItems.map((navItem) => (
-          <li key={navItem.label}>
-            <Link href={navItem.href}>
-              <Button color="link-gray" size="lg">
-                {navItem.label}
-              </Button>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex flex-col gap-3">
-        <Button size="lg">Sign up</Button>
-        <Button color="secondary" size="lg">
-          {/* espacio para otro botón si quieres */}
-        </Button>
-      </div>
-    </div>
-  );
-};
+const MobileFooter = () => null;
 
 // -----------------------------
 // Header principal
 // -----------------------------
 interface HeaderProps {
-  items?: HeaderNavItem[];
+  items: HeaderNavItem[];
   isFullWidth?: boolean;
   isFloating?: boolean;
   className?: string;
@@ -137,7 +92,7 @@ interface HeaderProps {
 }
 
 export const Header = ({
-  items = headerNavItems,
+  items,
   isFullWidth,
   isFloating,
   className,
@@ -148,6 +103,9 @@ export const Header = ({
   const headerRef = useRef<HTMLElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const [isMobileOpen, setIsMobileOpen] = useState(false); // estado del menú móvil
+
+  const handleCloseMenu = () => setIsMobileOpen(false);
 
   return (
     <header
@@ -166,9 +124,11 @@ export const Header = ({
               'ring-secondary_alt md:rounded-2xl md:bg-white md:py-3 md:pr-3 md:pl-4 md:shadow-xs md:ring-1'
           )}
         >
+          {/* Logo */}
           <div className="flex flex-1 items-center gap-5">
-            {/* Logo */}
-            {logoUrl && (
+            {renderLogo ? (
+              renderLogo()
+            ) : logoUrl ? (
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -180,20 +140,19 @@ export const Header = ({
                   <img src={logoUrl} alt={logoAlt || 'Logo'} className="h-10 w-auto" />
                 </Link>
               </motion.div>
-            )}
+            ) : null}
 
             {/* Desktop navigation */}
             <nav className="max-md:hidden">
-                <ul className="flex items-center gap-0.5">
-              {items.map((navItem) => {
-                const isActive = navItem.href === pathname;
-
-                return (
-                  <li key={navItem.label?.toString() || 'nav-item'} className="relative">
+              <ul className="flex items-center gap-0.5">
+                {items.map((navItem) => {
+                  const isActive = navItem.href === pathname;
+                  return (
+                    <li key={navItem.label?.toString() || 'nav-item'} className="relative">
                       {navItem.menu ? (
                         <AriaDialogTrigger>
-                          <AriaButton className="flex cursor-pointer items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-[var(--color-dark-gray)] outline-focus-ring transition duration-100 ease-linear hover:text-[var(--color-blue)] focus-visible:outline-2 focus-visible:outline-offset-2">
-                            <span className="px-0.5">{navItem.label}</span>
+                          <AriaButton className="flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-[var(--color-dark-gray)] hover:text-[var(--color-yellow)] focus-visible:outline-2 focus-visible:outline-offset-2">
+                            {navItem.label}
                             <ChevronDown className="size-4 stroke-[var(--color-dark-gray)] transition duration-100 ease-linear in-aria-expanded:-rotate-180" />
                           </AriaButton>
                           <AriaPopover>
@@ -203,25 +162,16 @@ export const Header = ({
                       ) : (
                         <Link
                           href={navItem.href!}
-                          className="flex cursor-pointer items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-[var(--color-dark-gray)] transition duration-100 ease-linear hover:text-[var(--color-yellow)] focus-visible:outline-2 focus-visible:outline-offset-2"
+                          className="flex items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-[var(--color-dark-gray)] hover:text-[var(--color-yellow)] focus-visible:outline-2 focus-visible:outline-offset-2"
                         >
-                          <span className="px-0.5 relative inline-block">
-                            {navItem.label}
-                            {/* Underline animado solo en activo */}
-                            <AnimatePresence>
-                              {isActive && (
-                                <motion.span
-                                  key="active-underline"
-                                  initial={{ scaleX: 0, opacity: 0 }}
-                                  animate={{ scaleX: 1, opacity: 1 }}
-                                  exit={{ opacity: 0 }}
-                                  transition={{ duration: 0.25, ease: 'easeOut' }}
-                                  className="absolute left-0 -bottom-1 h-[3px] w-full origin-center"
-                                  style={{ backgroundColor: 'var(--color-yellow)' }}
-                                />
-                              )}
-                            </AnimatePresence>
-                          </span>
+                          {navItem.label}
+                          {isActive && (
+                            <motion.span
+                              className="absolute left-0 -bottom-1 h-[3px] w-full bg-yellow-500"
+                              initial={{ scaleX: 0 }}
+                              animate={{ scaleX: 1 }}
+                            />
+                          )}
                         </Link>
                       )}
                     </li>
@@ -231,17 +181,8 @@ export const Header = ({
             </nav>
           </div>
 
-          {/* Botón Donar */}
-          <Button
-            color="orange"
-            size={isFloating ? 'md' : 'lg'}
-            onClick={() => router.push('/donar')}
-          >
-            Donar
-          </Button>
-
           {/* Mobile menu */}
-          <AriaDialogTrigger>
+          <AriaDialogTrigger isOpen={isMobileOpen} onOpenChange={setIsMobileOpen}>
             <AriaButton
               aria-label="Toggle navigation menu"
               className="group ml-auto cursor-pointer rounded-lg p-2 md:hidden"
@@ -277,24 +218,37 @@ export const Header = ({
               <AriaDialog className="outline-hidden w-full h-full">
                 <nav className="w-full h-full flex flex-col">
                   <ul className="flex flex-col divide-y divide-gray-300 py-5 px-4">
+                    {/* Items de Contentful */}
                     {items.map((navItem) =>
                       navItem.menu ? (
                         <li key={navItem.label?.toString() || 'nav-item'} className="pb-2">
-                          <MobileNavItem label={navItem.label}>{navItem.menu}</MobileNavItem>
+                          <MobileNavItem
+                            label={navItem.label}
+                            onClick={handleCloseMenu}
+                          >
+                            {navItem.menu}
+                          </MobileNavItem>
                         </li>
                       ) : (
                         <li key={navItem.label?.toString() || 'nav-item'} className="pb-2">
-                          <MobileNavItem label={navItem.label} href={navItem.href} />
+                          <MobileNavItem
+                            label={navItem.label}
+                            href={navItem.href}
+                            onClick={handleCloseMenu}
+                          />
                         </li>
                       )
                     )}
-
-                    {/* Botón Donar */}
-                    <li className="pt-4">
+                                        {/* Botón Donar primero */}
+                    <li className="pb-2">
                       <Button
                         color="orange"
-                        size={isFloating ? 'md' : 'lg'}
-                        onClick={() => router.push('/donar')}
+                        size="lg"
+                        className="w-full text-center"
+                        onClick={() => {
+                          router.push('/donar');
+                          handleCloseMenu();
+                        }}
                       >
                         Donar
                       </Button>
