@@ -39,7 +39,7 @@ export default async function RootLayout({
         <MainNav />
 
         {/* Contenido principal */}
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col overflow-x-hidden">
           <RouteProvider>
             <ThemeProvider>{children}</ThemeProvider>
           </RouteProvider>

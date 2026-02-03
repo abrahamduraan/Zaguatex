@@ -41,7 +41,7 @@ export default function HeroSection({
           {/* ================== HEADING ================== */}
           {heading && (
             <motion.h1
-              className="mt-4 text-display-md font-semibold text-[var(--color-blue)] md:text-display-lg lg:text-display-xl"
+              className="mt-4 text-display-md font-semibold text-[var(--color-white)] md:text-display-lg lg:text-display-xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -54,7 +54,7 @@ export default function HeroSection({
           {/* ================== SUPPORTING TEXT ================== */}
           {supportingText && (
             <motion.p
-              className="mt-4 max-w-3xl text-lg text-[var(--color-yellow)] md:mt-6 md:text-xl"
+              className="mt-4 max-w-3xl text-lg text-[var(--color-white)] md:mt-6 md:text-xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

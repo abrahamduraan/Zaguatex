@@ -1,31 +1,50 @@
+'use client';
+
 import { ReactElement } from 'react';
 import HeroSection from './blocks/HeroSection';
 import MainContentSection from './blocks/MainContentSection';
 import CarouselUntitled from './blocks/CarouselUntitled';
 import BigCarousel from './blocks/BigCarousel';
-import Footer from './blocks/Footer';
 import DogsAdoption from './blocks/adoptar/DogsAdoption';
 import FAQ from './blocks/FAQ';
 import InformationComponent from './blocks/InformationComponent';
 import ButtonComponent from './blocks/ButtonComponent';
+import DogsAdoptionCarousel from './blocks/adoptar/DogsAdoptionCarousel';
 
+/* -------------------------------------------------------------------------- */
+/* Base types                                                                  */
+/* -------------------------------------------------------------------------- */
 
-/** 🔹 Base type para cualquier bloque */
 export interface BlockBase {
   sys: { id: string };
   __typename: string;
   [key: string]: any;
 }
 
-/** 🔹 Props del PageRender */
 interface PageRenderProps {
   components: BlockBase[];
 }
 
-/** 🔹 Map de tipos de bloque a componente */
-const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | null> = {
+/* -------------------------------------------------------------------------- */
+/* Block-specific types                                                        */
+/* -------------------------------------------------------------------------- */
+
+interface BigCarouselBlock extends BlockBase {
+  size?: 'small' | 'medium' | 'large';
+  imagesCollection?: {
+    items: { url: string; title?: string }[];
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/* Block → Component map                                                       */
+/* -------------------------------------------------------------------------- */
+
+const BLOCK_COMPONENT_MAP: Record<
+  string,
+  (block: BlockBase) => ReactElement | null
+> = {
   Hero: (block) => {
-    // ❌ Evita renderizar Hero sin imagen
     if (!block.image?.url) return null;
 
     return (
@@ -63,29 +82,32 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   Carousel: (block) => (
     <CarouselUntitled
       key={block.sys.id}
-      images={Array.isArray(block.imagesCollection?.items) ? block.imagesCollection.items : []}
+      images={Array.isArray(block.imagesCollection?.items)
+        ? block.imagesCollection.items
+        : []}
     />
   ),
 
-  BigCarousel: (block) => (
+  BigCarousel: (block: BigCarouselBlock) => (
     <BigCarousel
       key={block.sys.id}
-      images={Array.isArray(block.imagesCollection?.items) ? block.imagesCollection.items : []}
+      images={Array.isArray(block.imagesCollection?.items)
+        ? block.imagesCollection.items
+        : []}
+      size={block.size ?? 'large'}
     />
   ),
-
-  Footer: (block) => <Footer key={block.sys.id} {...block} />,
 
   DogsAdoption: (block) => {
     const dogs = Array.isArray(block.dogsCollection?.items)
       ? block.dogsCollection.items.map((dog: any) => ({
-        sys: dog.sys,
-        title: dog.title ?? '',
-        description: dog.description ?? '',
-        information: dog.information ?? '',
-        mainImage: dog.mainImage ?? null,
-        galleryImages: dog.galleryImagesCollection?.items ?? [],
-      }))
+          sys: dog.sys,
+          title: dog.title ?? '',
+          description: dog.description ?? '',
+          information: dog.information ?? '',
+          mainImage: dog.mainImage ?? null,
+          galleryImages: dog.galleryImagesCollection?.items ?? [],
+        }))
       : [];
 
     if (!dogs.length) return null;
@@ -102,10 +124,35 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
     );
   },
 
+  DogsAdoptionCarousel: (block) => {
+    const dogs = Array.isArray(block.dogsCollection?.items)
+      ? block.dogsCollection.items.map((dog: any) => ({
+          sys: dog.sys,
+          title: dog.title ?? '',
+          description: dog.description ?? '',
+          mainImage: dog.mainImage ?? null,
+        }))
+      : [];
+
+    if (!dogs.length) return null;
+
+    return (
+      <DogsAdoptionCarousel
+        key={block.sys.id}
+        title={block.title ?? ''}
+        subtitle={block.subtitle ?? ''}
+        ctaText={block.ctaText ?? 'Ver todos'}
+        ctaUrl={block.ctaUrl ?? '/adoptar'}
+        dogs={dogs}
+      />
+    );
+  },
+
   Faq: (block) => {
     const faqItems = Array.isArray(block.itemsCollection?.items)
       ? block.itemsCollection.items
       : [];
+
     if (!faqItems.length) return null;
 
     return (
@@ -136,13 +183,10 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
     );
   },
 
-
-
   InformationComponent: (block) => {
     const infoItems = Array.isArray(block.itemsCollection?.items)
       ? block.itemsCollection.items
       : [];
-    if (!infoItems.length) return null;
 
     return (
       <InformationComponent
@@ -161,12 +205,14 @@ const BLOCK_COMPONENT_MAP: Record<string, (block: BlockBase) => ReactElement | n
   },
 };
 
-/** 🔹 PageRender seguro */
+/* -------------------------------------------------------------------------- */
+/* PageRender                                                                  */
+/* -------------------------------------------------------------------------- */
+
 export default function PageRender({ components }: PageRenderProps) {
   if (!Array.isArray(components) || components.length === 0) return null;
 
-  // ❗ Filtra Heroes sin imagen y bloque vacío
-  const safeComponents = components.filter(block => {
+  const safeComponents = components.filter((block) => {
     if (block.__typename === 'Hero' && !block.image?.url) return false;
     return true;
   });

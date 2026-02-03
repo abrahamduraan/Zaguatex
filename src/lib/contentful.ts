@@ -104,6 +104,7 @@ export async function getPageBySlug(slug: string) {
 
               ... on BigCarousel {
                 sys { id }
+                size
                 imagesCollection(limit: 10) {
                   items { url title }
                 }
@@ -126,6 +127,20 @@ export async function getPageBySlug(slug: string) {
                   }
                 }
               }
+              ... on DogsAdoptionCarousel {
+              title
+              subtitle
+              ctaText
+              ctaUrl
+              dogsCollection(limit: 6) {
+                items {
+                  sys { id }
+                  title
+                  description
+                  mainImage { url title }
+                }
+              }
+            }
 
               ... on ButtonComponent {  
                 text
