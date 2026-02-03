@@ -74,11 +74,6 @@ const MobileNavItem = ({
 };
 
 // -----------------------------
-// Footer mobile vacío
-// -----------------------------
-const MobileFooter = () => null;
-
-// -----------------------------
 // Header principal
 // -----------------------------
 interface HeaderProps {
@@ -103,7 +98,7 @@ export const Header = ({
   const headerRef = useRef<HTMLElement>(null);
   const router = useRouter();
   const pathname = usePathname();
-  const [isMobileOpen, setIsMobileOpen] = useState(false); // estado del menú móvil
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const handleCloseMenu = () => setIsMobileOpen(false);
 
@@ -119,12 +114,12 @@ export const Header = ({
       <div className="flex w-full max-w-container flex-1 items-center px-4 md:px-8">
         <div
           className={cx(
-            'flex w-full justify-between gap-4',
+            'flex w-full justify-between items-center gap-4',
             isFloating &&
-              'ring-secondary_alt md:rounded-2xl md:bg-white md:py-3 md:pr-3 md:pl-4 md:shadow-xs md:ring-1'
+            'ring-secondary_alt md:rounded-2xl md:bg-white md:py-3 md:pr-3 md:pl-4 md:shadow-xs md:ring-1'
           )}
         >
-          {/* Logo */}
+          {/* Logo + Desktop nav */}
           <div className="flex flex-1 items-center gap-5">
             {renderLogo ? (
               renderLogo()
@@ -143,8 +138,8 @@ export const Header = ({
             ) : null}
 
             {/* Desktop navigation */}
-            <nav className="max-md:hidden">
-              <ul className="flex items-center gap-0.5">
+            <nav className="max-md:hidden flex-1">
+              <ul className="flex items-center gap-4">
                 {items.map((navItem) => {
                   const isActive = navItem.href === pathname;
                   return (
@@ -181,6 +176,17 @@ export const Header = ({
             </nav>
           </div>
 
+          {/* Botón Donar a la derecha en Desktop */}
+          <div className="hidden md:block">
+            <Button
+              color="orange"
+              size="md"
+              onClick={() => router.push('/donar')}
+            >
+              Donar
+            </Button>
+          </div>
+
           {/* Mobile menu */}
           <AriaDialogTrigger isOpen={isMobileOpen} onOpenChange={setIsMobileOpen}>
             <AriaButton
@@ -209,7 +215,7 @@ export const Header = ({
 
             <AriaPopover
               triggerRef={headerRef}
-              className="fixed top-0 right-0 h-full w-1/2 bg-[var(--color-white)] shadow-lg overflow-y-auto md:hidden"
+              className="fixed top-0 right-0 h-full w-1/2 bg-white shadow-lg overflow-y-auto md:hidden"
               offset={0}
               crossOffset={0}
               containerPadding={0}
@@ -239,8 +245,8 @@ export const Header = ({
                         </li>
                       )
                     )}
-                                        {/* Botón Donar primero */}
-                    <li className="pb-2">
+                    {/* Botón Donar primero en mobile */}
+                    <li className="pb-4">
                       <Button
                         color="orange"
                         size="lg"
@@ -254,7 +260,6 @@ export const Header = ({
                       </Button>
                     </li>
                   </ul>
-                  <MobileFooter />
                 </nav>
               </AriaDialog>
             </AriaPopover>
