@@ -1,32 +1,35 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import type { ReactNode } from 'react';
-import { useRef, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useRef, useState, ReactNode } from 'react';
 import { ChevronDown } from '@untitledui/icons';
+import { Button } from '@/components/base/buttons/button';
+import { DropdownMenuSimple } from '@/components/marketing/header-navigation/dropdown-header-navigation';
+import { cx } from '@/utils/cx';
 import {
   Button as AriaButton,
   Dialog as AriaDialog,
   DialogTrigger as AriaDialogTrigger,
   Popover as AriaPopover,
 } from 'react-aria-components';
-import { Button } from '@/components/base/buttons/button';
-import { UntitledLogo } from '@/components/foundations/logo/untitledui-logo';
-import { UntitledLogoMinimal } from '@/components/foundations/logo/untitledui-logo-minimal';
-import { DropdownMenuSimple } from '@/components/marketing/header-navigation/dropdown-header-navigation';
-import { cx } from '@/utils/cx';
 
-type HeaderNavItem = {
-  label: string;
+// -----------------------------
+// Tipos
+// -----------------------------
+export type HeaderNavItem = {
+  label: string | ReactNode | null; // ahora puede ser JSX
   href?: string;
   menu?: ReactNode;
 };
 
+// -----------------------------
+// Items de ejemplo
+// -----------------------------
 const headerNavItems: HeaderNavItem[] = [
   { label: 'Products', href: '/products', menu: <DropdownMenuSimple /> },
-  { label: 'Services', href: '/Services', menu: <DropdownMenuSimple /> },
+  { label: 'Services', href: '/services', menu: <DropdownMenuSimple /> },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Resources', href: '/resources', menu: <DropdownMenuSimple /> },
   { label: 'About', href: '/about' },
@@ -36,31 +39,38 @@ const footerNavItems = [
   { label: 'About us', href: '/' },
   { label: 'Press', href: '/products' },
   { label: 'Careers', href: '/resources' },
-  { label: 'Legal', href: '/pricing' },
-  { label: 'Support', href: '/pricing' },
-  { label: 'Contact', href: '/pricing' },
-  { label: 'Sitemap', href: '/pricing' },
-  { label: 'Cookie settings', href: '/pricing' },
+  { label: 'Legal', href: '/ss' },
+  { label: 'Support', href: '/sss' },
+  { label: 'Contact', href: '/sss' },
+  { label: 'Sitemap', href: '/ssss' },
+  { label: 'Cookie settings', href: '/sssss' },
 ];
 
-
-const MobileNavItem = (props: {
+// -----------------------------
+// Componente para mobile nav
+// -----------------------------
+const MobileNavItem = ({
+  className,
+  label,
+  href,
+  children,
+}: {
   className?: string;
-  label: string;
+  label: string | ReactNode;
   href?: string;
   children?: ReactNode;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  if (props.href) {
+  if (href) {
     return (
       <li>
-        <a
-          href={props.href}
-          className="flex items-center justify-between px-4 py-3 text-md font-semibold text-primary hover:bg-primary_hover"
+        <Link
+          href={href}
+          className="flex items-center justify-between px-4 py-3 text-md font-semibold text-[var(--color-gray)] hover:bg-[var(--color-blue)] hover:text-[var(--color-white)]"
         >
-          {props.label}
-        </a>
+          {label}
+        </Link>
       </li>
     );
   }
@@ -70,45 +80,52 @@ const MobileNavItem = (props: {
       <button
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between px-4 py-3 text-md font-semibold text-primary hover:bg-primary_hover"
+        className="flex w-full items-center justify-between px-4 py-3 text-md font-semibold text-[var(--color-gray)] hover:bg-[var(--color-blue)] hover:text-[var(--color-white)]"
       >
-        {props.label}{' '}
+        {label}{' '}
         <ChevronDown
           className={cx(
-            'size-4 stroke-[2.625px] text-fg-quaternary transition duration-100 ease-linear',
+            'size-4 stroke-[var(--color-dark-gray)] transition duration-100 ease-linear',
             isOpen ? '-rotate-180' : 'rotate-0'
           )}
         />
       </button>
-      {isOpen && <div>{props.children}</div>}
+      {isOpen && <div>{children}</div>}
     </li>
   );
 };
 
+// -----------------------------
+// Footer mobile
+// -----------------------------
 const MobileFooter = () => {
   return (
     <div className="flex flex-col gap-8 border-t border-secondary px-4 py-6">
-      <div>
-        <ul className="grid grid-flow-col grid-cols-2 grid-rows-4 gap-x-6 gap-y-3">
-          {footerNavItems.map((navItem) => (
-            <li key={navItem.label}>
-              <Button color="link-gray" size="lg" href={navItem.href}>
+      <ul className="grid grid-flow-col grid-cols-2 grid-rows-4 gap-x-6 gap-y-3">
+        {footerNavItems.map((navItem) => (
+          <li key={navItem.label}>
+            <Link href={navItem.href}>
+              <Button color="link-gray" size="lg">
                 {navItem.label}
               </Button>
-            </li>
-          ))}
-        </ul>
-      </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
       <div className="flex flex-col gap-3">
         <Button size="lg">Sign up</Button>
         <Button color="secondary" size="lg">
-          Log in
+          {/* espacio para otro botón si quieres */}
         </Button>
       </div>
     </div>
   );
 };
 
+// -----------------------------
+// Header principal
+// -----------------------------
 interface HeaderProps {
   items?: HeaderNavItem[];
   isFullWidth?: boolean;
@@ -130,6 +147,7 @@ export const Header = ({
 }: HeaderProps) => {
   const headerRef = useRef<HTMLElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <header
@@ -137,146 +155,100 @@ export const Header = ({
       className={cx(
         'relative flex h-18 w-full items-center justify-center md:h-20',
         isFloating && 'h-16 md:h-19 md:pt-3',
-        isFullWidth && !isFloating
-          ? 'has-aria-expanded:bg-primary'
-          : 'max-md:has-aria-expanded:bg-primary',
         className
       )}
     >
-      <div className="flex size-full max-w-container flex-1 items-center pr-3 pl-4 md:px-8">
+      <div className="flex w-full max-w-container flex-1 items-center px-4 md:px-8">
         <div
           className={cx(
             'flex w-full justify-between gap-4',
             isFloating &&
-            'ring-secondary_alt md:rounded-2xl md:bg-primary md:py-3 md:pr-3 md:pl-4 md:shadow-xs md:ring-1'
+              'ring-secondary_alt md:rounded-2xl md:bg-white md:py-3 md:pr-3 md:pl-4 md:shadow-xs md:ring-1'
           )}
         >
           <div className="flex flex-1 items-center gap-5">
-            {/* Desktop logo */}
-            {/* Desktop logo */}
+            {/* Logo */}
             {logoUrl && (
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="cursor-pointer md:max-lg:hidden"
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="cursor-pointer"
               >
-                <Link href="/" passHref>
-                  <img
-                    src={logoUrl}
-                    alt={logoAlt || "Logo"}
-                    className="h-10 w-auto"
-                  />
+                <Link href="/">
+                  <img src={logoUrl} alt={logoAlt || 'Logo'} className="h-10 w-auto" />
                 </Link>
               </motion.div>
             )}
-
-            {/* Minimal / mobile logo */}
-            {logoUrl && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="cursor-pointer hidden md:inline-block lg:hidden"
-              >
-                <Link href="/" passHref>
-                  <img
-                    src={logoUrl}
-                    alt={logoAlt || "Logo"}
-                    className="h-8 w-auto"
-                  />
-                </Link>
-              </motion.div>
-            )}
-
 
             {/* Desktop navigation */}
             <nav className="max-md:hidden">
-              <ul className="flex items-center gap-0.5">
-                {items.map((navItem) => (
-                  <li key={navItem.label}>
-                    {navItem.menu ? (
-                      <AriaDialogTrigger>
-                        <AriaButton className="flex cursor-pointer items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-secondary outline-focus-ring transition duration-100 ease-linear hover:text-secondary_hover focus-visible:outline-2 focus-visible:outline-offset-2">
-                          <span className="px-0.5">{navItem.label}</span>
+                <ul className="flex items-center gap-0.5">
+              {items.map((navItem) => {
+                const isActive = navItem.href === pathname;
 
-                          <ChevronDown className="size-4 rotate-0 stroke-[2.625px] text-fg-quaternary transition duration-100 ease-linear in-aria-expanded:-rotate-180" />
-                        </AriaButton>
-
-                        <AriaPopover
-                          className={({ isEntering, isExiting }) =>
-                            cx(
-                              'hidden origin-top will-change-transform md:block',
-                              isFullWidth && 'w-full',
-                              isEntering &&
-                              'duration-200 ease-out animate-in fade-in slide-in-from-top-1',
-                              isExiting &&
-                              'duration-150 ease-in animate-out fade-out slide-out-to-top-1'
-                            )
-                          }
-                          offset={isFloating || isFullWidth ? 0 : 8}
-                          containerPadding={0}
-                          triggerRef={
-                            (isFloating && isFullWidth) || isFullWidth ? headerRef : undefined
-                          }
+                return (
+                  <li key={navItem.label?.toString() || 'nav-item'} className="relative">
+                      {navItem.menu ? (
+                        <AriaDialogTrigger>
+                          <AriaButton className="flex cursor-pointer items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-[var(--color-dark-gray)] outline-focus-ring transition duration-100 ease-linear hover:text-[var(--color-blue)] focus-visible:outline-2 focus-visible:outline-offset-2">
+                            <span className="px-0.5">{navItem.label}</span>
+                            <ChevronDown className="size-4 stroke-[var(--color-dark-gray)] transition duration-100 ease-linear in-aria-expanded:-rotate-180" />
+                          </AriaButton>
+                          <AriaPopover>
+                            <AriaDialog>{navItem.menu}</AriaDialog>
+                          </AriaPopover>
+                        </AriaDialogTrigger>
+                      ) : (
+                        <Link
+                          href={navItem.href!}
+                          className="flex cursor-pointer items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-[var(--color-dark-gray)] transition duration-100 ease-linear hover:text-[var(--color-yellow)] focus-visible:outline-2 focus-visible:outline-offset-2"
                         >
-                          {({ isEntering, isExiting }) => (
-                            <AriaDialog
-                              className={cx(
-                                'mx-auto origin-top outline-hidden',
-                                isFloating && 'max-w-7xl px-8 pt-3',
-                                // Have to use the scale animation inside the popover to avoid
-                                // miscalculating the popover's position when opening.
-                                isEntering &&
-                                !isFullWidth &&
-                                'duration-200 ease-out animate-in zoom-in-95',
-                                isExiting &&
-                                !isFullWidth &&
-                                'duration-150 ease-in animate-out zoom-out-95'
+                          <span className="px-0.5 relative inline-block">
+                            {navItem.label}
+                            {/* Underline animado solo en activo */}
+                            <AnimatePresence>
+                              {isActive && (
+                                <motion.span
+                                  key="active-underline"
+                                  initial={{ scaleX: 0, opacity: 0 }}
+                                  animate={{ scaleX: 1, opacity: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                                  className="absolute left-0 -bottom-1 h-[3px] w-full origin-center"
+                                  style={{ backgroundColor: 'var(--color-yellow)' }}
+                                />
                               )}
-                            >
-                              {navItem.menu}
-                            </AriaDialog>
-                          )}
-                        </AriaPopover>
-                      </AriaDialogTrigger>
-                    ) : (
-                      <a
-                        href={navItem.href}
-                        className="flex cursor-pointer items-center gap-0.5 rounded-lg px-1.5 py-1 text-md font-semibold text-secondary outline-focus-ring transition duration-100 ease-linear hover:text-secondary_hover focus:outline-offset-2 focus-visible:outline-2"
-                      >
-                        <span className="px-0.5">{navItem.label}</span>
-                      </a>
-                    )}
-                  </li>
-                ))}
+                            </AnimatePresence>
+                          </span>
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
           </div>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <Button color="primary" size={isFloating ? 'md' : 'lg'} href="donar">
-              Donar
-            </Button>
-          </div>
+          {/* Botón Donar */}
+          <Button
+            color="orange"
+            size={isFloating ? 'md' : 'lg'}
+            onClick={() => router.push('/donar')}
+          >
+            Donar
+          </Button>
 
-          {/* Mobile menu and menu trigger */}
+          {/* Mobile menu */}
           <AriaDialogTrigger>
             <AriaButton
               aria-label="Toggle navigation menu"
-              className={({ isFocusVisible, isHovered }) =>
-                cx(
-                  'group ml-auto cursor-pointer rounded-lg p-2 md:hidden',
-                  isHovered && 'bg-primary_hover',
-                  isFocusVisible && 'outline-2 outline-offset-2 outline-focus-ring'
-                )
-              }
+              className="group ml-auto cursor-pointer rounded-lg p-2 md:hidden"
             >
-              <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path
-                  className="hidden text-secondary group-aria-expanded:block"
+                  className="hidden group-aria-expanded:block text-[var(--color-dark-gray)]"
                   d="M18 6L6 18M6 6L18 18"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -284,7 +256,7 @@ export const Header = ({
                   strokeLinejoin="round"
                 />
                 <path
-                  className="text-secondary group-aria-expanded:hidden"
+                  className="text-[var(--color-dark-gray)] group-aria-expanded:hidden"
                   d="M3 12H21M3 6H21M3 18H21"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -296,7 +268,7 @@ export const Header = ({
 
             <AriaPopover
               triggerRef={headerRef}
-              className="fixed top-0 right-0 h-full w-1/2 bg-primary shadow-lg overflow-y-auto md:hidden"
+              className="fixed top-0 right-0 h-full w-1/2 bg-[var(--color-white)] shadow-lg overflow-y-auto md:hidden"
               offset={0}
               crossOffset={0}
               containerPadding={0}
@@ -307,23 +279,28 @@ export const Header = ({
                   <ul className="flex flex-col divide-y divide-gray-300 py-5 px-4">
                     {items.map((navItem) =>
                       navItem.menu ? (
-                        <li key={navItem.label} className="pb-2">
+                        <li key={navItem.label?.toString() || 'nav-item'} className="pb-2">
                           <MobileNavItem label={navItem.label}>{navItem.menu}</MobileNavItem>
                         </li>
                       ) : (
-                        <li key={navItem.label} className="pb-2">
+                        <li key={navItem.label?.toString() || 'nav-item'} className="pb-2">
                           <MobileNavItem label={navItem.label} href={navItem.href} />
                         </li>
                       )
                     )}
 
-                    {/* Botón Donar sin línea horizontal */}
+                    {/* Botón Donar */}
                     <li className="pt-4">
-                      <Button color="primary" size="lg" href="/donar" className="w-full">
+                      <Button
+                        color="orange"
+                        size={isFloating ? 'md' : 'lg'}
+                        onClick={() => router.push('/donar')}
+                      >
                         Donar
                       </Button>
                     </li>
                   </ul>
+                  <MobileFooter />
                 </nav>
               </AriaDialog>
             </AriaPopover>
