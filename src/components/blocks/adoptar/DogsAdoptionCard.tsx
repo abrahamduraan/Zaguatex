@@ -49,13 +49,22 @@ export default function DogsAdoptionCard({
         )}
 
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20">
-          <div className="bg-white/90 backdrop-blur rounded-full px-4 py-1.5 shadow-md text-gray-900 font-semibold text-base rotate-[-1deg] transition-all duration-300 group-hover:-translate-y-12 group-hover:scale-125 group-hover:px-6 group-hover:py-2.5">
+          <div
+            className="bg-white/90 backdrop-blur rounded-full px-4 py-1.5 shadow-md font-semibold text-base rotate-[-1deg] transition-all duration-300 group-hover:-translate-y-12 group-hover:scale-125 group-hover:px-6 group-hover:py-2.5"
+            style={{ color: 'var(--color-orange)' }} // título naranja
+          >
             {title}
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-6 text-center bg-brand-solid translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-          <p className="text-sm text-white font-semibold leading-relaxed line-clamp-1">
+        <div
+          className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-6 text-center translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+          style={{ backgroundColor: 'var(--color-orange)' }} // descripción naranja de fondo
+        >
+          <p
+            className="text-sm font-semibold leading-relaxed line-clamp-1"
+            style={{ color: 'var(--color-white)' }} // texto blanco
+          >
             {truncate(description, 20)}
           </p>
         </div>

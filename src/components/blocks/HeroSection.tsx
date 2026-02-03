@@ -38,9 +38,10 @@ export default function HeroSection({
       <div className="flex flex-col items-center justify-center w-full pt-16 pb-16 md:pt-24 md:pb-24">
         <div className="mx-auto w-full max-w-container flex flex-col px-4 md:px-8 items-center text-center">
 
+          {/* ================== HEADING ================== */}
           {heading && (
             <motion.h1
-              className="mt-4 text-display-md font-semibold text-primary md:text-display-lg lg:text-display-xl"
+              className="mt-4 text-display-md font-semibold text-[var(--color-blue)] md:text-display-lg lg:text-display-xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -50,9 +51,10 @@ export default function HeroSection({
             </motion.h1>
           )}
 
+          {/* ================== SUPPORTING TEXT ================== */}
           {supportingText && (
             <motion.p
-              className="mt-4 max-w-3xl text-lg text-brand-secondary md:mt-6 md:text-xl"
+              className="mt-4 max-w-3xl text-lg text-[var(--color-yellow)] md:mt-6 md:text-xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -62,6 +64,7 @@ export default function HeroSection({
             </motion.p>
           )}
 
+          {/* ================== BUTTONS ================== */}
           <motion.div
             className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-12"
             initial={{ opacity: 0, y: 20 }}
@@ -69,17 +72,28 @@ export default function HeroSection({
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
           >
+            {/* BOTÓN PRINCIPAL - Gray */}
             {buttonOneText && buttonOneUrl && (
               <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <Button iconLeading={PlayCircle} color="secondary" size="xl" href={buttonOneUrl}>
+                <Button
+                  iconLeading={PlayCircle}
+                  color="secondary" // ⬅️ usa el color orange definido en tu Button
+                  size="xl"
+                  href={buttonOneUrl}
+                >
                   {buttonOneText}
                 </Button>
               </motion.div>
             )}
 
+            {/* BOTÓN SECUNDARIO NARANJA */}
             {buttonTwoText && buttonTwoUrl && (
               <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <Button size="xl" href={buttonTwoUrl}>
+                <Button
+                  size="xl"
+                  color="orange" // ⬅️ el color secundario definido en tu Button
+                  href={buttonTwoUrl}
+                >
                   {buttonTwoText}
                 </Button>
               </motion.div>

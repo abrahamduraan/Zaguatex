@@ -6,7 +6,7 @@ import { Button } from '@/components/base/buttons/button';
 type ButtonComponentProps = {
   sys: { id: string };
   text?: string;
-  link?: string;
+  link: string;
   color?: 'blue' | 'orange' | 'yellow';
   position?: 'left' | 'center' | 'right';
 };
@@ -17,11 +17,10 @@ const POSITION_MAP: Record<string, string> = {
   right: 'justify-end',
 };
 
-// Mapeo de colores a Button color o style
-const COLOR_MAP: Record<'blue' | 'orange' | 'yellow', { background: string; text: string }> = {
-  blue: { background: 'rgb(7, 78, 140)', text: '#ffffff' },      // azul
-  orange: { background: 'rgb(243, 112, 33)', text: '#ffffff' },  // naranja
-  yellow: { background: 'rgb(242, 183, 5)', text: '#000000' },   // amarillo
+const ROOT_COLORS: Record<'blue' | 'orange' | 'yellow', { bg: string; text: string }> = {
+  blue: { bg: 'var(--color-blue)', text: 'var(--color-white)' },
+  orange: { bg: 'var(--color-orange)', text: 'var(--color-white)' },
+  yellow: { bg: 'var(--color-yellow)', text: 'var(--color-dark-gray)' },
 };
 
 export default function ButtonComponent({
@@ -34,12 +33,10 @@ export default function ButtonComponent({
   if (!text?.trim() || !link) return null;
 
   const justifyClass = POSITION_MAP[position] ?? POSITION_MAP.center;
-  const styles = COLOR_MAP[color] ?? COLOR_MAP.blue;
+  const styles = ROOT_COLORS[color];
 
   return (
-    // wrapper full width
     <div className="w-full my-8">
-      {/* contenedor limitado con padding como DogInfo */}
       <motion.div
         key={sys.id}
         className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex ${justifyClass}`}
@@ -48,15 +45,11 @@ export default function ButtonComponent({
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          {/* 🔥 botón base, pero con colores dinámicos */}
+        <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
           <Button
             size="xl"
             style={{
-              backgroundColor: styles.background,
+              backgroundColor: styles.bg,
               color: styles.text,
             }}
             href={link}

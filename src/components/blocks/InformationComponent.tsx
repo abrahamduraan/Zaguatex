@@ -60,7 +60,8 @@ export default function InformationComponent({
         {/* Heading */}
         {heading && (
           <motion.h2
-            className="mx-auto mb-6 max-w-4xl text-center text-3xl font-bold text-brand-primary md:text-4xl"
+            className="mx-auto mb-6 max-w-4xl text-center text-3xl font-bold md:text-4xl"
+            style={{ color: "var(--color-blue)" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -73,7 +74,8 @@ export default function InformationComponent({
         {/* Intro */}
         {introText && (
           <motion.p
-            className="mx-auto mb-16 max-w-4xl text-center text-base leading-relaxed text-tertiary md:text-lg whitespace-pre-line"
+            className="mx-auto mb-16 max-w-4xl text-center text-base leading-relaxed md:text-lg whitespace-pre-line"
+            style={{ color: "var(--color-gray)" }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -90,7 +92,6 @@ export default function InformationComponent({
             const isHorizontal = position === 'left' || position === 'right';
             const isVideo = item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
 
-            /* Layout: define SOLO el orden */
             const layoutClass = cx(
               'flex gap-6',
               isHorizontal
@@ -100,7 +101,6 @@ export default function InformationComponent({
                 : 'flex-col items-center text-center'
             );
 
-            /* Texto: siempre anclado a la izquierda en horizontal */
             const contentClass = cx(
               'flex flex-col gap-4',
               isHorizontal
@@ -148,12 +148,18 @@ export default function InformationComponent({
                 transition={{ duration: 0.6, delay: index * 0.2 }}
               >
                 {item.title && (
-                  <h3 className="text-xl font-semibold text-brand-secondary md:text-2xl">
+                  <h3
+                    className="text-xl font-semibold md:text-2xl"
+                    style={{ color: "var(--color-yellow)" }}
+                  >
                     {item.title}
                   </h3>
                 )}
                 {item.text && (
-                  <p className="text-base leading-relaxed text-tertiary md:text-lg whitespace-pre-line">
+                  <p
+                    className="text-base leading-relaxed md:text-lg whitespace-pre-line"
+                    style={{ color: "var(--color-gray)" }}
+                  >
                     {item.text}
                   </p>
                 )}

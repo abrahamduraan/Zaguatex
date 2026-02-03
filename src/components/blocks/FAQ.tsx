@@ -34,10 +34,10 @@ export default function FAQ({
     <section className="bg-primary py-16 md:py-24">
       <div className="mx-auto max-w-container px-4 md:px-8">
 
-        {/* Subtitle */}
+        {/* Subheading */}
         {subheading && (
           <motion.p
-            className="text-brand-secondary text-lg font-semibold md:text-xl mb-4 text-center"
+            className="text-lg font-semibold md:text-xl mb-4 text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -49,7 +49,8 @@ export default function FAQ({
         {/* Heading */}
         {heading && (
           <motion.h2
-            className="text-brand-primary text-3xl md:text-4xl font-bold mb-12 text-center"
+            className="text-3xl md:text-4xl font-bold mb-12 text-center"
+            style={{ color: "var(--color-blue)" }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
@@ -80,13 +81,17 @@ export default function FAQ({
                   className="flex w-full items-start justify-between gap-4 text-left"
                 >
                   {/* Question */}
-                  <span className="text-brand-secondary text-lg font-semibold">
+                  <span
+                    className="text-lg font-semibold"
+                    style={{ color: "var(--color-yellow)" }}
+                  >
                     {faq.question}
                   </span>
 
                   {/* Animated Icon */}
                   <motion.span
-                    className="flex size-6 items-center text-quaternary-fg"
+                    className="flex size-6 items-center"
+                    style={{ color: "var(--color-yellow)" }}
                     animate={{ rotate: isOpen ? -90 : 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
                   >
@@ -122,7 +127,10 @@ export default function FAQ({
                   className="overflow-hidden"
                 >
                   <div className="pt-3 pr-4">
-                    <p className="text-tertiary text-base leading-relaxed">
+                    <p
+                      className="text-base leading-relaxed"
+                      style={{ color: "var(--color-gray)" }}
+                    >
                       {faq.answer}
                     </p>
                   </div>

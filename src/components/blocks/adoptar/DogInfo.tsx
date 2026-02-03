@@ -28,7 +28,6 @@ export default function DogInfo({
   const [modalImage, setModalImage] = useState<Image | null>(null);
   const displayedGallery = galleryImages.slice(0, 6);
 
-  // Mensaje de WhatsApp hardcodeado
   const buttonText = 'Adoptar por WhatsApp';
   const buttonUrl = `https://wa.me/+50689320530?text=${encodeURIComponent(
     `Hola, quiero saber más acerca de ${title}`
@@ -40,12 +39,12 @@ export default function DogInfo({
       {/* ===================== MOBILE ===================== */}
       <section className="block lg:hidden space-y-6">
         {/* TITLE */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-primary text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[var(--color-blue)] text-center">
           {title}
         </h1>
 
         {/* DESCRIPTION */}
-        <p className="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-line break-words hyphens-auto text-center">
+        <p className="text-[var(--color-gray)] text-base md:text-lg leading-relaxed whitespace-pre-line break-words hyphens-auto text-center">
           {description}
         </p>
 
@@ -58,17 +57,8 @@ export default function DogInfo({
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <Button
-                size="xl"
-                href={buttonUrl}
-                color="primary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+            <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
+              <Button size="xl" href={buttonUrl} color="orange" target="_blank" rel="noopener noreferrer">
                 {buttonText}
               </Button>
             </motion.div>
@@ -115,7 +105,7 @@ export default function DogInfo({
         {/* INFORMATION */}
         {information && (
           <section className="rounded-2xl bg-[#F5EFE6] px-5 sm:px-6 py-5">
-            <div className="text-gray-800 text-sm md:text-base leading-relaxed whitespace-pre-line break-words hyphens-auto">
+            <div className="text-[var(--color-gray)] text-sm md:text-base leading-relaxed whitespace-pre-line break-words hyphens-auto">
               {information}
             </div>
           </section>
@@ -166,10 +156,10 @@ export default function DogInfo({
         <div className="lg:col-span-6 flex flex-col space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-brand-primary mb-2">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[var(--color-blue)] mb-2">
                 {title}
               </h1>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-line break-words hyphens-auto">
+              <p className="text-[var(--color-gray)] text-base md:text-lg leading-relaxed whitespace-pre-line break-words hyphens-auto">
                 {description}
               </p>
             </div>
@@ -182,17 +172,8 @@ export default function DogInfo({
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <Button
-                    size="xl"
-                    href={buttonUrl}
-                    color="primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
+                  <Button size="xl" href={buttonUrl} color="orange" target="_blank" rel="noopener noreferrer">
                     {buttonText}
                   </Button>
                 </motion.div>
@@ -202,7 +183,7 @@ export default function DogInfo({
 
           {information && (
             <section className="rounded-2xl bg-[#F5EFE6] px-5 sm:px-6 py-5">
-              <div className="text-gray-800 text-sm md:text-base leading-relaxed whitespace-pre-line break-words hyphens-auto">
+              <div className="text-[var(--color-gray)] text-sm md:text-base leading-relaxed whitespace-pre-line break-words hyphens-auto">
                 {information}
               </div>
             </section>
@@ -235,7 +216,7 @@ export default function DogInfo({
 
               <button
                 onClick={() => setModalImage(null)}
-                className="absolute -top-3 -right-3 rounded-full bg-brand-solid text-white p-2 shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-white/60"
+                className="absolute -top-3 -right-3 rounded-full bg-[var(--color-orange)] text-white p-2 shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-white/60"
                 aria-label="Cerrar"
               >
                 ✕

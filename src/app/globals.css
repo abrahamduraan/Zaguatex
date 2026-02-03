@@ -9,6 +9,7 @@
 @custom-variant focus-input-within (&:has(input:focus));
 
 @utility scrollbar-hide {
+
   /* For Webkit-based browsers (Chrome, Safari and Opera) */
   &::-webkit-scrollbar {
     display: none;
@@ -16,8 +17,10 @@
   }
 
   /* For IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 @utility transition-inherit-all {
@@ -37,6 +40,22 @@ body {
   font-kerning: normal;
 }
 
+/* src/app/globals.css */
+:root {
+  --color-blue: rgb(7, 78, 140);
+  --color-yellow: rgb(242, 183, 5);
+  --color-orange: rgb(243, 112, 33);
+  --color-gray: rgb(107, 114, 128);
+  --color-dark-gray: rgb(31, 41, 55);
+  --color-white: #ffffff;
+}
+
+
+/* Tailwind base */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Hide the default expand arrow on Safari.  */
 details summary::-webkit-details-marker {
   display: none;
@@ -49,6 +68,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;

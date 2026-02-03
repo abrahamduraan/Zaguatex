@@ -20,14 +20,12 @@ interface DogsAdoptionProps {
   dogs: Dog[];
 }
 
-// Variants tipados correctamente
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
-// Import easing desde Framer Motion
-const ease: Easing = [0.25, 0.1, 0.25, 1]; // equivalente a easeOut
+const ease: Easing = [0.25, 0.1, 0.25, 1]; // easeOut
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -47,9 +45,11 @@ export default function DogsAdoption({
 
   return (
     <div className="mx-auto max-w-5xl px-4 md:px-6 py-12 text-center">
+      {/* Subtitulo */}
       {subtitle && (
         <motion.p
-          className="text-brand-secondary text-lg font-semibold mb-3"
+          className="text-lg font-semibold mb-3"
+          style={{ color: "var(--color-yellow)" }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -59,9 +59,11 @@ export default function DogsAdoption({
         </motion.p>
       )}
 
+      {/* Titulo */}
       {title && (
         <motion.h2
-          className="text-brand-primary text-3xl md:text-4xl font-bold mb-8"
+          className="text-3xl md:text-4xl font-bold mb-8"
+          style={{ color: "var(--color-blue)" }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -71,6 +73,7 @@ export default function DogsAdoption({
         </motion.h2>
       )}
 
+      {/* Boton principal */}
       {buttonText && buttonUrl && (
         <motion.div
           className="mb-12 flex justify-center"
@@ -83,16 +86,18 @@ export default function DogsAdoption({
             <Button
               size="xl"
               href={buttonUrl}
-              color="primary"
+              color="orange"
               target="_blank"
               rel="noopener noreferrer"
             >
               {buttonText}
             </Button>
+
           </motion.div>
         </motion.div>
       )}
 
+      {/* Tarjetas de perros */}
       <motion.ul
         variants={containerVariants}
         initial="hidden"
@@ -112,7 +117,9 @@ export default function DogsAdoption({
               title={dog.title}
               description={dog.description}
               mainImage={dog.mainImage}
-              onClick={() => router.push(`/adoptar/${encodeURIComponent(dog.title)}`)}
+              onClick={() =>
+                router.push(`/adoptar/${encodeURIComponent(dog.title)}`)
+              }
             />
           </motion.li>
         ))}

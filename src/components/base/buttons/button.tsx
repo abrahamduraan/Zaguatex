@@ -54,6 +54,19 @@ export const styles = sortCx({
   },
 
   colors: {
+
+    orange: {
+      root: [
+        // Fondo y texto principal
+        'bg-[var(--color-orange)] text-white shadow-xs-skeumorphic ring-1 ring-transparent ring-inset',
+        // Hover y loading
+        // Disabled
+        'disabled:bg-disabled disabled:shadow-xs disabled:ring-disabled_subtle',
+        // Iconos si hay
+        '*:data-icon:text-button-orange-icon hover:*:data-icon:text-button-orange-icon_hover',
+      ].join(' '),
+    },
+
     primary: {
       root: [
         'bg-brand-solid text-white shadow-xs-skeumorphic ring-1 ring-transparent ring-inset hover:bg-brand-solid_hover data-loading:bg-brand-solid_hover',
@@ -165,11 +178,11 @@ export interface CommonProps {
  */
 export interface ButtonProps
   extends
-    CommonProps,
-    DetailedHTMLProps<
-      Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color' | 'slot'>,
-      HTMLButtonElement
-    > {
+  CommonProps,
+  DetailedHTMLProps<
+    Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color' | 'slot'>,
+    HTMLButtonElement
+  > {
   /** Slot name for react-aria component */
   slot?: AriaButtonProps['slot'];
 }
@@ -179,8 +192,8 @@ export interface ButtonProps
  */
 interface LinkProps
   extends
-    CommonProps,
-    DetailedHTMLProps<Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'color'>, HTMLAnchorElement> {}
+  CommonProps,
+  DetailedHTMLProps<Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'color'>, HTMLAnchorElement> { }
 
 /** Union type of button and link props */
 export type Props = ButtonProps | LinkProps;
@@ -242,9 +255,9 @@ export const Button = ({
         (loading || (href && (disabled || loading))) && 'pointer-events-none',
         // If in `loading` state, hide everything except the loading icon (and text if `showTextWhileLoading` is true).
         loading &&
-          (showTextWhileLoading
-            ? '[&>*:not([data-icon=loading]):not([data-text])]:hidden'
-            : '[&>*:not([data-icon=loading])]:invisible'),
+        (showTextWhileLoading
+          ? '[&>*:not([data-icon=loading]):not([data-text])]:hidden'
+          : '[&>*:not([data-icon=loading])]:invisible'),
         className
       )}
     >
