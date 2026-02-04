@@ -18,27 +18,32 @@ interface Props {
 
 export default function InformationComponentItem({ item, index }: Props) {
   const position = item.mediaPosition || 'top';
-
   const isHorizontal = position === 'left' || position === 'right';
   const isBottom = position === 'bottom';
+
   const isVideo = item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
 
+  // LAYOUT PRINCIPAL:
+  // Mobile: siempre flex-col, centrado
+  // Desktop: si left/right, flex-row o row-reverse
   const layoutClass = cx(
-    'flex gap-6',
+    'flex flex-col gap-6 items-center text-center', // móvil
     isHorizontal
       ? position === 'right'
-        ? 'flex-col md:flex-row-reverse md:items-center md:gap-10'
-        : 'flex-col md:flex-row md:items-center md:gap-10'
-      : 'flex-col items-center text-center'
+        ? 'md:flex-row-reverse md:items-center md:gap-10'
+        : 'md:flex-row md:items-center md:gap-10'
+      : ''
   );
 
+  // CONTENIDO
+  // Mobile: centrado, ancho completo
+  // Desktop: si horizontal, contenido a la izquierda o derecha, media a la otra mitad
   const contentClass = cx(
-    'flex flex-col gap-4',
-    isHorizontal
-      ? 'md:items-start md:text-left md:mr-auto'
-      : 'items-center text-center max-w-2xl'
+    'flex flex-col gap-4 items-center text-center w-full', // móvil
+    isHorizontal ? 'md:items-start md:text-left md:w-1/2' : 'max-w-2xl'
   );
 
+  // MEDIA
   const mediaClass = cx(
     'w-full rounded-xl',
     isHorizontal ? 'md:w-1/2' : 'max-w-3xl'

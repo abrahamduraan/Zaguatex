@@ -9,15 +9,16 @@ type ButtonComponentProps = {
   link: string;
   color?: 'blue' | 'orange' | 'yellow';
   position?: 'left' | 'center' | 'right';
+  open?: 'this' | 'another'; // 👈 NUEVO
 };
 
-const POSITION_MAP: Record<string, string> = {
+const POSITION_MAP: Record<'left' | 'center' | 'right', string> = {
   left: 'justify-start',
   center: 'justify-center',
   right: 'justify-end',
 };
 
-const ROOT_COLORS: Record<'blue' | 'orange' | 'yellow', { bg: string; text: string }> = {
+const ROOT_COLORS = {
   blue: { bg: 'var(--color-blue)', text: 'var(--color-white)' },
   orange: { bg: 'var(--color-orange)', text: 'var(--color-white)' },
   yellow: { bg: 'var(--color-yellow)', text: 'var(--color-dark-gray)' },
@@ -29,11 +30,14 @@ export default function ButtonComponent({
   link,
   color = 'blue',
   position = 'center',
+  open = 'another', // 👈 default
 }: ButtonComponentProps) {
   if (!text?.trim() || !link) return null;
 
-  const justifyClass = POSITION_MAP[position] ?? POSITION_MAP.center;
+  const justifyClass = POSITION_MAP[position];
   const styles = ROOT_COLORS[color];
+
+  const isExternal = open === 'another';
 
   return (
     <div className="w-full my-8">
@@ -48,13 +52,13 @@ export default function ButtonComponent({
         <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
           <Button
             size="xl"
+            href={link}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
             style={{
               backgroundColor: styles.bg,
               color: styles.text,
             }}
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             {text}
           </Button>

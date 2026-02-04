@@ -75,13 +75,11 @@ export default function InformationComponent({
 
         {/* Items (opcional) */}
         {items.length > 0 && (
-          <div className="mx-auto flex max-w-4xl flex-col gap-14">
+          <div className="mx-auto flex max-w-4xl flex-col items-center gap-14">
             {items.map((item, index) => (
-              <InformationComponentItem
-                key={index}
-                item={item}
-                index={index}
-              />
+              <div key={index} className="w-full md:max-w-full mx-auto">
+                <InformationComponentItem item={item} index={index} />
+              </div>
             ))}
           </div>
         )}

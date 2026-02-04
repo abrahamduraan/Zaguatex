@@ -7,10 +7,6 @@ import { ArrowLeft, ArrowRight } from '@untitledui/icons';
 import { cx } from '@/utils/cx';
 import { isReactComponent } from '@/utils/is-react-component';
 
-/* -------------------------------------------------------------------------- */
-/* Types                                                                      */
-/* -------------------------------------------------------------------------- */
-
 type CarouselSize = 'small' | 'medium' | 'large';
 
 interface BigCarouselProps {
@@ -20,42 +16,46 @@ interface BigCarouselProps {
   size?: CarouselSize;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Size config                                                                 */
-/* -------------------------------------------------------------------------- */
-
 const SIZE_STYLES: Record<
   CarouselSize,
   {
     container: string;
     gap: string;
+    itemBasis: string;
     image: string;
     button: string;
+    controlsGap: string;
+    controlsPadding: string;
   }
 > = {
   small: {
     container: 'py-8',
     gap: 'gap-4',
-    image: 'max-h-48 max-w-48 lg:max-h-64 lg:max-w-64',
-    button: 'size-10 md:size-12',
+    itemBasis: 'basis-[70%] sm:basis-[45%] md:basis-[30%]',
+    image: 'w-full h-auto rounded-2xl',
+    button: 'size-8 md:size-10',
+    controlsGap: 'gap-3 md:gap-4',
+    controlsPadding: 'pl-2 md:pl-4',
   },
   medium: {
     container: 'py-10',
     gap: 'gap-5',
-    image: 'max-h-64 max-w-64 lg:max-h-96 lg:max-w-96',
-    button: 'size-11 md:size-13',
+    itemBasis: 'basis-[75%] sm:basis-[50%] md:basis-[33%]',
+    image: 'w-full h-auto rounded-2xl',
+    button: 'size-9 md:size-11',
+    controlsGap: 'gap-4 md:gap-6',
+    controlsPadding: 'pl-2 md:pl-6',
   },
   large: {
     container: 'py-12 md:py-16',
     gap: 'gap-6 lg:gap-8',
-    image: 'max-h-90 max-w-90 lg:max-h-180 lg:max-w-180',
-    button: 'size-12 md:size-14',
+    itemBasis: 'basis-[85%] sm:basis-[50%] md:basis-[40%] lg:basis-[35%]',
+    image: 'w-full h-auto rounded-2xl',
+    button: 'size-13 md:size-15',
+    controlsGap: 'gap-6 md:gap-8',
+    controlsPadding: 'pl-4 md:pl-8',
   },
 };
-
-/* -------------------------------------------------------------------------- */
-/* Components                                                                  */
-/* -------------------------------------------------------------------------- */
 
 const RoundButton = ({
   icon: Icon,
@@ -82,10 +82,6 @@ const RoundButton = ({
     )}
   </Button>
 );
-
-/* -------------------------------------------------------------------------- */
-/* BigCarousel                                                                 */
-/* -------------------------------------------------------------------------- */
 
 export const BigCarousel = ({
   title,
@@ -134,12 +130,12 @@ export const BigCarousel = ({
       <Carousel.Root opts={{ align: 'start' }}>
         <Carousel.Content
           overflowHidden
-          className={cx(styles.gap, 'pr-4 md:pr-8')}
+          className={cx(styles.gap, 'pr-6 md:pr-12')}
         >
           {images.map((img, index) => (
             <Carousel.Item
               key={`${img.url}-${index}`}
-              className="basis-auto"
+              className={cx(styles.itemBasis, 'flex-shrink-0')}
             >
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -155,10 +151,7 @@ export const BigCarousel = ({
                 <img
                   src={img.url}
                   alt={img.title || ''}
-                  className={cx(
-                    'cursor-grab object-contain',
-                    styles.image
-                  )}
+                  className={styles.image}
                 />
               </motion.div>
             </Carousel.Item>
@@ -166,19 +159,19 @@ export const BigCarousel = ({
         </Carousel.Content>
 
         {/* Controls */}
-        <div className="mt-8 flex gap-4 md:gap-8 pl-4">
+        <div
+          className={cx(
+            'mt-8 flex justify-center md:justify-start',
+            styles.controlsGap,
+            styles.controlsPadding
+          )}
+        >
           <Carousel.PrevTrigger asChild>
-            <RoundButton
-              icon={ArrowLeft}
-              sizeClass={styles.button}
-            />
+            <RoundButton icon={ArrowLeft} sizeClass={styles.button} />
           </Carousel.PrevTrigger>
 
           <Carousel.NextTrigger asChild>
-            <RoundButton
-              icon={ArrowRight}
-              sizeClass={styles.button}
-            />
+            <RoundButton icon={ArrowRight} sizeClass={styles.button} />
           </Carousel.NextTrigger>
         </div>
       </Carousel.Root>

@@ -101,13 +101,13 @@ const BLOCK_COMPONENT_MAP: Record<
   DogsAdoption: (block) => {
     const dogs = Array.isArray(block.dogsCollection?.items)
       ? block.dogsCollection.items.map((dog: any) => ({
-          sys: dog.sys,
-          title: dog.title ?? '',
-          description: dog.description ?? '',
-          information: dog.information ?? '',
-          mainImage: dog.mainImage ?? null,
-          galleryImages: dog.galleryImagesCollection?.items ?? [],
-        }))
+        sys: dog.sys,
+        title: dog.title ?? '',
+        description: dog.description ?? '',
+        information: dog.information ?? '',
+        mainImage: dog.mainImage ?? null,
+        galleryImages: dog.galleryImagesCollection?.items ?? [],
+      }))
       : [];
 
     if (!dogs.length) return null;
@@ -127,11 +127,11 @@ const BLOCK_COMPONENT_MAP: Record<
   DogsAdoptionCarousel: (block) => {
     const dogs = Array.isArray(block.dogsCollection?.items)
       ? block.dogsCollection.items.map((dog: any) => ({
-          sys: dog.sys,
-          title: dog.title ?? '',
-          description: dog.description ?? '',
-          mainImage: dog.mainImage ?? null,
-        }))
+        sys: dog.sys,
+        title: dog.title ?? '',
+        description: dog.description ?? '',
+        mainImage: dog.mainImage ?? null,
+      }))
       : [];
 
     if (!dogs.length) return null;
@@ -176,9 +176,10 @@ const BLOCK_COMPONENT_MAP: Record<
         key={block.sys.id}
         sys={block.sys}
         text={block.text}
-        link={block.link || undefined}
+        link={block.link}
         color={block.color || 'blue'}
         position={block.position || 'center'}
+        open={block.open || 'another'} 
       />
     );
   },

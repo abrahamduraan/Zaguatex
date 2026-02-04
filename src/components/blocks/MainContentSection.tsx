@@ -51,6 +51,7 @@ export default function MainContentSection({
 
   return (
     <section className="bg-white py-16 md:py-24">
+      {/* Heading */}
       <div className="mx-auto max-w-container px-4 md:px-8">
         <motion.div
           className="mx-auto max-w-3xl text-center"
@@ -96,21 +97,28 @@ export default function MainContentSection({
         </motion.div>
       </div>
 
+      {/* Cards */}
       <div className="mx-auto mt-16 flex max-w-container flex-col gap-20 px-4 md:px-8">
         {cards.map((card, idx) => (
           <motion.div
             key={idx}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-10"
+            className={`
+              flex flex-col items-center text-center gap-8
+              lg:grid lg:grid-cols-2 lg:gap-10
+              ${card.reverse ? 'lg:grid-flow-col-dense' : ''}
+            `}
             initial={{ opacity: 0, x: card.reverse ? 50 : -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: "easeOut", delay: idx * 0.2 }}
           >
-            <div className={`${card.reverse ? 'order-first lg:order-last' : 'order-first'}`}>
+            {/* Imagen */}
+            <div className={`w-full ${card.reverse ? 'lg:order-last' : 'lg:order-first'}`}>
               <ImageBlock image={card.image} />
             </div>
 
-            <div className="self-center lg:pl-12 lg:pr-24">
+            {/* Texto */}
+            <div className="w-full flex flex-col items-center text-center lg:items-start lg:text-left lg:pl-12 lg:pr-24">
               <h3
                 style={{ color: "var(--color-yellow)" }}
                 className="text-display-xs font-semibold"
