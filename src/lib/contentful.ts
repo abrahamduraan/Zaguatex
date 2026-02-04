@@ -149,13 +149,6 @@ export async function getPageBySlug(slug: string) {
               position
               open
             }
-            ... on MapComponent {
-              sys { id }
-              text
-              link
-              color
-              size
-            }
               ... on Faq {
                 heading
                 subheading

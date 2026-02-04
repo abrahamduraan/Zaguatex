@@ -9,9 +9,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    turbo: false, // ⚡ Desactiva Turbopack en desarrollo para evitar errores de source map
-  },
 };
 
 export default nextConfig;

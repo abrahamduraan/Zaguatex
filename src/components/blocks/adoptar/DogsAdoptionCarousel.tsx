@@ -11,9 +11,8 @@ import { cx } from '@/utils/cx';
 interface Dog {
   sys: { id: string };
   title: string;
-  description?: string;
+  description: string;
   mainImage?: { url: string; title?: string; description?: string };
-  slug: string; // usar slug en lugar de title para URLs
 }
 
 interface DogsAdoptionCarouselProps {
@@ -24,12 +23,7 @@ interface DogsAdoptionCarouselProps {
   dogs: Dog[];
 }
 
-interface RoundButtonProps extends React.ComponentProps<typeof Button> {
-  icon: React.ElementType;
-  className?: string;
-}
-
-const RoundButton = ({ icon: Icon, className, ...props }: RoundButtonProps) => (
+const RoundButton = ({ icon: Icon, className, ...props }: any) => (
   <Button
     {...props}
     className={cx(
@@ -100,13 +94,11 @@ export default function DogsAdoptionCarousel({
                 className="cursor-pointer"
               >
                 <DogsAdoptionCard
-                  title={dog.title || 'Sin título'}
-                  description={dog.description || ''}
+                  title={dog.title}
+                  description={dog.description}
                   mainImage={dog.mainImage}
                   onClick={() =>
-                    router.push(
-                      `/adoptar/${encodeURIComponent(dog.slug)}`
-                    )
+                    router.push(`/adoptar/${encodeURIComponent(dog.title)}`)
                   }
                 />
               </motion.div>
@@ -114,32 +106,34 @@ export default function DogsAdoptionCarousel({
           ))}
         </Carousel.Content>
 
-        {/* Triggers y CTA */}
         <div className="mt-6 flex flex-col md:flex-row items-center md:justify-between gap-4">
-          {/* Mobile */}
           <div className="flex md:hidden items-center justify-between w-full px-4">
             <Carousel.PrevTrigger asChild>
-              <RoundButton icon={ArrowLeft} aria-label="Anterior" />
+              <RoundButton icon={ArrowLeft} />
             </Carousel.PrevTrigger>
 
-            <Button href={ctaUrl} color="orange" size="lg" className="flex-1 mx-2">
+            <Button
+              href={ctaUrl}
+              color="orange"
+              size="lg"
+              className="flex-1 mx-2"
+            >
               {ctaText}
             </Button>
 
             <Carousel.NextTrigger asChild>
-              <RoundButton icon={ArrowRight} aria-label="Siguiente" />
+              <RoundButton icon={ArrowRight} />
             </Carousel.NextTrigger>
           </div>
 
-          {/* Desktop */}
           <div className="hidden md:flex items-center justify-between w-full px-4">
             <div className="flex gap-4">
               <Carousel.PrevTrigger asChild>
-                <RoundButton icon={ArrowLeft} aria-label="Anterior" />
+                <RoundButton icon={ArrowLeft} />
               </Carousel.PrevTrigger>
 
               <Carousel.NextTrigger asChild>
-                <RoundButton icon={ArrowRight} aria-label="Siguiente" />
+                <RoundButton icon={ArrowRight} />
               </Carousel.NextTrigger>
             </div>
 
