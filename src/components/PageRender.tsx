@@ -10,6 +10,7 @@ import FAQ from './blocks/FAQ';
 import InformationComponent from './blocks/InformationComponent';
 import ButtonComponent from './blocks/ButtonComponent';
 import DogsAdoptionCarousel from './blocks/adoptar/DogsAdoptionCarousel';
+import MapComponent from './blocks/MapComponent';
 
 /* -------------------------------------------------------------------------- */
 /* Base types                                                                  */
@@ -179,31 +180,47 @@ const BLOCK_COMPONENT_MAP: Record<
         link={block.link}
         color={block.color || 'blue'}
         position={block.position || 'center'}
-        open={block.open || 'another'} 
+        open={block.open || 'another'}
       />
     );
   },
 
-  InformationComponent: (block) => {
-    const infoItems = Array.isArray(block.itemsCollection?.items)
-      ? block.itemsCollection.items
-      : [];
+  MapComponent: (block) => {
+    if (!block.link) return null;
 
     return (
-      <InformationComponent
+      <MapComponent
         key={block.sys.id}
-        heading={block.heading ?? ''}
-        introText={block.introText ?? ''}
-        image={block.image ?? null}
-        items={infoItems.map((item: any) => ({
-          title: item.title ?? '',
-          text: item.text ?? '',
-          media: item.media ?? null,
-          mediaPosition: item.mediaPosition ?? 'left',
-        }))}
+        sys={block.sys}
+        text={block.text}
+        link={block.link}
+        color={block.color || 'blue'} // opcional
+        size={block.size || 'md'} // opcional: 'sm', 'md', 'lg'
       />
     );
   },
+
+
+    InformationComponent: (block) => {
+      const infoItems = Array.isArray(block.itemsCollection?.items)
+        ? block.itemsCollection.items
+        : [];
+
+      return (
+        <InformationComponent
+          key={block.sys.id}
+          heading={block.heading ?? ''}
+          introText={block.introText ?? ''}
+          image={block.image ?? null}
+          items={infoItems.map((item: any) => ({
+            title: item.title ?? '',
+            text: item.text ?? '',
+            media: item.media ?? null,
+            mediaPosition: item.mediaPosition ?? 'left',
+          }))}
+        />
+      );
+    },
 };
 
 /* -------------------------------------------------------------------------- */

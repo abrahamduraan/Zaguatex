@@ -90,7 +90,7 @@ const Footer = ({
               {heading && (
                 <p
                   className="text-lg font-semibold mb-1 max-w-[200px] break-words"
-                  style={{ color: "var(--color-dark-gray)" }} // gris oscuro
+                  style={{ color: "var(--color-blue)" }} // gris oscuro
                 >
                   {heading}
                 </p>
