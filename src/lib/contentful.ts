@@ -168,6 +168,7 @@ export async function getPageBySlug(slug: string) {
               items {
                 title
                 text
+                poster { url title description }
                 media { url title description }
                 mediaPosition
               }

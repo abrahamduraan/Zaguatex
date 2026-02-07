@@ -198,6 +198,7 @@ const BLOCK_COMPONENT_MAP: Record<
         items={infoItems.map((item: any) => ({
           title: item.title ?? '',
           text: item.text ?? '',
+          poster: item.poster ?? null,
           media: item.media ?? null,
           mediaPosition: item.mediaPosition ?? 'left',
         }))}

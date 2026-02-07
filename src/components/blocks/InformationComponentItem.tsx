@@ -8,6 +8,7 @@ export interface InformationItem {
   title?: string;
   text?: string;
   media?: MediaItem | null;
+  poster?: MediaItem | null; // miniatura separada
   mediaPosition?: 'top' | 'bottom' | 'left' | 'right';
 }
 
@@ -23,11 +24,9 @@ export default function InformationComponentItem({ item, index }: Props) {
 
   const isVideo = item.media?.url?.match(/\.(mp4|webm|ogg)$/i);
 
-  // LAYOUT PRINCIPAL:
-  // Mobile: siempre flex-col, centrado
-  // Desktop: si left/right, flex-row o row-reverse
+  // LAYOUT PRINCIPAL
   const layoutClass = cx(
-    'flex flex-col gap-6 items-center text-center', // móvil
+    'flex flex-col gap-6 items-center text-center',
     isHorizontal
       ? position === 'right'
         ? 'md:flex-row-reverse md:items-center md:gap-10'
@@ -36,10 +35,8 @@ export default function InformationComponentItem({ item, index }: Props) {
   );
 
   // CONTENIDO
-  // Mobile: centrado, ancho completo
-  // Desktop: si horizontal, contenido a la izquierda o derecha, media a la otra mitad
   const contentClass = cx(
-    'flex flex-col gap-4 items-center text-center w-full', // móvil
+    'flex flex-col gap-4 items-center text-center w-full',
     isHorizontal ? 'md:items-start md:text-left md:w-1/2' : 'max-w-2xl'
   );
 
@@ -49,6 +46,7 @@ export default function InformationComponentItem({ item, index }: Props) {
     isHorizontal ? 'md:w-1/2' : 'max-w-3xl'
   );
 
+  // MEDIA CON POSTER
   const Media = item.media?.url && (
     isVideo ? (
       <motion.video
@@ -56,6 +54,8 @@ export default function InformationComponentItem({ item, index }: Props) {
         controls
         playsInline
         className={mediaClass}
+        poster={item.poster?.url} // <--- miniatura desde ContentModel
+        preload="metadata"         // carga mínima para mostrar poster en móviles
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -75,6 +75,7 @@ export default function InformationComponentItem({ item, index }: Props) {
     )
   );
 
+  // CONTENIDO
   const Content = (
     <motion.div
       className={contentClass}
